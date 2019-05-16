@@ -1,7 +1,13 @@
 <resources>
     <string name="app_name">SendBirdSampleApp</string>
 
+    <string name="sample_version">Sample UI v%1$s / SDK v%2$s</string>
+
     <!--Login page-->
     <string name="logo_desc">SendBird Logo</string>
     <string name="user_id">User ID</string>
+    <string name="nickname">Nickname</string>
+    <string name="connect">Connect</string>
+
+
 </resources>
