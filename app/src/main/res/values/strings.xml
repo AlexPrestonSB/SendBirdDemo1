@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">SendBirdSampleApp</string>
+
+    <!--Login page-->
+    <string name="logo_desc">SendBird Logo</string>
+    <string name="user_id">User ID</string>
+</resources>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/loginConstraintLayout"
+        android:background="#ffffff">
+
+    <ImageView android:layout_width="@dimen/login_logo_size"
+               android:layout_height="@dimen/login_logo_size"
+               android:background="@drawable/logo_square"
+               android:contentDescription="@string/logo_desc"
+               android:id="@+id/image_login_logo"
+               app:layout_constraintTop_toTopOf="parent"
+               app:layout_constraintBottom_toBottomOf="parent"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintVertical_bias="0.3"/>
+
+    <android.support.design.widget.TextInputLayout
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="@id/image_login_logo"
+            app:layout_constraintEnd_toEndOf="@id/image_login_logo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin">
+
+        <android.support.design.widget.TextInputEditText
+                android:id="@+id/edittext_login_user_id"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:hint="@string/user_id"
+                android:inputType="textVisiblePassword"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+
+</android.support.constraint.ConstraintLayout>
