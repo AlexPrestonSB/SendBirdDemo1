@@ -1,11 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.channel.ChannelActivity">
+
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/layout_main_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".MainActivity">
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_main"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:theme="@style/Widget.AppCompat.Toolbar"
+            app:popupTheme="@style/Theme.AppCompat.Light">
+
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
 
 
+    <TextView
+        android:id="@+id/textview_main_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:drawableStart="@drawable/group_icon_40_dp"
+        android:drawablePadding="@dimen/activity_horizontal_margin"
+        android:gravity="center_vertical"
+        android:text="@string/group_channel"
+        android:textColor="@color/text_standard"
+        android:textSize="@dimen/text_standard"
+        app:layout_constraintTop_toBottomOf="@+id/layout_main_toolbar" />
+
+    <View
+        android:id="@+id/line_main"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_height"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@color/light_gray"
+        app:layout_constraintTop_toBottomOf="@+id/textview_main_group" />
+
+    <TextView
+        android:id="@+id/textview_main_open"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:drawableStart="@drawable/open_icon_40_dp"
+        android:drawablePadding="@dimen/activity_horizontal_margin"
+        android:gravity="center_vertical"
+        android:text="@string/open_channel"
+        android:textColor="@color/text_standard"
+        android:textSize="@dimen/text_standard"
+        app:layout_constraintTop_toBottomOf="@+id/line_main" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_height"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@color/light_gray"
+        app:layout_constraintTop_toBottomOf="@id/textview_main_open" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/button_main_disconnected"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="@dimen/button_bottom_spacing"
+        android:background="@drawable/selector_btn_white"
+        android:stateListAnimator="@null"
+        android:text="@string/disconnected"
+        app:layout_constraintBottom_toTopOf="@+id/textview_main_version">
+
+    </android.support.v7.widget.AppCompatButton>
+
+    <TextView
+        android:id="@+id/textview_main_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:text="@string/sample_version"
+        android:textColor="@color/version_text"
+        android:textSize="@dimen/text_version_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
