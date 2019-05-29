@@ -6,6 +6,15 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorControlActivated">@color/colorPrimary</item>
+    </style>
+
+    <style name="AppTheme.ButtonStyle" parent="ThemeOverlay.AppCompat">
+        <item name="colorAccent">@color/colorButton</item>
+        <item name="android:clickable">true</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="textAllCaps">true</item>
     </style>
 
     <style name="AppTheme.ButtonStyle2" parent="ThemeOverlay.AppCompat">
@@ -15,5 +24,7 @@
         <item name="android:textColor">@color/colorButton</item>
         <item name="textAllCaps">true</item>
     </style>
+
+
 
 </resources>
