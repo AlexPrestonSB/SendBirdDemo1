@@ -15,5 +15,8 @@
     <string name="group_channel">Group Channels</string>
     <string name="disconnected">Disconnected</string>
 
+    <!--Channel page-->
+    <string name="channel_icon">"Channel Icon</string>
+
 
 </resources>

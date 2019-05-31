@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.sendbirdsampleapp.ui.channel.view.ChannelActivity">
+
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/layout_channel_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_channel"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:theme="@style/Widget.AppCompat.Toolbar"
+            app:popupTheme="@style/Theme.AppCompat.Light">
+
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
+
+    <TextView
+        android:id="@+id/textview_channel_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:drawableStart="@drawable/group_icon_40_dp"
+        android:drawablePadding="@dimen/activity_horizontal_margin"
+        android:gravity="center_vertical"
+        android:text="@string/group_channel"
+        android:textColor="@color/text_standard"
+        android:textSize="@dimen/text_standard"
+        app:layout_constraintTop_toBottomOf="@+id/layout_channel_toolbar" />
+
+    <View
+        android:id="@+id/line_channel"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_height"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@color/light_gray"
+        app:layout_constraintTop_toBottomOf="@+id/textview_channel_group" />
+
+    <TextView
+        android:id="@+id/textview_channel_open"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:drawableStart="@drawable/open_icon_40_dp"
+        android:drawablePadding="@dimen/activity_horizontal_margin"
+        android:gravity="center_vertical"
+        android:text="@string/open_channel"
+        android:textColor="@color/text_standard"
+        android:textSize="@dimen/text_standard"
+        app:layout_constraintTop_toBottomOf="@+id/line_channel" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_height"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@color/light_gray"
+        app:layout_constraintTop_toBottomOf="@id/textview_channel_open" />
+
+    <TextView
+        android:id="@+id/textview_channel_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:text="@string/sample_version"
+        android:textColor="@color/version_text"
+        android:textSize="@dimen/text_version_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</android.support.constraint.ConstraintLayout>
