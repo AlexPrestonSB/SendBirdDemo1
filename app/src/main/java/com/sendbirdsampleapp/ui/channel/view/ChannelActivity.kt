@@ -36,6 +36,7 @@ class ChannelActivity : AppCompatActivity(), ChannelView {
     }
 
     fun groupChannelPressed() {
+
         presenter.onChannelPressed(BaseChannel.ChannelType.GROUP)
     }
 
