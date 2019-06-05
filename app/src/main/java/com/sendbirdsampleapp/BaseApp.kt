@@ -1,16 +1,29 @@
 package com.sendbirdsampleapp
 
+import android.app.Activity
 import android.app.Application
 import com.sendbird.android.SendBird
+import com.sendbirdsampleapp.di.component.AppComponent
+import com.sendbirdsampleapp.util.AppConstants
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasActivityInjector
+import javax.inject.Inject
 
-class BaseApp : Application() {
+class BaseApp : Application(), HasActivityInjector {
 
-    val APP_ID = "B6DCC89A-9D92-4012-B354-CC41A1BAC5DF"
+
+    @Inject
+    lateinit internal var activityDispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
+
+    override fun activityInjector() = activityDispatchingAndroidInjector
 
     override fun onCreate() {
         super.onCreate()
 
-        SendBird.init(APP_ID, applicationContext)
+        SendBird.init(AppConstants.APP_ID, applicationContext)
+
+        //AppComponent. TODO 
     }
+
 
 }

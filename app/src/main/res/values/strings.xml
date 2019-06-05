@@ -8,6 +8,8 @@
     <string name="user_id">User ID</string>
     <string name="nickname">Nickname</string>
     <string name="connect">Connect</string>
+    <string name="nickname_missing">Nickname Missing</string>
+    <string name="user_id_missing">UserId Missing</string>
     <string name="login_failed">Login to SendBird Failed</string>
 
     <!--Main page-->
