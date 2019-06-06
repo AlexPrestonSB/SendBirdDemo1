@@ -23,4 +23,5 @@ interface AppComponent {
     }
 
     fun inject(app: BaseApp)
+
 }

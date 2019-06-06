@@ -1,6 +1,5 @@
 package com.sendbirdsampleapp.data.preferences
 
-import com.sendbird.android.ConnectionManager
 
 interface PreferenceHelper {
 

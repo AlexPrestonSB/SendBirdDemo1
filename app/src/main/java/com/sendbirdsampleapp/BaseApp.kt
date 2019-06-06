@@ -3,14 +3,13 @@ package com.sendbirdsampleapp
 import android.app.Activity
 import android.app.Application
 import com.sendbird.android.SendBird
-import com.sendbirdsampleapp.di.component.AppComponent
+import com.sendbirdsampleapp.di.component.DaggerAppComponent
 import com.sendbirdsampleapp.util.AppConstants
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import javax.inject.Inject
 
 class BaseApp : Application(), HasActivityInjector {
-
 
     @Inject
     lateinit internal var activityDispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
@@ -22,8 +21,9 @@ class BaseApp : Application(), HasActivityInjector {
 
         SendBird.init(AppConstants.APP_ID, applicationContext)
 
-        //AppComponent. TODO 
+        DaggerAppComponent.builder()
+            .application(this)
+            .build()
+            .inject(this)
     }
-
-
 }

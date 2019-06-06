@@ -38,6 +38,11 @@ class LoginActivity : BaseActivity(), LoginMVPView  {
         textview_login_version.text = version
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.onDetach()
+    }
+
     override fun showValidationMessage(errorCode: Int) {
         when (errorCode) {
             AppConstants.FAILED_LOGIN -> Toast.makeText(this, getString(R.string.login_failed), Toast.LENGTH_LONG).show()

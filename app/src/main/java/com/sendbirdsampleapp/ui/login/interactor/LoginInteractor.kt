@@ -1,6 +1,7 @@
 package com.sendbirdsampleapp.ui.login.interactor
 
-import com.sendbird.android.SendBird
+
+import android.content.Context
 import com.sendbirdsampleapp.data.preferences.PreferenceHelper
 import com.sendbirdsampleapp.ui.base.interactor.BaseInteractor
 import javax.inject.Inject

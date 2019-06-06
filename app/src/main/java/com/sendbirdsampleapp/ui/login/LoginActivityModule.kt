@@ -15,5 +15,6 @@ class LoginActivityModule {
     internal fun provideLoginInteractor(interactor: LoginInteractor): LoginMVPInteractor = interactor
 
     @Provides
-    internal fun provideLoginPresenter(presenter: LoginPresenter<LoginMVPView, LoginMVPInteractor>): LoginMVPPresenter<LoginMVPView, LoginMVPInteractor> = presenter
+    internal fun provideLoginPresenter(presenter: LoginPresenter<LoginMVPView, LoginMVPInteractor>): LoginMVPPresenter<LoginMVPView, LoginMVPInteractor> =
+        presenter
 }
