@@ -6,8 +6,8 @@ interface LoginView {
 
     fun hideProgress()
 
-    fun navigateToChannels()
-
     fun showValidationMessage(errorCode: Int)
+
+    fun navigateToChannels()
 
 }

@@ -1,26 +1,29 @@
-package com.sendbirdsampleapp.ui.channel.view
+package com.sendbirdsampleapp.ui.channel
 
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.sendbird.android.BaseChannel
 import com.sendbird.android.SendBird
 import com.sendbirdsampleapp.BuildConfig
 import com.sendbirdsampleapp.R
-import com.sendbirdsampleapp.ui.channel.interactor.ChannelInteractor
-import com.sendbirdsampleapp.ui.channel.presenter.ChannelPresenter
+import com.sendbirdsampleapp.ui.channel.presenter.ChannelPresenterImpl
+import com.sendbirdsampleapp.ui.channel.view.ChannelView
 import com.sendbirdsampleapp.ui.group_channel.view.GroupChannelActivity
 import com.sendbirdsampleapp.ui.open_channel.view.OpenChannelActivity
 import kotlinx.android.synthetic.main.activity_channel_chooser.*
 
 class ChannelActivity : AppCompatActivity(), ChannelView {
 
-    private val presenter =
-        ChannelPresenter(this, ChannelInteractor())
+
+    lateinit var presenter: ChannelPresenterImpl
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_channel_chooser)
+
+        presenter = ChannelPresenterImpl()
+        presenter.setView(this)
 
 
         textview_channel_group.setOnClickListener { groupChannelPressed() }
@@ -35,13 +38,12 @@ class ChannelActivity : AppCompatActivity(), ChannelView {
         textview_channel_version.text = version
     }
 
-    fun groupChannelPressed() {
-
-        presenter.onChannelPressed(BaseChannel.ChannelType.GROUP)
+    private fun groupChannelPressed() {
+        presenter.navigateToGroupChannels()
     }
 
-    fun openChannelPressed() {
-        presenter.onChannelPressed(BaseChannel.ChannelType.OPEN)
+    private fun openChannelPressed() {
+        presenter.navigateToOpenChannels()
     }
 
     override fun navigateToGroupChannels() {
@@ -52,4 +54,7 @@ class ChannelActivity : AppCompatActivity(), ChannelView {
         startActivity(Intent(this, OpenChannelActivity::class.java))
     }
 
+    override fun showValidationMessage(errorCode: Int) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 }

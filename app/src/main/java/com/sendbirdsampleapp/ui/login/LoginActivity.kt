@@ -8,11 +8,10 @@ import com.sendbird.android.SendBird
 import com.sendbirdsampleapp.BaseApp.Companion.app
 import com.sendbirdsampleapp.BuildConfig
 import com.sendbirdsampleapp.R
-import com.sendbirdsampleapp.ui.channel.view.ChannelActivity
+import com.sendbirdsampleapp.ui.channel.ChannelActivity
 import com.sendbirdsampleapp.ui.login.presenter.LoginPresenter
 import com.sendbirdsampleapp.ui.login.view.LoginView
 import com.sendbirdsampleapp.util.AppConstants
-import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
 
