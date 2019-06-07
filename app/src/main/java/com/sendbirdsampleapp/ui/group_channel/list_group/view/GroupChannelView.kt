@@ -1,4 +1,4 @@
-package com.sendbirdsampleapp.ui.group_channel.view
+package com.sendbirdsampleapp.ui.group_channel.list_group.view
 
 interface GroupChannelView {
 

@@ -1,8 +1,8 @@
-package com.sendbirdsampleapp.ui.group_channel.presenter
+package com.sendbirdsampleapp.ui.group_channel.list_group.presenter
 
 import com.sendbird.android.GroupChannel
 
-import com.sendbirdsampleapp.ui.group_channel.view.GroupChannelView
+import com.sendbirdsampleapp.ui.group_channel.list_group.view.GroupChannelView
 import com.sendbirdsampleapp.util.AppConstants
 
 class GroupChannelPresenterImpl: GroupChannelPresenter {
