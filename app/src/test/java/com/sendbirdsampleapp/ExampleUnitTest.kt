@@ -1,4 +1,4 @@
-package com.example.sendbirdsampleapp
+package com.sendbirdsampleapp
 
 import org.junit.Test
 

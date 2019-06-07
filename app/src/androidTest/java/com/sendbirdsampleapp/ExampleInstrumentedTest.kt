@@ -1,4 +1,4 @@
-package com.example.sendbirdsampleapp
+package com.sendbirdsampleapp
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
