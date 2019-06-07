@@ -2,10 +2,9 @@ package com.sendbirdsampleapp.data.preferences
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.sendbirdsampleapp.di.PreferenceInfo
 import javax.inject.Inject
 
-class AppPreferenceHelper @Inject constructor(context: Context, @PreferenceInfo private val prefFileName: String) : PreferenceHelper {
+class AppPreferenceHelper @Inject constructor(context: Context) : PreferenceHelper {
 
     companion object {
         private val SENDBIRD = "sendbird"
@@ -23,7 +22,7 @@ class AppPreferenceHelper @Inject constructor(context: Context, @PreferenceInfo 
         editor.apply()
     }
 
-    private val mPrefs: SharedPreferences = context.getSharedPreferences(prefFileName, Context.MODE_PRIVATE)
+    private val mPrefs: SharedPreferences = context.getSharedPreferences(SENDBIRD, Context.MODE_PRIVATE)
 
     override fun getUserId(): String =  mPrefs.getString(PREFERENCE_KEY_USERID, "UserId")!!
 
