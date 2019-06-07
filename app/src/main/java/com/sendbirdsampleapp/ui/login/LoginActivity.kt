@@ -3,6 +3,7 @@ package com.sendbirdsampleapp.ui.login
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.widget.Toast
 import com.sendbird.android.SendBird
 import com.sendbirdsampleapp.BaseApp.Companion.app
@@ -17,6 +18,8 @@ import javax.inject.Inject
 
 
 class LoginActivity : AppCompatActivity(), LoginView {
+
+    private val TAG = "LOGIN_ACTIVITY"
 
     @Inject lateinit var presenter: LoginPresenter
 
@@ -62,9 +65,19 @@ class LoginActivity : AppCompatActivity(), LoginView {
 
     override fun showValidationMessage(errorCode: Int) {
         when (errorCode) {
-            AppConstants.FAILED_LOGIN -> Toast.makeText(this, getString(R.string.login_failed), Toast.LENGTH_LONG).show()
-            AppConstants.EMPTY_USER_ID -> Toast.makeText(this, getString(R.string.user_id_missing), Toast.LENGTH_LONG).show()
-            AppConstants.EMPTY_NICKNAME -> Toast.makeText(this, getString(R.string.nickname_missing), Toast.LENGTH_LONG).show()
+            AppConstants.FAILED_LOGIN -> {
+                Toast.makeText(this, getString(R.string.login_failed), Toast.LENGTH_LONG).show()
+                Log.e(TAG, getString(R.string.login_failed))
+            }
+            AppConstants.EMPTY_USER_ID ->  {
+                Toast.makeText(this, getString(R.string.user_id_missing), Toast.LENGTH_LONG).show()
+                Log.e(TAG, getString(R.string.user_id_missing))
+
+            }
+            AppConstants.EMPTY_NICKNAME -> {
+                Toast.makeText(this, getString(R.string.nickname_missing), Toast.LENGTH_LONG).show()
+                Log.e(TAG, getString(R.string.nickname_missing))
+            }
         }
     }
 }

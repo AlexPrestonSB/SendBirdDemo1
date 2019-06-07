@@ -8,7 +8,7 @@ import com.sendbirdsampleapp.BuildConfig
 import com.sendbirdsampleapp.R
 import com.sendbirdsampleapp.ui.channel.presenter.ChannelPresenterImpl
 import com.sendbirdsampleapp.ui.channel.view.ChannelView
-import com.sendbirdsampleapp.ui.group_channel.view.GroupChannelActivity
+import com.sendbirdsampleapp.ui.group_channel.GroupChannelActivity
 import com.sendbirdsampleapp.ui.open_channel.view.OpenChannelActivity
 import kotlinx.android.synthetic.main.activity_channel_chooser.*
 

@@ -25,7 +25,7 @@
             </intent-filter>
         </activity>
         <activity android:name="com.sendbirdsampleapp.ui.channel.ChannelActivity"></activity>
-        <activity android:name="com.sendbirdsampleapp.ui.group_channel.view.GroupChannelActivity"></activity>
+        <activity android:name="com.sendbirdsampleapp.ui.group_channel.GroupChannelActivity"></activity>
         <activity android:name="com.sendbirdsampleapp.ui.open_channel.view.OpenChannelActivity"></activity>
     </application>
 

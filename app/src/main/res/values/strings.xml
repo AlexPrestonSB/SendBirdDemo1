@@ -20,5 +20,8 @@
     <!--Channel page-->
     <string name="channel_icon">"Channel Icon</string>
 
+    <!--Group Channel-->
+    <string name="group_channel_create_failed">Failed to create a group channel</string>
+
 
 </resources>
