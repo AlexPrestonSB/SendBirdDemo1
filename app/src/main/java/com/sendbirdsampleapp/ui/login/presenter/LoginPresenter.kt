@@ -7,4 +7,6 @@ interface LoginPresenter {
 
     fun onLoginClicked(userId: String, nickname: String)
 
+    fun checkConnected()
+
 }

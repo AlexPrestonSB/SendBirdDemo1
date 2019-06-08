@@ -6,13 +6,22 @@ import android.view.View
 import android.view.ViewGroup
 import com.sendbird.android.GroupChannel
 import com.sendbirdsampleapp.R
+import kotlinx.android.synthetic.main.channel_view.view.*
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class GroupChannelListAdapter : RecyclerView.Adapter<GroupChannelListAdapter.ChannelHolder>() {
 
-    private val channels: MutableList<GroupChannel>
+    private var channels: MutableList<GroupChannel>
 
     init {
         channels = ArrayList()
+    }
+
+    fun addChannels(channels: MutableList<GroupChannel>) {
+        this.channels = channels
+        notifyDataSetChanged()
     }
 
 
@@ -24,20 +33,35 @@ class GroupChannelListAdapter : RecyclerView.Adapter<GroupChannelListAdapter.Cha
     override fun getItemCount() = channels.size
 
     override fun onBindViewHolder(holder: ChannelHolder, position: Int) {
-        holder.bindViews(position)
+        holder.bindViews(channels[position], position)
     }
 
     class ChannelHolder(v: View) : RecyclerView.ViewHolder(v), View.OnClickListener {
-        val
+
+        val channelName = v.text_channel_name
+        val channelDate = v.text_channel_date
+        val channelRecentMessage = v.text_channel_recent
+        val channelMemberCount= v.text_channel_member_count
 
 
-        fun bindViews(position: Int) {
+        fun bindViews(groupChannel: GroupChannel, position: Int) {
+
+            channelName.text = groupChannel.members[0].nickname
+            channelDate.text = formatDate(groupChannel.lastMessage.createdAt.toString())
+            channelRecentMessage.text = groupChannel.lastMessage.data
+            channelMemberCount.text = groupChannel.memberCount.toString()
 
 
         }
 
         override fun onClick(v: View?) {
 
+
+        }
+
+        fun formatDate(timeInMillis: String): String {
+            val dateFormat = SimpleDateFormat("MMMM dd", Locale.getDefault())
+            return dateFormat.format(timeInMillis)
         }
     }
 }

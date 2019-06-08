@@ -1,5 +1,6 @@
 package com.sendbirdsampleapp.ui.group_channel.list_group.presenter
 
+import android.util.Log
 import com.sendbird.android.GroupChannel
 
 import com.sendbirdsampleapp.ui.group_channel.list_group.view.GroupChannelView
@@ -21,7 +22,24 @@ class GroupChannelPresenterImpl: GroupChannelPresenter {
         }
     }
 
-    override fun getUserChannels() {
+    override fun onResume() {
 
     }
+
+    override fun setUserChannels() {
+
+        val channelListQuery = GroupChannel.createMyGroupChannelListQuery()
+        channelListQuery.isIncludeEmpty = true
+        channelListQuery.limit = 100
+
+        channelListQuery.next() { channels, e ->
+            if (e != null) {
+                Log.e("TAG",e.printStackTrace().toString())
+                view.showValidationMessage(AppConstants.FAILED_CHANNEL_GET)
+            } else {
+                view.setUserChannels(channels)
+            }
+        }
+    }
+
 }

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.Toast
+import com.sendbird.android.GroupChannel
 import com.sendbird.android.SendBird
 import com.sendbirdsampleapp.BaseApp.Companion.app
 import com.sendbirdsampleapp.BuildConfig
@@ -33,6 +34,7 @@ class LoginActivity : AppCompatActivity(), LoginView {
 
 
         presenter.setView(this)
+        presenter.checkConnected()
 
         val version = String.format(
             resources.getString(R.string.sample_version),
@@ -45,7 +47,7 @@ class LoginActivity : AppCompatActivity(), LoginView {
     }
 
     private fun loginPressed() {
-        presenter.onLoginClicked(edittext_login_user_id.toString(), edittext_login_nickname.toString())
+        presenter.onLoginClicked(edittext_login_user_id.text.toString(), edittext_login_nickname.text.toString())
 
     }
 
@@ -58,12 +60,28 @@ class LoginActivity : AppCompatActivity(), LoginView {
     }
 
     override fun navigateToChannels() {
+//        var connection = SendBird.getConnectionState()
+//
+//        val channelListQuery = GroupChannel.createMyGroupChannelListQuery()
+//        channelListQuery.isIncludeEmpty = true
+//        channelListQuery.limit = 100
+//
+//        channelListQuery.next() { channels, e ->
+//            if (e != null) {
+//                Log.e("TAG",e.printStackTrace().toString())
+//                //view.showValidationMessage(AppConstants.FAILED_CHANNEL_GET)
+//            } else {
+//               // view.setUserChannels(channels)
+//                var t = ""
+//            }
+//        }
         val intent = Intent(this, ChannelActivity::class.java)
         startActivity(intent)
         finish()
     }
 
     override fun showValidationMessage(errorCode: Int) {
+        hideProgress()
         when (errorCode) {
             AppConstants.FAILED_LOGIN -> {
                 Toast.makeText(this, getString(R.string.login_failed), Toast.LENGTH_LONG).show()

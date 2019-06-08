@@ -26,13 +26,13 @@ class AppPreferenceHelper @Inject constructor(context: Context) : PreferenceHelp
 
     override fun getUserId(): String =  mPrefs.getString(PREFERENCE_KEY_USERID, "UserId")!!
 
-    override fun setUserId(userId: String?) { mPrefs.edit{ it.putString(PREFERENCE_KEY_NICKNAME, userId)}}
+    override fun setUserId(userId: String?) { mPrefs.edit{ it.putString(PREFERENCE_KEY_USERID, userId)}}
 
     override fun getNickname(): String = mPrefs.getString(PREFERENCE_KEY_NICKNAME, "Nickname")!!
 
     override fun setNickname(nickname: String?) { mPrefs.edit { it.putString(PREFERENCE_KEY_NICKNAME, nickname) } }
 
-    override fun getConnected(): Boolean =  mPrefs.getBoolean(PREFERENCE_KEY_CONNECTED, true)
+    override fun getConnected(): Boolean =  mPrefs.getBoolean(PREFERENCE_KEY_CONNECTED, false)
 
     override fun setConnected(connected: Boolean) { mPrefs.edit{it.putBoolean(PREFERENCE_KEY_CONNECTED, connected)} }
 }
