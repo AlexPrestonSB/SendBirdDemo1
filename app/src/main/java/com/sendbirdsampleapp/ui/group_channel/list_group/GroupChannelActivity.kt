@@ -37,21 +37,7 @@ class GroupChannelActivity : AppCompatActivity(), GroupChannelView {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        presenter.setUserChannels()
-
-        val channelListQuery = GroupChannel.createMyGroupChannelListQuery()
-        channelListQuery.isIncludeEmpty = true
-        channelListQuery.limit = 100
-
-        channelListQuery.next() { channels, e ->
-            if (e != null) {
-                Log.e("TAG",e.printStackTrace().toString())
-                //view.showValidationMessage(AppConstants.FAILED_CHANNEL_GET)
-            } else {
-                //view.setUserChannels(channels)
-                val s = ""
-            }
-        }
+        setUserChannels()
 
     }
 
@@ -70,7 +56,18 @@ class GroupChannelActivity : AppCompatActivity(), GroupChannelView {
         }
     }
 
-    override fun setUserChannels(channels: MutableList<GroupChannel>) {
-        adapter.addChannels(channels)
+    fun setUserChannels() {
+
+        val channelListQuery = GroupChannel.createMyGroupChannelListQuery()
+        channelListQuery.isIncludeEmpty = true
+        channelListQuery.limit = 100
+
+        channelListQuery.next() { channels, e ->
+            if (e != null) {
+                Log.e("TAG",e.printStackTrace().toString())
+            } else {
+                adapter.addChannels(channels)
+            }
+        }
     }
 }

@@ -6,9 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.sendbird.android.GroupChannel
 import com.sendbirdsampleapp.R
+import com.sendbirdsampleapp.util.DateUtils
 import kotlinx.android.synthetic.main.channel_view.view.*
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.collections.ArrayList
 
 class GroupChannelListAdapter : RecyclerView.Adapter<GroupChannelListAdapter.ChannelHolder>() {
@@ -47,11 +46,10 @@ class GroupChannelListAdapter : RecyclerView.Adapter<GroupChannelListAdapter.Cha
         fun bindViews(groupChannel: GroupChannel, position: Int) {
 
             channelName.text = groupChannel.members[0].nickname
-            channelDate.text = formatDate(groupChannel.lastMessage.createdAt.toString())
+            channelDate.text = DateUtils.formatDateTime(groupChannel.lastMessage.createdAt)
             channelRecentMessage.text = groupChannel.lastMessage.data
             channelMemberCount.text = groupChannel.memberCount.toString()
-
-
+            
         }
 
         override fun onClick(v: View?) {
@@ -59,9 +57,5 @@ class GroupChannelListAdapter : RecyclerView.Adapter<GroupChannelListAdapter.Cha
 
         }
 
-        fun formatDate(timeInMillis: String): String {
-            val dateFormat = SimpleDateFormat("MMMM dd", Locale.getDefault())
-            return dateFormat.format(timeInMillis)
-        }
     }
 }

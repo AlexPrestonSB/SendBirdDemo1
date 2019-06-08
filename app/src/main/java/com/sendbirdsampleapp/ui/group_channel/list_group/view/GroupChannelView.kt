@@ -6,7 +6,6 @@ interface GroupChannelView {
 
     fun showValidationMessage(errorCode: Int)
 
-    fun setUserChannels(channels: MutableList<GroupChannel>)
 
 
 }

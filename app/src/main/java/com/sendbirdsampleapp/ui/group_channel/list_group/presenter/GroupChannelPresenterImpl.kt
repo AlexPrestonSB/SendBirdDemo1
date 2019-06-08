@@ -26,20 +26,5 @@ class GroupChannelPresenterImpl: GroupChannelPresenter {
 
     }
 
-    override fun setUserChannels() {
-
-        val channelListQuery = GroupChannel.createMyGroupChannelListQuery()
-        channelListQuery.isIncludeEmpty = true
-        channelListQuery.limit = 100
-
-        channelListQuery.next() { channels, e ->
-            if (e != null) {
-                Log.e("TAG",e.printStackTrace().toString())
-                view.showValidationMessage(AppConstants.FAILED_CHANNEL_GET)
-            } else {
-                view.setUserChannels(channels)
-            }
-        }
-    }
 
 }

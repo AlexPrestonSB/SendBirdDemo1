@@ -8,8 +8,6 @@ interface GroupChannelPresenter {
 
     fun createGroupPressed(users: List<String>)
 
-    fun setUserChannels()
-
     fun onResume()
 
 }
