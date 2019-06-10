@@ -4,17 +4,21 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.sendbird.android.SendBird
+import com.sendbirdsampleapp.BaseApp
 import com.sendbirdsampleapp.BuildConfig
 import com.sendbirdsampleapp.R
 import com.sendbirdsampleapp.ui.channel.presenter.ChannelPresenterImpl
 import com.sendbirdsampleapp.ui.channel.view.ChannelView
 import com.sendbirdsampleapp.ui.group_channel.list_group.GroupChannelActivity
+import com.sendbirdsampleapp.ui.login.LoginActivity
 import com.sendbirdsampleapp.ui.open_channel.view.OpenChannelActivity
 import kotlinx.android.synthetic.main.activity_channel_chooser.*
+import javax.inject.Inject
 
 class ChannelActivity : AppCompatActivity(), ChannelView {
 
 
+    @Inject
     lateinit var presenter: ChannelPresenterImpl
 
 
@@ -22,7 +26,8 @@ class ChannelActivity : AppCompatActivity(), ChannelView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_channel_chooser)
 
-        presenter = ChannelPresenterImpl()
+        BaseApp.app(this).injector.inject(this)
+
         presenter.setView(this)
 
 
@@ -36,6 +41,7 @@ class ChannelActivity : AppCompatActivity(), ChannelView {
         )
 
         textview_channel_version.text = version
+        button_channel_logout.setOnClickListener { presenter.logoutPressed() }
     }
 
     private fun groupChannelPressed() {
@@ -44,6 +50,11 @@ class ChannelActivity : AppCompatActivity(), ChannelView {
 
     private fun openChannelPressed() {
         presenter.navigateToOpenChannels()
+    }
+
+    override fun logoutPressed() {
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
     }
 
     override fun navigateToGroupChannels() {

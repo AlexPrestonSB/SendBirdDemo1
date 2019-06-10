@@ -28,6 +28,6 @@ interface AppComponent {
 
     fun inject(loginActivity: LoginActivity)
 
-    //fun inject(channelActivity: ChannelActivity)
+    fun inject(channelActivity: ChannelActivity)
 
 }

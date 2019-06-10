@@ -6,5 +6,7 @@ interface GroupChannelCreateView {
 
     fun showValidationMessage(errorCode: Int)
 
+    fun backPressed()
+
 
 }

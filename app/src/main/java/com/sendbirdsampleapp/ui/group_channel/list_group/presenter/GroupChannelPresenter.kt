@@ -8,4 +8,6 @@ interface GroupChannelPresenter {
 
     fun createGroupPressed()
 
+    fun backPressed()
+
 }

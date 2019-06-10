@@ -7,6 +7,8 @@ interface GroupChannelView {
 
     fun createGroupPressed()
 
+    fun backPressed()
+
 
 
 }

@@ -6,7 +6,8 @@ interface GroupChannelCreatePresenter {
 
     fun setView(groupView: GroupChannelCreateView)
 
-
     fun createChannel(users: MutableList<String>)
+
+    fun backPressed()
 
 }

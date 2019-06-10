@@ -22,4 +22,8 @@ class GroupChannelCreatePresenterImpl : GroupChannelCreatePresenter {
             }
         }
     }
+
+    override fun backPressed() {
+        view.backPressed()
+    }
 }

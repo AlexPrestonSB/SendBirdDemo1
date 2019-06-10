@@ -11,6 +11,7 @@ import com.sendbird.android.User
 import com.sendbirdsampleapp.R
 import com.sendbirdsampleapp.ui.group_channel.create_group.presenter.GroupChannelCreatePresenterImpl
 import com.sendbirdsampleapp.ui.group_channel.create_group.view.GroupChannelCreateView
+import com.sendbirdsampleapp.ui.group_channel.list_group.GroupChannelActivity
 import com.sendbirdsampleapp.ui.group_channel.message_group.GroupChannelMessageActivity
 import kotlinx.android.synthetic.main.activity_group_create.*
 
@@ -43,12 +44,17 @@ class GroupChannelCreateActivity : AppCompatActivity(), GroupChannelCreateAdapte
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-
         text_channel_create.setOnClickListener { presenter.createChannel(selectedUsers) }
+
+        button_channel_create_back.setOnClickListener{ presenter.backPressed()}
 
         loadUsers()
     }
 
+    override fun backPressed() {
+        val intent = Intent(this, GroupChannelActivity::class.java)
+        startActivity(intent)
+    }
 
     override fun createChannelPressed(channelId: String) {
         val intent = Intent(this, GroupChannelMessageActivity::class.java)

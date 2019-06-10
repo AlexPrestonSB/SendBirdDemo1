@@ -15,4 +15,7 @@ class GroupChannelPresenterImpl: GroupChannelPresenter {
         view.createGroupPressed()
     }
 
+    override fun backPressed() {
+        view.backPressed()
+    }
 }

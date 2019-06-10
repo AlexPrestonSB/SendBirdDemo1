@@ -9,19 +9,27 @@ import android.view.ViewGroup
 import com.sendbird.android.*
 import com.sendbirdsampleapp.BuildConfig
 import com.sendbirdsampleapp.R
+import com.sendbirdsampleapp.ui.group_channel.create_group.GroupChannelCreateAdapter
 import com.sendbirdsampleapp.util.DateUtils
 import kotlinx.android.synthetic.main.channel_chooser_view.view.*
 import kotlin.collections.ArrayList
 
-class GroupChannelListAdapter(context: Context) : RecyclerView.Adapter<GroupChannelListAdapter.ChannelHolder>() {
+class GroupChannelListAdapter(context: Context, listener: OnChannelClickedListener) : RecyclerView.Adapter<GroupChannelListAdapter.ChannelHolder>() {
+
+    interface OnChannelClickedListener {
+        fun onItemClicked(channel: GroupChannel)
+    }
 
     private var channels: MutableList<GroupChannel>
     private val context: Context
+    private val listener: OnChannelClickedListener
+
 
 
     init {
         channels = ArrayList()
         this.context = context
+        this.listener = listener
     }
 
     fun addChannels(channels: MutableList<GroupChannel>) {
@@ -38,10 +46,10 @@ class GroupChannelListAdapter(context: Context) : RecyclerView.Adapter<GroupChan
     override fun getItemCount() = channels.size
 
     override fun onBindViewHolder(holder: ChannelHolder, position: Int) {
-        holder.bindViews(context, channels[position], position)
+        holder.bindViews(context, channels[position], position, listener)
     }
 
-    class ChannelHolder(v: View) : RecyclerView.ViewHolder(v), View.OnClickListener {
+    class ChannelHolder(v: View) : RecyclerView.ViewHolder(v) {
 
         val channelName = v.text_channel_name
         val channelDate = v.text_channel_date
@@ -49,7 +57,7 @@ class GroupChannelListAdapter(context: Context) : RecyclerView.Adapter<GroupChan
         val channelMemberCount = v.text_channel_member_count
 
 
-        fun bindViews(context: Context, groupChannel: GroupChannel, position: Int) {
+        fun bindViews(context: Context, groupChannel: GroupChannel, position: Int, listener: OnChannelClickedListener) {
 
             val lastMessage = groupChannel.lastMessage
 
@@ -72,15 +80,15 @@ class GroupChannelListAdapter(context: Context) : RecyclerView.Adapter<GroupChan
                 }
             }
 
+            itemView.setOnClickListener {
+                listener.onItemClicked(groupChannel)
+            }
+
             channelName.text = groupChannel.members[0].nickname
             channelMemberCount.text = groupChannel.memberCount.toString()
 
         }
 
-        override fun onClick(v: View?) {
-
-
-        }
 
     }
 }

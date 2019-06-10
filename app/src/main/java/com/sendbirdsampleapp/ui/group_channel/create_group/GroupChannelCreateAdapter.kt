@@ -19,10 +19,9 @@ class GroupChannelCreateAdapter(context: Context, listener: OnItemCheckedChangeL
         fun onItemChecked(user: User, checked: Boolean)
     }
 
-
     private var users: MutableList<User>
     private val context: Context
-    private lateinit var checkedListener: OnItemCheckedChangeListener
+    private var checkedListener: OnItemCheckedChangeListener
 
     companion object {
         fun selectedUsers() = ArrayList<String>()
@@ -35,7 +34,6 @@ class GroupChannelCreateAdapter(context: Context, listener: OnItemCheckedChangeL
         this.checkedListener = listener
     }
 
-//    fun setItemCheckedChangeListener(listener: OnItemCheckedChangeListener) = checkedListener
 
     fun addUsers(users: MutableList<User>) {
         this.users = users
