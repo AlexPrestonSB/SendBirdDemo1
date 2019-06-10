@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.sendbird.android.BaseMessage
 import com.sendbird.android.GroupChannel
 import com.sendbirdsampleapp.R
 import com.sendbirdsampleapp.util.DateUtils
@@ -45,11 +46,13 @@ class GroupChannelListAdapter : RecyclerView.Adapter<GroupChannelListAdapter.Cha
 
         fun bindViews(groupChannel: GroupChannel, position: Int) {
 
+            val lastMessage = groupChannel.lastMessage
+
             channelName.text = groupChannel.members[0].nickname
             channelDate.text = DateUtils.formatDateTime(groupChannel.lastMessage.createdAt)
-            channelRecentMessage.text = groupChannel.lastMessage.data
+            channelRecentMessage.text = lastMessage.messageId.toString()
             channelMemberCount.text = groupChannel.memberCount.toString()
-            
+
         }
 
         override fun onClick(v: View?) {
