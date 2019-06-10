@@ -45,11 +45,6 @@ class GroupChannelActivity : AppCompatActivity(), GroupChannelView {
 
     }
 
-    override fun onResume() {
-        super.onResume()
-        presenter.onResume()
-    }
-
     override fun showValidationMessage(errorCode: Int) {
 
         when (errorCode) {

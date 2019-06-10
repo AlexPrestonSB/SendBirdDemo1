@@ -15,9 +15,4 @@ class GroupChannelPresenterImpl: GroupChannelPresenter {
         view.createGroupPressed()
     }
 
-    override fun onResume() {
-
-    }
-
-
 }

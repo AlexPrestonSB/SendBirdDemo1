@@ -60,6 +60,19 @@ class LoginActivity : AppCompatActivity(), LoginView {
     }
 
     override fun navigateToChannels() {
+
+//        val userListQuery = SendBird.createApplicationUserListQuery()
+//
+//        userListQuery.setLimit(100) //TODO change don't user constants
+//        userListQuery.next() {list, e ->
+//            if (e != null){
+//                Log.e(TAG, "Failed to load users")
+//            } else {
+//                //adapter.addUsers(list)
+//
+//            }
+//
+//        }
         val intent = Intent(this, ChannelActivity::class.java)
         startActivity(intent)
         finish()
