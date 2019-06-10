@@ -20,6 +20,9 @@
     <dimen name="button_vertical">44dp</dimen>
     <dimen name="button_height">56dp</dimen>
     <dimen name="button_bottom_spacing">24dp</dimen>
+    <dimen name="button_upload_size">48dp</dimen>
+    <dimen name="button_send_width">64dp</dimen>
+    <dimen name="button_send_height">48dp</dimen>
 
     <!--Images-->
     <dimen name="channel_image_height">40dp</dimen>

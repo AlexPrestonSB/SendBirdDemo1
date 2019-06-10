@@ -34,5 +34,10 @@
     <string name="create">Create</string>
     <string name="create_channel">Create Channel</string>
 
+    <!--Chat-->
+    <string name="upload">Upload</string>
+    <string name="hints">Enter Message</string>
+    <string name="send">SEND</string>
+
 
 </resources>
