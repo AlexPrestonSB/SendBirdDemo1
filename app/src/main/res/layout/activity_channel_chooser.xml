@@ -8,7 +8,7 @@
 
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/layout_channel_toolbar"
+        android:id="@+id/layout_channel_chooser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
@@ -16,11 +16,31 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar_channel"
+            android:id="@+id/toolbar_channel_chooser"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:theme="@style/Widget.AppCompat.Toolbar"
             app:popupTheme="@style/Theme.AppCompat.Light">
+
+            <TextView
+                android:layout_marginTop="@dimen/text_version_size"
+                android:id="@+id/button_channel_logout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/logout"
+                android:textColor="@color/light_gray"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_standard"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="@string/select_channel_type"
+                android:textColor="@color/light_gray"
+                android:textSize="@dimen/text_toolbar_size"
+                android:textStyle="bold" />
 
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
@@ -38,7 +58,7 @@
         android:text="@string/group_channel"
         android:textColor="@color/text_standard"
         android:textSize="@dimen/text_standard"
-        app:layout_constraintTop_toBottomOf="@+id/layout_channel_toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/layout_channel_chooser" />
 
     <View
         android:id="@+id/line_channel"

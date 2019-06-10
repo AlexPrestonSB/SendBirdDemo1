@@ -4,11 +4,14 @@
     package="com.sendbirdsampleapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <!--READ/WRITE_EXTERNAL_STORAGE permissions are required for upload and download of files. -->
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
 
 
     <application
@@ -25,8 +28,10 @@
             </intent-filter>
         </activity>
         <activity android:name="com.sendbirdsampleapp.ui.channel.ChannelActivity"></activity>
-        <activity android:name="com.sendbirdsampleapp.ui.group_channel.view.GroupChannelActivity"></activity>
+        <activity android:name="com.sendbirdsampleapp.ui.group_channel.list_group.GroupChannelActivity"></activity>
         <activity android:name="com.sendbirdsampleapp.ui.open_channel.view.OpenChannelActivity"></activity>
+        <activity android:name="com.sendbirdsampleapp.ui.group_channel.create_group.GroupChannelCreateActivity"></activity>
+        <activity android:name=".ui.group_channel.message_group.GroupChannelMessageActivity"></activity>
     </application>
 
 </manifest>

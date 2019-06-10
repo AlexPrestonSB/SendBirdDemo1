@@ -2,6 +2,9 @@
     <string name="app_name">SendBirdSampleApp</string>
 
     <string name="sample_version">Sample UI v%1$s / SDK v%2$s</string>
+    <string name="group_channel_list_file_message_text">%1$s has uploaded a file.</string>
+    <string name="back">Back</string>
+
 
     <!--Login page-->
     <string name="logo_desc">SendBird Logo</string>
@@ -16,9 +19,20 @@
     <string name="open_channel">Open Channels</string>
     <string name="group_channel">Group Channels</string>
     <string name="disconnected">Disconnected</string>
+    <string name="select_channel_type">Select Channel Type</string>
+    <string name="logout">Logout</string>
 
     <!--Channel page-->
     <string name="channel_icon">"Channel Icon</string>
+
+    <!--Group Channel-->
+    <string name="group_channel_create_failed">Failed to create a group channel</string>
+    <string name="group_channels">Group Channels</string>
+    
+    <!--Create Channel-->
+    <string name="user_icon">User Icon</string>
+    <string name="create">Create</string>
+    <string name="create_channel">Create Channel</string>
 
 
 </resources>

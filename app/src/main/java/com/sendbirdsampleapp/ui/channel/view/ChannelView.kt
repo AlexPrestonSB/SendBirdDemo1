@@ -8,4 +8,6 @@ interface ChannelView {
 
     fun showValidationMessage(errorCode: Int)
 
+    fun logoutPressed()
+
 }

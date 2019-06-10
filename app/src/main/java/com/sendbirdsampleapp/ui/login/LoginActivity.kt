@@ -3,6 +3,7 @@ package com.sendbirdsampleapp.ui.login
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.widget.Toast
 import com.sendbird.android.SendBird
 import com.sendbirdsampleapp.BaseApp.Companion.app
@@ -18,7 +19,10 @@ import javax.inject.Inject
 
 class LoginActivity : AppCompatActivity(), LoginView {
 
-    @Inject lateinit var presenter: LoginPresenter
+    private val TAG = "LOGIN_ACTIVITY"
+
+    @Inject
+    lateinit var presenter: LoginPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +34,7 @@ class LoginActivity : AppCompatActivity(), LoginView {
 
 
         presenter.setView(this)
+        presenter.checkConnected()
 
         val version = String.format(
             resources.getString(R.string.sample_version),
@@ -42,7 +47,7 @@ class LoginActivity : AppCompatActivity(), LoginView {
     }
 
     private fun loginPressed() {
-        presenter.onLoginClicked(edittext_login_user_id.toString(), edittext_login_nickname.toString())
+        presenter.onLoginClicked(edittext_login_user_id.text.toString(), edittext_login_nickname.text.toString())
 
     }
 
@@ -55,16 +60,28 @@ class LoginActivity : AppCompatActivity(), LoginView {
     }
 
     override fun navigateToChannels() {
+
         val intent = Intent(this, ChannelActivity::class.java)
         startActivity(intent)
         finish()
     }
 
     override fun showValidationMessage(errorCode: Int) {
+        hideProgress()
         when (errorCode) {
-            AppConstants.FAILED_LOGIN -> Toast.makeText(this, getString(R.string.login_failed), Toast.LENGTH_LONG).show()
-            AppConstants.EMPTY_USER_ID -> Toast.makeText(this, getString(R.string.user_id_missing), Toast.LENGTH_LONG).show()
-            AppConstants.EMPTY_NICKNAME -> Toast.makeText(this, getString(R.string.nickname_missing), Toast.LENGTH_LONG).show()
+            AppConstants.FAILED_LOGIN -> {
+                Toast.makeText(this, getString(R.string.login_failed), Toast.LENGTH_LONG).show()
+                Log.e(TAG, getString(R.string.login_failed))
+            }
+            AppConstants.EMPTY_USER_ID -> {
+                Toast.makeText(this, getString(R.string.user_id_missing), Toast.LENGTH_LONG).show()
+                Log.e(TAG, getString(R.string.user_id_missing))
+
+            }
+            AppConstants.EMPTY_NICKNAME -> {
+                Toast.makeText(this, getString(R.string.nickname_missing), Toast.LENGTH_LONG).show()
+                Log.e(TAG, getString(R.string.nickname_missing))
+            }
         }
     }
 }
