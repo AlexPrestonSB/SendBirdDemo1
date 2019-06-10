@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.Toast
-import com.sendbird.android.GroupChannel
 import com.sendbird.android.SendBird
 import com.sendbirdsampleapp.BaseApp.Companion.app
 import com.sendbirdsampleapp.BuildConfig
@@ -22,7 +21,8 @@ class LoginActivity : AppCompatActivity(), LoginView {
 
     private val TAG = "LOGIN_ACTIVITY"
 
-    @Inject lateinit var presenter: LoginPresenter
+    @Inject
+    lateinit var presenter: LoginPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,18 +61,6 @@ class LoginActivity : AppCompatActivity(), LoginView {
 
     override fun navigateToChannels() {
 
-//        val userListQuery = SendBird.createApplicationUserListQuery()
-//
-//        userListQuery.setLimit(100) //TODO change don't user constants
-//        userListQuery.next() {list, e ->
-//            if (e != null){
-//                Log.e(TAG, "Failed to load users")
-//            } else {
-//                //adapter.addUsers(list)
-//
-//            }
-//
-//        }
         val intent = Intent(this, ChannelActivity::class.java)
         startActivity(intent)
         finish()
@@ -85,7 +73,7 @@ class LoginActivity : AppCompatActivity(), LoginView {
                 Toast.makeText(this, getString(R.string.login_failed), Toast.LENGTH_LONG).show()
                 Log.e(TAG, getString(R.string.login_failed))
             }
-            AppConstants.EMPTY_USER_ID ->  {
+            AppConstants.EMPTY_USER_ID -> {
                 Toast.makeText(this, getString(R.string.user_id_missing), Toast.LENGTH_LONG).show()
                 Log.e(TAG, getString(R.string.user_id_missing))
 

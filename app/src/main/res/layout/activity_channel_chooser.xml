@@ -22,6 +22,26 @@
             android:theme="@style/Widget.AppCompat.Toolbar"
             app:popupTheme="@style/Theme.AppCompat.Light">
 
+            <TextView
+                android:layout_marginTop="@dimen/text_version_size"
+                android:id="@+id/button_channel_logout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/logout"
+                android:textColor="@color/light_gray"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_standard"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="@string/select_channel_type"
+                android:textColor="@color/light_gray"
+                android:textSize="@dimen/text_toolbar_size"
+                android:textStyle="bold" />
+
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 

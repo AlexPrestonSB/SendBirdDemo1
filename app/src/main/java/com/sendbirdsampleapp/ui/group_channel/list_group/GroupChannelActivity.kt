@@ -34,7 +34,7 @@ class GroupChannelActivity : AppCompatActivity(), GroupChannelView {
 
         presenter.setView(this)
 
-        adapter = GroupChannelListAdapter()
+        adapter = GroupChannelListAdapter(this)
         recyclerView = recycler_group_channels
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -47,12 +47,6 @@ class GroupChannelActivity : AppCompatActivity(), GroupChannelView {
 
     override fun showValidationMessage(errorCode: Int) {
 
-        when (errorCode) {
-            AppConstants.FAILED_GROUP_CREATE -> {
-                Toast.makeText(this, getString(R.string.group_channel_create_failed), Toast.LENGTH_LONG).show()
-                Log.e(TAG, getString(R.string.group_channel_create_failed))
-            }
-        }
     }
 
     override fun createGroupPressed() {

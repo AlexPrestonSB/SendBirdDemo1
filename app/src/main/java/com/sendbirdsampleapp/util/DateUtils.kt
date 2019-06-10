@@ -8,7 +8,7 @@ object DateUtils {
 
     fun formatDateTime(timeInMillis: Long): String {
         if (isToday(timeInMillis)) {
-            return formatDateTime(timeInMillis)
+            return formatTime(timeInMillis)
         } else {
             return formatDate(timeInMillis)
         }
