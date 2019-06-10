@@ -1,5 +1,6 @@
 package com.sendbirdsampleapp.ui.group_channel.list_group
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -8,6 +9,7 @@ import android.util.Log
 import android.widget.Toast
 import com.sendbird.android.*
 import com.sendbirdsampleapp.R
+import com.sendbirdsampleapp.ui.group_channel.create_group.GroupChannelCreateActivity
 import com.sendbirdsampleapp.ui.group_channel.list_group.presenter.GroupChannelPresenterImpl
 import com.sendbirdsampleapp.ui.group_channel.list_group.view.GroupChannelView
 import com.sendbirdsampleapp.util.AppConstants
@@ -39,6 +41,8 @@ class GroupChannelActivity : AppCompatActivity(), GroupChannelView {
 
         setUserChannels()
 
+        fab_group_channel_create.setOnClickListener { presenter.createGroupPressed() }
+
     }
 
     override fun onResume() {
@@ -48,7 +52,7 @@ class GroupChannelActivity : AppCompatActivity(), GroupChannelView {
 
     override fun showValidationMessage(errorCode: Int) {
 
-        when(errorCode) {
+        when (errorCode) {
             AppConstants.FAILED_GROUP_CREATE -> {
                 Toast.makeText(this, getString(R.string.group_channel_create_failed), Toast.LENGTH_LONG).show()
                 Log.e(TAG, getString(R.string.group_channel_create_failed))
@@ -56,7 +60,13 @@ class GroupChannelActivity : AppCompatActivity(), GroupChannelView {
         }
     }
 
-    fun setUserChannels() {
+    override fun createGroupPressed() {
+        val intent = Intent(this, GroupChannelCreateActivity::class.java)
+        startActivity(intent)
+    }
+
+
+    private fun setUserChannels() {
 
         val channelListQuery = GroupChannel.createMyGroupChannelListQuery()
         channelListQuery.isIncludeEmpty = true
@@ -64,7 +74,7 @@ class GroupChannelActivity : AppCompatActivity(), GroupChannelView {
 
         channelListQuery.next() { channels, e ->
             if (e != null) {
-                Log.e("TAG",e.printStackTrace().toString())
+                Log.e("TAG", e.printStackTrace().toString())
             } else {
                 adapter.addChannels(channels)
             }

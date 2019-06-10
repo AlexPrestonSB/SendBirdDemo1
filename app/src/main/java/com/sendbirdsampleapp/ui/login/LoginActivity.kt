@@ -60,21 +60,6 @@ class LoginActivity : AppCompatActivity(), LoginView {
     }
 
     override fun navigateToChannels() {
-//        var connection = SendBird.getConnectionState()
-//
-//        val channelListQuery = GroupChannel.createMyGroupChannelListQuery()
-//        channelListQuery.isIncludeEmpty = true
-//        channelListQuery.limit = 100
-//
-//        channelListQuery.next() { channels, e ->
-//            if (e != null) {
-//                Log.e("TAG",e.printStackTrace().toString())
-//                //view.showValidationMessage(AppConstants.FAILED_CHANNEL_GET)
-//            } else {
-//               // view.setUserChannels(channels)
-//                var t = ""
-//            }
-//        }
         val intent = Intent(this, ChannelActivity::class.java)
         startActivity(intent)
         finish()

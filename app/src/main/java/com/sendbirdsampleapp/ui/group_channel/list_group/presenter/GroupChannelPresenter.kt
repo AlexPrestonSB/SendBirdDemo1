@@ -6,7 +6,7 @@ interface GroupChannelPresenter {
 
     fun setView(groupView: GroupChannelView)
 
-    fun createGroupPressed(users: List<String>)
+    fun createGroupPressed()
 
     fun onResume()
 

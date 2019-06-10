@@ -6,6 +6,8 @@ interface GroupChannelView {
 
     fun showValidationMessage(errorCode: Int)
 
+    fun createGroupPressed()
+
 
 
 }
