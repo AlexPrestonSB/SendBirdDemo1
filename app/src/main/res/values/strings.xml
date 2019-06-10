@@ -21,7 +21,10 @@
     <string name="channel_icon">"Channel Icon</string>
 
     <!--Group Channel-->
-    <string name="group_channel_create_failed">Failed to create a group channel</string>
+    <string name="group_channel_create_failed">Failed to create a group channel</string>'
+    
+    <!--Create Channel-->
+    <string name="user_icon">User Icon</string>
 
 
 </resources>

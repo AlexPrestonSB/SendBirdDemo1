@@ -4,11 +4,10 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.sendbird.android.BaseMessage
 import com.sendbird.android.GroupChannel
 import com.sendbirdsampleapp.R
 import com.sendbirdsampleapp.util.DateUtils
-import kotlinx.android.synthetic.main.channel_view.view.*
+import kotlinx.android.synthetic.main.channel_chooser_view.view.*
 import kotlin.collections.ArrayList
 
 class GroupChannelListAdapter : RecyclerView.Adapter<GroupChannelListAdapter.ChannelHolder>() {
@@ -27,7 +26,7 @@ class GroupChannelListAdapter : RecyclerView.Adapter<GroupChannelListAdapter.Cha
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChannelHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        return ChannelHolder(layoutInflater.inflate(R.layout.channel_view, parent, false))
+        return ChannelHolder(layoutInflater.inflate(R.layout.channel_chooser_view, parent, false))
     }
 
     override fun getItemCount() = channels.size
@@ -50,12 +49,14 @@ class GroupChannelListAdapter : RecyclerView.Adapter<GroupChannelListAdapter.Cha
 
             channelName.text = groupChannel.members[0].nickname
             channelDate.text = DateUtils.formatDateTime(groupChannel.lastMessage.createdAt)
-            channelRecentMessage.text = lastMessage.messageId.toString()
+            //channelRecentMessage.text = lastMessage.messageId.toString()
             channelMemberCount.text = groupChannel.memberCount.toString()
 
         }
 
         override fun onClick(v: View?) {
+
+
 
 
         }
