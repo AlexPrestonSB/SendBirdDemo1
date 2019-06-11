@@ -22,6 +22,7 @@ class GroupChannelChatPresenterImpl: GroupChannelChatPresenter {
                     view.showValidationMessage(AppConstants.FAILED_CHANNEL_GET)
                 } else {
                     loadPreviousMessages(groupChannel)
+                    view.displayChatTitle(groupChannel.name)
                     channel = groupChannel
                 }
             }
@@ -65,8 +66,18 @@ class GroupChannelChatPresenterImpl: GroupChannelChatPresenter {
                 }
             }
         })
+    }
 
+    override fun onPause() {
+        SendBird.removeChannelHandler(AppConstants.CHANNEL_HANDLER_ID)
+    }
 
+    override fun setTypingStatus(typing: Boolean) {
+        if (typing){
+            channel.startTyping()
+        } else {
+            channel.endTyping()
+        }
     }
 
     fun preparedMessage(users: MutableList<Member>): String {
@@ -82,7 +93,7 @@ class GroupChannelChatPresenterImpl: GroupChannelChatPresenter {
         }
     }
 
-    fun loadPreviousMessages(groupChannel: GroupChannel) {
+    private fun loadPreviousMessages(groupChannel: GroupChannel) {
         Thread {
             val prevMessages = groupChannel.createPreviousMessageListQuery()
             prevMessages.load(100,true) { messages, sendBirdException ->

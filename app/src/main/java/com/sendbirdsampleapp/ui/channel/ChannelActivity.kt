@@ -11,7 +11,7 @@ import com.sendbirdsampleapp.ui.channel.presenter.ChannelPresenterImpl
 import com.sendbirdsampleapp.ui.channel.view.ChannelView
 import com.sendbirdsampleapp.ui.group_channel.list_group.GroupChannelActivity
 import com.sendbirdsampleapp.ui.login.LoginActivity
-import com.sendbirdsampleapp.ui.open_channel.view.OpenChannelActivity
+import com.sendbirdsampleapp.ui.open_channel.OpenChannelActivity
 import kotlinx.android.synthetic.main.activity_channel_chooser.*
 import javax.inject.Inject
 

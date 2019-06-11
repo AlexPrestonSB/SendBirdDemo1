@@ -29,6 +29,7 @@
                 android:src="@drawable/ic_arrow_left_white_24_dp" />
 
             <TextView
+                android:id="@+id/text_group_chat_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -46,13 +47,14 @@
         android:layout_height="wrap_content"
         app:layout_constrainedHeight="true"
         app:layout_constraintBottom_toTopOf="@+id/text_group_chat_indicator"
-        app:layout_constraintTop_toBottomOf="@+id/layout_group_chat"/>
+        app:layout_constraintTop_toBottomOf="@+id/layout_group_chat" />
 
     <TextView
         android:id="@+id/text_group_chat_indicator"
-        android:layout_width="match_parent"
-        android:visibility="gone"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/view"
         app:layout_constraintStart_toStartOf="parent" />
 

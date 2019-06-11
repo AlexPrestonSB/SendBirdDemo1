@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import com.sendbird.android.BaseMessage
 import com.sendbird.android.Member
@@ -36,18 +38,11 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView {
         presenter = GroupChannelChatPresenterImpl()
         presenter.setView(this)
 
+        setUpRecyclerView()
+
         presenter.enterChannel(getChannelURl())
 
-        adapter = GroupChannelChatAdapter()
-        recyclerView = recycler_group_chat
-        recyclerView.adapter = adapter
-        val layoutManager = LinearLayoutManager(this)
-        layoutManager.reverseLayout = true
-        recyclerView.layoutManager = layoutManager
-
-        button_group_chat_back.setOnClickListener { presenter.backPressed() }
-
-        button_group_chat_send.setOnClickListener { presenter.sendMessage(edit_group_chat_message.text.toString()) }
+        setListeners()
     }
 
     override fun onResume() {
@@ -55,11 +50,19 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView {
         presenter.onResume()
     }
 
+    override fun onPause() {
+        super.onPause()
+        presenter.setTypingStatus(false)
+        presenter.onPause()
+    }
+
     override fun receiveMessage(message: BaseMessage) {
         adapter.addFirst(message)
+        recyclerView.scrollToPosition(0)
     }
 
     override fun typingIndicator(message: String) {
+        recyclerView.scrollToPosition(0)
         if (message != "") {
             text_group_chat_indicator.visibility = View.VISIBLE
             text_group_chat_indicator.setText(message)
@@ -72,6 +75,7 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView {
     override fun sendMessage(message: UserMessage) {
         adapter.addFirst(message)
         edit_group_chat_message.setText("")
+        recyclerView.scrollToPosition(0)
     }
 
     override fun loadPreviousMessages(messages: MutableList<BaseMessage>) {
@@ -87,7 +91,41 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView {
         startActivity(intent)
     }
 
-    fun getChannelURl(): String {
+    override fun displayChatTitle(title: String) {
+        text_group_chat_name.text = title
+    }
+
+    private fun setListeners() {
+        button_group_chat_back.setOnClickListener { presenter.backPressed() }
+        button_group_chat_send.setOnClickListener { presenter.sendMessage(edit_group_chat_message.text.toString()) }
+
+        edit_group_chat_message.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                recyclerView.scrollToPosition(0)
+                if (s?.isNotEmpty()!!) {
+                    presenter.setTypingStatus(true)
+                } else {
+                    presenter.setTypingStatus(false)
+                }
+
+            }
+        })
+    }
+
+    private fun setUpRecyclerView() {
+        adapter = GroupChannelChatAdapter()
+        recyclerView = recycler_group_chat
+        recyclerView.adapter = adapter
+        val layoutManager = LinearLayoutManager(this)
+        layoutManager.reverseLayout = true
+        recyclerView.layoutManager = layoutManager
+        recyclerView.scrollToPosition(0)
+
+    }
+
+    private fun getChannelURl(): String {
         val intent = this.intent
         return intent.getStringExtra(EXTRA_CHANNEL_URL)
     }

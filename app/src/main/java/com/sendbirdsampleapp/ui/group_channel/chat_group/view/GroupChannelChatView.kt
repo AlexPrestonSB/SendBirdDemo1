@@ -18,4 +18,6 @@ interface GroupChannelChatView {
 
     fun typingIndicator(message: String)
 
+    fun displayChatTitle(title: String)
+
 }
