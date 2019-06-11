@@ -1,6 +1,7 @@
 package com.sendbirdsampleapp.ui.group_channel.chat_group.view
 
 import com.sendbird.android.BaseMessage
+import com.sendbird.android.UserMessage
 
 interface GroupChannelChatView {
 
@@ -9,5 +10,7 @@ interface GroupChannelChatView {
     fun showValidationMessage(errorCode: Int)
 
     fun backPressed()
+
+    fun sendMessage(message: UserMessage)
 
 }

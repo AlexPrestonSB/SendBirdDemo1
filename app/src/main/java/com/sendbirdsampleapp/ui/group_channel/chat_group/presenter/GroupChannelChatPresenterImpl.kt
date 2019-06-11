@@ -9,6 +9,7 @@ import com.sendbirdsampleapp.util.AppConstants
 class GroupChannelChatPresenterImpl: GroupChannelChatPresenter {
 
     private lateinit var view: GroupChannelChatView
+    private lateinit var channel: GroupChannel
 
     override fun setView(view: GroupChannelChatView) {
         this.view = view
@@ -21,13 +22,21 @@ class GroupChannelChatPresenterImpl: GroupChannelChatPresenter {
                     view.showValidationMessage(AppConstants.FAILED_CHANNEL_GET)
                 } else {
                     loadPreviousMessages(groupChannel)
+                    channel = groupChannel
                 }
             }
         }.start()
     }
 
-    override fun sendMessage() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun sendMessage(message: String) {
+
+        val tempMessage = channel.sendUserMessage(message) { userMessage, sendBirdException ->
+            if  (sendBirdException != null) {
+                //TODO handle error
+            } else {
+                view.sendMessage(userMessage)
+            }
+        }
     }
 
     override fun backPressed() {
@@ -41,7 +50,7 @@ class GroupChannelChatPresenterImpl: GroupChannelChatPresenter {
     fun loadPreviousMessages(groupChannel: GroupChannel) {
         Thread {
             val prevMessages = groupChannel.createPreviousMessageListQuery()
-            prevMessages.load(30,true) { messages, sendBirdException ->
+            prevMessages.load(100,true) { messages, sendBirdException ->
                 if (sendBirdException!= null){
                     //TODO
                 } else {

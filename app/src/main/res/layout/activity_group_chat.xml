@@ -46,9 +46,21 @@
         android:layout_height="wrap_content"
         app:layout_constrainedHeight="true"
         app:layout_constraintBottom_toTopOf="@+id/layout_group_chat_chatbox"
-        app:layout_constraintTop_toBottomOf="@+id/layout_group_chat">
-    </android.support.v7.widget.RecyclerView>
+        app:layout_constraintTop_toBottomOf="@+id/layout_group_chat"/>
 
+    <TextView
+        android:id="@+id/text_group_chat_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/view"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_height"
+        android:background="@color/light_gray"
+        app:layout_constraintBottom_toTopOf="@+id/layout_group_chat_chatbox" />
 
     <RelativeLayout
         android:id="@+id/layout_group_chat_chatbox"
@@ -70,7 +82,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toStartOf="@+id/button_grouu_chat_send"
+            android:layout_toStartOf="@+id/button_group_chat_send"
             android:layout_toEndOf="@+id/button_group_chat_upload"
             android:background="@android:color/transparent"
             android:hint="@string/hints"
@@ -79,7 +91,7 @@
             tools:ignore="Autofill" />
 
         <Button
-            android:id="@+id/button_grouu_chat_send"
+            android:id="@+id/button_group_chat_send"
             android:layout_width="@dimen/button_send_width"
             android:layout_height="@dimen/button_send_height"
             android:layout_alignParentEnd="true"
@@ -89,11 +101,5 @@
 
     </RelativeLayout>
 
-    <View
-        android:id="@+id/view"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/line_height"
-        android:background="@color/light_gray"
-        app:layout_constraintBottom_toTopOf="@+id/layout_group_chat_chatbox" />
 
 </android.support.constraint.ConstraintLayout>

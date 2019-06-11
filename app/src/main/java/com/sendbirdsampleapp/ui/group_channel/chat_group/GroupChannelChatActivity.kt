@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import com.sendbird.android.BaseMessage
+import com.sendbird.android.UserMessage
 import com.sendbirdsampleapp.R
 import com.sendbirdsampleapp.ui.group_channel.chat_group.presenter.GroupChannelChatPresenterImpl
 import com.sendbirdsampleapp.ui.group_channel.chat_group.view.GroupChannelChatView
@@ -38,14 +39,23 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView {
         adapter = GroupChannelChatAdapter()
         recyclerView = recycler_group_chat
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        val layoutManager = LinearLayoutManager(this)
+        layoutManager.reverseLayout = true
+        recyclerView.layoutManager = layoutManager
 
         button_group_chat_back.setOnClickListener { presenter.backPressed() }
+
+        button_group_chat_send.setOnClickListener { presenter.sendMessage(edit_group_chat_message.text.toString()) }
     }
 
     fun getChannelURl(): String {
         val intent = this.intent
         return intent.getStringExtra(EXTRA_CHANNEL_URL)
+    }
+
+    override fun sendMessage(message: UserMessage) {
+        adapter.addFirst(message)
+        edit_group_chat_message.setText("")
     }
 
     override fun loadPreviousMessages(messages: MutableList<BaseMessage>) {
