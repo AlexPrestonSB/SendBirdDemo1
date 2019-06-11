@@ -38,6 +38,13 @@
     <string name="upload">Upload</string>
     <string name="hints">Enter Message</string>
     <string name="send">SEND</string>
-
-
+    <string name="date_placeholder">June 10</string>
+    <string name="name_placeholder">John Grady Cole</string>
+    <string name="message_placeholder">This is a message</string>
+    <string name="url_placeholder">Youtube</string>
+    <string name="title_placeholder">Good News</string>
+    <string name="description_placeholder">This is a description</string>
+    <string name="message_time_placeholder">12:20</string>
+    <string name="message_count_placeholder">3</string>
+    <string name="link_preview">Link Preview</string>
 </resources>
