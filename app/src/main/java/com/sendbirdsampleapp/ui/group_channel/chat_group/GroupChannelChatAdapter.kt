@@ -26,7 +26,7 @@ class GroupChannelChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() 
         notifyDataSetChanged()
     }
 
-    fun addFirst(message: UserMessage) {
+    fun addFirst(message: BaseMessage) {
         messages.add(0, message)
         notifyDataSetChanged()
     }

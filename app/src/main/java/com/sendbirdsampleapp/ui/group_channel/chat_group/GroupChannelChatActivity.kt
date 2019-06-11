@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.View
 import com.sendbird.android.BaseMessage
+import com.sendbird.android.Member
 import com.sendbird.android.UserMessage
 import com.sendbirdsampleapp.R
 import com.sendbirdsampleapp.ui.group_channel.chat_group.presenter.GroupChannelChatPresenterImpl
@@ -48,9 +50,23 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView {
         button_group_chat_send.setOnClickListener { presenter.sendMessage(edit_group_chat_message.text.toString()) }
     }
 
-    fun getChannelURl(): String {
-        val intent = this.intent
-        return intent.getStringExtra(EXTRA_CHANNEL_URL)
+    override fun onResume() {
+        super.onResume()
+        presenter.onResume()
+    }
+
+    override fun receiveMessage(message: BaseMessage) {
+        adapter.addFirst(message)
+    }
+
+    override fun typingIndicator(message: String) {
+        if (message != "") {
+            text_group_chat_indicator.visibility = View.VISIBLE
+            text_group_chat_indicator.setText(message)
+        } else {
+            text_group_chat_indicator.setText(message)
+            text_group_chat_indicator.visibility = View.GONE
+        }
     }
 
     override fun sendMessage(message: UserMessage) {
@@ -69,5 +85,10 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView {
     override fun backPressed() {
         val intent = Intent(this, GroupChannelActivity::class.java)
         startActivity(intent)
+    }
+
+    fun getChannelURl(): String {
+        val intent = this.intent
+        return intent.getStringExtra(EXTRA_CHANNEL_URL)
     }
 }

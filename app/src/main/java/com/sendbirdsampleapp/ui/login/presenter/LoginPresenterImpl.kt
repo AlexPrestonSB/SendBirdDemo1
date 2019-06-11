@@ -1,7 +1,6 @@
 package com.sendbirdsampleapp.ui.login.presenter
 
 import android.util.Log
-import com.sendbird.android.GroupChannel
 import com.sendbird.android.SendBird
 import com.sendbirdsampleapp.data.preferences.AppPreferenceHelper
 import com.sendbirdsampleapp.ui.login.view.LoginView

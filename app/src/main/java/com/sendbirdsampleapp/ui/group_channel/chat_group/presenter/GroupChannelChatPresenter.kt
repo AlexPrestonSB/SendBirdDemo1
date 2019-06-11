@@ -14,4 +14,6 @@ interface GroupChannelChatPresenter {
     fun uploadImage()
 
     fun backPressed()
+
+    fun onResume()
 }

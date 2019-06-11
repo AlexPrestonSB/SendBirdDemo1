@@ -1,6 +1,7 @@
 package com.sendbirdsampleapp.ui.group_channel.chat_group.view
 
 import com.sendbird.android.BaseMessage
+import com.sendbird.android.Member
 import com.sendbird.android.UserMessage
 
 interface GroupChannelChatView {
@@ -12,5 +13,9 @@ interface GroupChannelChatView {
     fun backPressed()
 
     fun sendMessage(message: UserMessage)
+
+    fun receiveMessage(message: BaseMessage)
+
+    fun typingIndicator(message: String)
 
 }
