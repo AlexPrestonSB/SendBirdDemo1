@@ -31,7 +31,7 @@
         <activity android:name="com.sendbirdsampleapp.ui.group_channel.list_group.GroupChannelActivity"></activity>
         <activity android:name="com.sendbirdsampleapp.ui.open_channel.view.OpenChannelActivity"></activity>
         <activity android:name="com.sendbirdsampleapp.ui.group_channel.create_group.GroupChannelCreateActivity"></activity>
-        <activity android:name=".ui.group_channel.message_group.GroupChannelMessageActivity"></activity>
+        <activity android:name=".ui.group_channel.chat_group.GroupChannelChatActivity"></activity>
     </application>
 
 </manifest>

@@ -124,6 +124,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/message_count_placeholder"
+        android:id="@+id/text_group_chat_me_read"
         android:textColor="@color/groupChatReadReceiptOther"
         android:textSize="@dimen/text_message_date_size"
         app:layout_constraintBottom_toTopOf="@+id/text_group_chat_me_message_date"

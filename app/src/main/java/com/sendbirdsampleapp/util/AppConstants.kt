@@ -11,4 +11,10 @@ object AppConstants {
     internal val FAILED_LOGIN = 1003
     internal val FAILED_CHANNEL_GET = 1005
     internal val FAILED_CHANNEL_CREATE = 1006
+
+
+    //Constant viewTypes for chat
+    internal val VIEW_TYPE_USER_MESSAGE_ME = 1
+    internal val VIEW_TYPE_USER_MESSAGE_OTHER = 2
+    internal val VIEW_TYPE_ADMIN_MESSAGE = 3
 }

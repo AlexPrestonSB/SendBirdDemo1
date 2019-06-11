@@ -12,14 +12,14 @@ import com.sendbirdsampleapp.R
 import com.sendbirdsampleapp.ui.group_channel.create_group.presenter.GroupChannelCreatePresenterImpl
 import com.sendbirdsampleapp.ui.group_channel.create_group.view.GroupChannelCreateView
 import com.sendbirdsampleapp.ui.group_channel.list_group.GroupChannelActivity
-import com.sendbirdsampleapp.ui.group_channel.message_group.GroupChannelMessageActivity
+import com.sendbirdsampleapp.ui.group_channel.chat_group.GroupChannelChatActivity
 import kotlinx.android.synthetic.main.activity_group_create.*
 
 class GroupChannelCreateActivity : AppCompatActivity(), GroupChannelCreateAdapter.OnItemCheckedChangeListener,
     GroupChannelCreateView {
 
     private val TAG = "GROUP_CREATE_ACTIVITY"
-    private val EXTRA_NEW_CHANNEL_URL = "EXTRA_NEW_CHANNEL_URL";
+    private val EXTRA_CHANNEL_URL = "EXTRA_CHANNEL_URL"
 
 
     lateinit var recyclerView: RecyclerView
@@ -57,8 +57,8 @@ class GroupChannelCreateActivity : AppCompatActivity(), GroupChannelCreateAdapte
     }
 
     override fun createChannelPressed(channelId: String) {
-        val intent = Intent(this, GroupChannelMessageActivity::class.java)
-        intent.putExtra(EXTRA_NEW_CHANNEL_URL, channelId)
+        val intent = Intent(this, GroupChannelChatActivity::class.java)
+        intent.putExtra(EXTRA_CHANNEL_URL, channelId)
         startActivity(intent)
 
     }

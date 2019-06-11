@@ -6,21 +6,19 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
-import android.widget.Toast
 import com.sendbird.android.*
 import com.sendbirdsampleapp.R
 import com.sendbirdsampleapp.ui.channel.ChannelActivity
 import com.sendbirdsampleapp.ui.group_channel.create_group.GroupChannelCreateActivity
 import com.sendbirdsampleapp.ui.group_channel.list_group.presenter.GroupChannelPresenterImpl
 import com.sendbirdsampleapp.ui.group_channel.list_group.view.GroupChannelView
-import com.sendbirdsampleapp.ui.group_channel.message_group.GroupChannelMessageActivity
-import com.sendbirdsampleapp.util.AppConstants
+import com.sendbirdsampleapp.ui.group_channel.chat_group.GroupChannelChatActivity
 import kotlinx.android.synthetic.main.activity_group_channel.*
 
 class GroupChannelActivity : AppCompatActivity(), GroupChannelView, GroupChannelListAdapter.OnChannelClickedListener {
 
     private val TAG = "GROUP_CHANNEL_ACTIVITY"
-    private val EXTRA_NEW_CHANNEL_URL = "EXTRA_NEW_CHANNEL_URL";
+    private val EXTRA_CHANNEL_URL = "EXTRA_CHANNEL_URL";
 
 
     lateinit var presenter: GroupChannelPresenterImpl
@@ -66,8 +64,8 @@ class GroupChannelActivity : AppCompatActivity(), GroupChannelView, GroupChannel
     }
 
     override fun onItemClicked(channel: GroupChannel) {
-        val intent = Intent(this, GroupChannelMessageActivity::class.java)
-        intent.putExtra(EXTRA_NEW_CHANNEL_URL, channel.url)
+        val intent = Intent(this, GroupChannelChatActivity::class.java)
+        intent.putExtra(EXTRA_CHANNEL_URL, channel.url)
         startActivity(intent)
 
     }
