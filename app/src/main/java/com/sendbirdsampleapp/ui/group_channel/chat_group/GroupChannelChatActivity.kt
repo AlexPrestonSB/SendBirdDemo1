@@ -3,11 +3,17 @@ package com.sendbirdsampleapp.ui.group_channel.chat_group
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import com.sendbird.android.BaseMessage
 import com.sendbirdsampleapp.R
 import com.sendbirdsampleapp.ui.group_channel.chat_group.presenter.GroupChannelChatPresenterImpl
 import com.sendbirdsampleapp.ui.group_channel.chat_group.view.GroupChannelChatView
+import com.sendbirdsampleapp.ui.group_channel.create_group.GroupChannelCreateAdapter
 import com.sendbirdsampleapp.ui.group_channel.list_group.GroupChannelActivity
+import kotlinx.android.synthetic.main.activity_group_channel.*
+import kotlinx.android.synthetic.main.activity_group_chat.*
+import kotlinx.android.synthetic.main.activity_group_create.*
 
 class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView {
 
@@ -15,6 +21,10 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView {
 
 
     private lateinit var presenter: GroupChannelChatPresenterImpl
+
+    private lateinit var recyclerView: RecyclerView
+
+    private lateinit var adapter: GroupChannelChatAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +35,12 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView {
 
         presenter.enterChannel(getChannelURl())
 
+        adapter = GroupChannelChatAdapter()
+        recyclerView = recycler_group_chat
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(this)
 
+        button_group_chat_back.setOnClickListener { presenter.backPressed() }
     }
 
     fun getChannelURl(): String {
@@ -34,7 +49,7 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView {
     }
 
     override fun loadPreviousMessages(messages: MutableList<BaseMessage>) {
-        val messages = messages
+        adapter.loadMessages(messages)
     }
 
     override fun showValidationMessage(errorCode: Int) {

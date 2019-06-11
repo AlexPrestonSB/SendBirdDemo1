@@ -22,9 +22,9 @@ class GroupChannelCreateActivity : AppCompatActivity(), GroupChannelCreateAdapte
     private val EXTRA_CHANNEL_URL = "EXTRA_CHANNEL_URL"
 
 
-    lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerView: RecyclerView
 
-    lateinit var adapter: GroupChannelCreateAdapter
+    private lateinit var adapter: GroupChannelCreateAdapter
 
     private lateinit var selectedUsers: ArrayList<String>
     private lateinit var presenter: GroupChannelCreatePresenterImpl

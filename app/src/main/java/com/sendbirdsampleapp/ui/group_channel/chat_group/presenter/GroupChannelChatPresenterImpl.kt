@@ -30,6 +30,10 @@ class GroupChannelChatPresenterImpl: GroupChannelChatPresenter {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
+    override fun backPressed() {
+        view.backPressed()
+    }
+
     override fun uploadImage() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

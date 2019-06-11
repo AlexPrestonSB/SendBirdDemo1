@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import com.sendbird.android.*
 import com.sendbirdsampleapp.R
 import com.sendbirdsampleapp.util.AppConstants
+import com.sendbirdsampleapp.util.DateUtils
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.channel_chat_me_view.view.*
 import kotlinx.android.synthetic.main.channel_chat_other_view.view.*
 
@@ -71,14 +73,28 @@ class GroupChannelChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() 
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
+        val message = messages.get(position)
+        var isNewDay = false
+
+        when {
+            (position < messages.size - 1) -> {
+                val previousMessage = messages.get(position + 1)
+
+                isNewDay = !DateUtils.isSameDay(message.createdAt, previousMessage.createdAt)
+            }
+            (position == messages.size - 1) -> {
+                isNewDay = true
+            }
+        }
+
         when (holder.itemViewType) {
             AppConstants.VIEW_TYPE_USER_MESSAGE_ME -> {
                 holder as MyUserHolder
-                holder.bindView(messages.get(position), position)
+                holder.bindView(messages.get(position) as UserMessage, position, isNewDay)
             }
             AppConstants.VIEW_TYPE_USER_MESSAGE_OTHER -> {
                 holder as OtherUserHolder
-                holder.bindView(messages.get(position), position)
+                holder.bindView(messages.get(position) as UserMessage, position, isNewDay)
             }
             AppConstants.VIEW_TYPE_ADMIN_MESSAGE -> {
                 holder as AdminUserHolder
@@ -90,34 +106,67 @@ class GroupChannelChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() 
 
     class MyUserHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        val message = view.text_group_chat_me_message
-        val siteName = view.text_group_chat_me_site
-        val title = view.text_group_chat_me_title
-        val description = view.text_group_chat_me_description
-        val image = view.image_group_chat_me_url
+        val messageText = view.text_group_chat_me_message
         val date = view.text_group_chat_me_date
         val messageDate = view.text_group_chat_me_message_date
         val read = view.text_group_chat_me_read
 
-        fun bindView(message: BaseMessage, position: Int) {
+        val urlContainer = view.layout_group_chat_me_link
+        val urlName = view.text_group_chat_me_site
+        val urlTitle = view.text_group_chat_me_title
+        val urlDescription = view.text_group_chat_me_description
+        val urlImage = view.image_group_chat_me_url
 
+        fun bindView(message: UserMessage, position: Int, isNewDay: Boolean) {
+
+            messageText.text = message.message
+            messageDate.text = DateUtils.formatTime(message.createdAt)
+
+            if (isNewDay) {
+                date.visibility = View.VISIBLE
+                date.text = DateUtils.formatDate(message.createdAt)
+            } else {
+                date.visibility = View.GONE
+            }
+
+            urlContainer.visibility = View.GONE
+            //TODO set the rest
         }
     }
 
     class OtherUserHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        val message = view.text_group_chat_other_message
-        val siteName = view.text_group_chat_other_site
-        val title = view.text_group_chat_other_title
-        val description = view.text_group_chat_other_description
-        val image = view.image_group_chat_other_url
+        val messageText = view.text_group_chat_other_message
         val date = view.text_group_chat_other_date
         val messageDate = view.text_group_chat_other_message_date
         val read = view.text_group_chat_other_read
         val profileImage = view.image_group_chat_other_profile
         val user = view.text_group_chat_other_user
 
-        fun bindView(message: BaseMessage, position: Int) {
+        val urlContainer = view.layout_group_chat_other_link
+        val urlName = view.text_group_chat_other_site
+        val urlTitle = view.text_group_chat_other_title
+        val urlDescription = view.text_group_chat_other_description
+        val urlImage = view.image_group_chat_other_url
+
+        fun bindView(message: UserMessage, position: Int, isNewDay: Boolean) {
+
+            messageText.text = message.message
+            messageDate.text = DateUtils.formatTime(message.createdAt)
+
+            if (isNewDay) {
+                date.visibility = View.VISIBLE
+                date.text = DateUtils.formatDate(message.createdAt)
+            } else {
+                date.visibility = View.GONE
+            }
+
+            Picasso.get().load(message.sender.profileUrl).resize(50,50).into(profileImage)
+            user.text = message.sender.nickname
+
+
+            urlContainer.visibility = View.GONE
+            //TODO set the rest
 
         }
     }
