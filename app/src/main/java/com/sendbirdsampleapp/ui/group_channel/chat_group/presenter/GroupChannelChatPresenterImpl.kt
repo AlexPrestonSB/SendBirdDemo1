@@ -4,7 +4,7 @@ import com.sendbird.android.*
 import com.sendbirdsampleapp.ui.group_channel.chat_group.view.GroupChannelChatView
 import com.sendbirdsampleapp.util.AppConstants
 
-class GroupChannelChatPresenterImpl: GroupChannelChatPresenter {
+class GroupChannelChatPresenterImpl : GroupChannelChatPresenter {
 
     private lateinit var view: GroupChannelChatView
     private lateinit var channel: GroupChannel
@@ -17,7 +17,7 @@ class GroupChannelChatPresenterImpl: GroupChannelChatPresenter {
     override fun enterChannel(channelUrl: String) {
         this.channelUrl = channelUrl
         Thread {
-            GroupChannel.getChannel(channelUrl) {groupChannel, sendBirdException ->
+            GroupChannel.getChannel(channelUrl) { groupChannel, sendBirdException ->
                 if (sendBirdException != null) {
                     view.showValidationMessage(AppConstants.FAILED_CHANNEL_GET)
                 } else {
@@ -32,7 +32,7 @@ class GroupChannelChatPresenterImpl: GroupChannelChatPresenter {
     override fun sendMessage(message: String) {
 
         val tempMessage = channel.sendUserMessage(message) { userMessage, sendBirdException ->
-            if  (sendBirdException != null) {
+            if (sendBirdException != null) {
                 //TODO handle error
             } else {
                 view.sendMessage(userMessage)
@@ -50,12 +50,14 @@ class GroupChannelChatPresenterImpl: GroupChannelChatPresenter {
 
     override fun onResume() {
 
-        SendBird.addChannelHandler(AppConstants.CHANNEL_HANDLER_ID, object: SendBird.ChannelHandler() {
+        SendBird.addChannelHandler(AppConstants.CHANNEL_HANDLER_ID, object : SendBird.ChannelHandler() {
             override fun onMessageReceived(baseChannel: BaseChannel?, baseMessage: BaseMessage?) {
                 if (baseChannel?.url.equals(channelUrl)) {
                     if (baseMessage != null) {
                         view.receiveMessage(baseMessage)
                     }
+                } else {
+                    view.displayPushNotification(baseMessage as UserMessage, baseChannel?.url)
                 }
             }
 
@@ -68,12 +70,13 @@ class GroupChannelChatPresenterImpl: GroupChannelChatPresenter {
         })
     }
 
+
     override fun onPause() {
         SendBird.removeChannelHandler(AppConstants.CHANNEL_HANDLER_ID)
     }
 
     override fun setTypingStatus(typing: Boolean) {
-        if (typing){
+        if (typing) {
             channel.startTyping()
         } else {
             channel.endTyping()
@@ -96,8 +99,8 @@ class GroupChannelChatPresenterImpl: GroupChannelChatPresenter {
     private fun loadPreviousMessages(groupChannel: GroupChannel) {
         Thread {
             val prevMessages = groupChannel.createPreviousMessageListQuery()
-            prevMessages.load(100,true) { messages, sendBirdException ->
-                if (sendBirdException!= null){
+            prevMessages.load(100, true) { messages, sendBirdException ->
+                if (sendBirdException != null) {
                     //TODO
                 } else {
                     view.loadPreviousMessages(messages)

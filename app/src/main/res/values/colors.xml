@@ -32,6 +32,9 @@
     <color name="groupChannelUnreadCountBackground">#7d62df</color>
     <color name="groupChannelUnreadCountText">#ffffff</color>
 
+    <!--Push notifications-->
+    <color name="small_icon_background">#7469C4</color>
+
 
 
 </resources>

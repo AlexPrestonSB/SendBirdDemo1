@@ -1,14 +1,25 @@
 package com.sendbirdsampleapp.ui.group_channel.chat_group
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
+import android.support.v4.app.NotificationCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import com.sendbird.android.BaseMessage
+import com.sendbird.android.GroupChannel
 import com.sendbird.android.Member
 import com.sendbird.android.UserMessage
 import com.sendbirdsampleapp.R
@@ -35,14 +46,16 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_group_chat)
 
+
         presenter = GroupChannelChatPresenterImpl()
         presenter.setView(this)
 
-        setUpRecyclerView()
 
         presenter.enterChannel(getChannelURl())
 
         setListeners()
+        setUpRecyclerView()
+
     }
 
     override fun onResume() {
@@ -83,7 +96,7 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView {
     }
 
     override fun showValidationMessage(errorCode: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Log.e("TEST", errorCode.toString())
     }
 
     override fun backPressed() {
@@ -93,6 +106,37 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView {
 
     override fun displayChatTitle(title: String) {
         text_group_chat_name.text = title
+    }
+
+    override fun displayPushNotification(message: UserMessage, channelUrl: String?) {
+        val notificationManager = this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        val CHANNEL_ID = "CHANNEL_ID"
+        if (Build.VERSION.SDK_INT >= 26) {
+            val channel = NotificationChannel(CHANNEL_ID, "CHANNEL_NAME", NotificationManager.IMPORTANCE_HIGH)
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        val intent = Intent(this, GroupChannelChatActivity::class.java)
+        intent.putExtra(EXTRA_CHANNEL_URL, channelUrl)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+
+        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        val builder = NotificationCompat
+            .Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.drawable.img_notification)
+            .setColor(Color.parseColor("#7469C4"))
+            .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.img_notification_large))
+            .setContentTitle(this.getResources().getString(R.string.app_name))
+            .setAutoCancel(true)
+            .setPriority(Notification.PRIORITY_MAX)
+            .setDefaults(Notification.DEFAULT_ALL)
+            .setContentIntent(pendingIntent)
+
+        builder.setContentText(message.message)
+
+        notificationManager.notify(0, builder.build())
     }
 
     private fun setListeners() {

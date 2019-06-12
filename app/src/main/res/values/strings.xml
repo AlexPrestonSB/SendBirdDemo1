@@ -45,6 +45,7 @@
     <string name="title_placeholder">Good News</string>
     <string name="description_placeholder">This is a description</string>
     <string name="message_time_placeholder">12:20</string>
-    <string name="message_count_placeholder">3</string>
+    <string name="message_count_placeholder">1</string>
     <string name="link_preview">Link Preview</string>
+
 </resources>

@@ -3,6 +3,7 @@ package com.sendbirdsampleapp.ui.channel.presenter
 import com.sendbird.android.SendBird
 import com.sendbirdsampleapp.data.preferences.AppPreferenceHelper
 import com.sendbirdsampleapp.ui.channel.view.ChannelView
+import com.sendbirdsampleapp.util.PushUtil
 import javax.inject.Inject
 
 class ChannelPresenterImpl@Inject constructor(private val preferenceHelper: AppPreferenceHelper) : ChannelPresenter {
@@ -24,6 +25,7 @@ class ChannelPresenterImpl@Inject constructor(private val preferenceHelper: AppP
 
     override fun logoutPressed() {
         SendBird.disconnect {
+            PushUtil.unregisterPushTokenForCurrentUser(preferenceHelper.getToken(), null)
             channelView.logoutPressed()
             preferenceHelper.setConnected(false)
         }
