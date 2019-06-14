@@ -13,7 +13,7 @@ import com.sendbirdsampleapp.ui.group_channel.create_group.GroupChannelCreateAct
 import com.sendbirdsampleapp.ui.group_channel.list_group.presenter.GroupChannelPresenterImpl
 import com.sendbirdsampleapp.ui.group_channel.list_group.view.GroupChannelView
 import com.sendbirdsampleapp.ui.group_channel.chat_group.GroupChannelChatActivity
-import kotlinx.android.synthetic.main.activity_group_channel.*
+import kotlinx.android.synthetic.main.activity_gchannel.*
 
 class GroupChannelActivity : AppCompatActivity(), GroupChannelView, GroupChannelListAdapter.OnChannelClickedListener {
 
@@ -29,7 +29,7 @@ class GroupChannelActivity : AppCompatActivity(), GroupChannelView, GroupChannel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_group_channel)
+        setContentView(R.layout.activity_gchannel)
 
 
         presenter = GroupChannelPresenterImpl()
@@ -45,7 +45,7 @@ class GroupChannelActivity : AppCompatActivity(), GroupChannelView, GroupChannel
 
         fab_group_channel_create.setOnClickListener { presenter.createGroupPressed() }
 
-        button_channel_group_back.setOnClickListener { presenter.backPressed()}
+        button_gchannel_back.setOnClickListener { presenter.backPressed()}
 
     }
 

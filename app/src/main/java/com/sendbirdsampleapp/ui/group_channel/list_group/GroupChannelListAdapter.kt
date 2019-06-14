@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import com.sendbird.android.*
 import com.sendbirdsampleapp.R
 import com.sendbirdsampleapp.util.DateUtils
-import kotlinx.android.synthetic.main.channel_chooser_view.view.*
+import kotlinx.android.synthetic.main.item_channel_chooser.view.*
 import kotlin.collections.ArrayList
 
 class GroupChannelListAdapter(context: Context, listener: OnChannelClickedListener) : RecyclerView.Adapter<GroupChannelListAdapter.ChannelHolder>() {
@@ -37,7 +37,7 @@ class GroupChannelListAdapter(context: Context, listener: OnChannelClickedListen
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChannelHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        return ChannelHolder(layoutInflater.inflate(R.layout.channel_chooser_view, parent, false))
+        return ChannelHolder(layoutInflater.inflate(R.layout.item_channel_chooser, parent, false))
     }
 
     override fun getItemCount() = channels.size

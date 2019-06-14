@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import com.sendbird.android.User
 import com.sendbirdsampleapp.R
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.group_create_view.view.*
+import kotlinx.android.synthetic.main.item_gcreate.view.*
 
 
 
@@ -42,7 +42,7 @@ class GroupChannelCreateAdapter(context: Context, listener: OnItemCheckedChangeL
 
     override fun onCreateViewHolder(parent: ViewGroup, position: Int): UserHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        return UserHolder(layoutInflater.inflate(R.layout.group_create_view, parent, false))
+        return UserHolder(layoutInflater.inflate(R.layout.item_gcreate, parent, false))
     }
 
     override fun getItemCount() = users.size
@@ -53,9 +53,9 @@ class GroupChannelCreateAdapter(context: Context, listener: OnItemCheckedChangeL
 
     class UserHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        val checkbox = view.checkbox_channel_create_view
-        val userImage = view.image_channel_create_view
-        val userId = view.text_channel_create_user_id
+        val checkbox = view.checkbox_gcreate
+        val userImage = view.image_gcreate
+        val userId = view.text_gcreate_user
 
         fun bindViews(user: User, position: Int, listener: OnItemCheckedChangeListener) {
 

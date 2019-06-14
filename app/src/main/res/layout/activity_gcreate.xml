@@ -20,7 +20,7 @@
             app:popupTheme="@style/Theme.AppCompat.Light">
 
             <ImageView
-                android:id="@+id/button_channel_create_back"
+                android:id="@+id/button_gcreate_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -38,12 +38,12 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/text_channel_create"
+                android:id="@+id/button_gcreate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:gravity="center_vertical"
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:gravity="center_vertical"
                 android:text="@string/create"
                 android:textColor="@color/light_gray" />
 
@@ -51,7 +51,7 @@
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_group_create"
+        android:id="@+id/recycler_gcreate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/layout_group_create">

@@ -31,8 +31,8 @@ class ChannelActivity : AppCompatActivity(), ChannelView {
         presenter.setView(this)
 
 
-        textview_channel_group.setOnClickListener { groupChannelPressed() }
-        textview_channel_open.setOnClickListener { openChannelPressed() }
+        text_channel_group.setOnClickListener { groupChannelPressed() }
+        text_channel_open.setOnClickListener { openChannelPressed() }
 
         val version = String.format(
             resources.getString(R.string.sample_version),
@@ -40,7 +40,7 @@ class ChannelActivity : AppCompatActivity(), ChannelView {
             SendBird.getSDKVersion().toString()
         )
 
-        textview_channel_version.text = version
+        text_channel_version.text = version
         button_channel_logout.setOnClickListener { presenter.logoutPressed() }
     }
 

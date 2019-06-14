@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/layout_group_channel"
+        android:id="@+id/layout_gchannel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
@@ -13,14 +13,14 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar_channel"
+            android:id="@+id/toolbar_gchannel"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:theme="@style/Widget.AppCompat.Toolbar"
             app:popupTheme="@style/Theme.AppCompat.Light">
 
             <ImageView
-                android:id="@+id/button_channel_group_back"
+                android:id="@+id/button_gchannel_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -44,7 +44,7 @@
         android:id="@+id/recycler_group_channels"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/layout_group_channel">
+        app:layout_constraintTop_toBottomOf="@+id/layout_gchannel">
 
     </android.support.v7.widget.RecyclerView>
 

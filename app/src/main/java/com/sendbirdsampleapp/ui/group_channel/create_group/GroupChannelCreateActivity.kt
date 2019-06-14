@@ -13,7 +13,7 @@ import com.sendbirdsampleapp.ui.group_channel.create_group.presenter.GroupChanne
 import com.sendbirdsampleapp.ui.group_channel.create_group.view.GroupChannelCreateView
 import com.sendbirdsampleapp.ui.group_channel.list_group.GroupChannelActivity
 import com.sendbirdsampleapp.ui.group_channel.chat_group.GroupChannelChatActivity
-import kotlinx.android.synthetic.main.activity_group_create.*
+import kotlinx.android.synthetic.main.activity_gcreate.*
 
 class GroupChannelCreateActivity : AppCompatActivity(), GroupChannelCreateAdapter.OnItemCheckedChangeListener,
     GroupChannelCreateView {
@@ -32,7 +32,7 @@ class GroupChannelCreateActivity : AppCompatActivity(), GroupChannelCreateAdapte
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_group_create)
+        setContentView(R.layout.activity_gcreate)
 
         presenter = GroupChannelCreatePresenterImpl()
         presenter.setView(this)
@@ -40,13 +40,13 @@ class GroupChannelCreateActivity : AppCompatActivity(), GroupChannelCreateAdapte
         selectedUsers = ArrayList()
 
         adapter = GroupChannelCreateAdapter(this, this)
-        recyclerView = recycler_group_create
+        recyclerView = recycler_gcreate
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        text_channel_create.setOnClickListener { presenter.createChannel(selectedUsers) }
+        button_gcreate.setOnClickListener { presenter.createChannel(selectedUsers) }
 
-        button_channel_create_back.setOnClickListener{ presenter.backPressed()}
+        button_gcreate_back.setOnClickListener{ presenter.backPressed()}
 
         loadUsers()
     }

@@ -9,8 +9,8 @@ import com.sendbirdsampleapp.R
 import com.sendbirdsampleapp.util.AppConstants
 import com.sendbirdsampleapp.util.DateUtils
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.group_chat_me_view.view.*
-import kotlinx.android.synthetic.main.group_chat_other_view.view.*
+import kotlinx.android.synthetic.main.item_gchat_me.view.*
+import kotlinx.android.synthetic.main.item_gchat_other.view.*
 
 class GroupChannelChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -36,19 +36,19 @@ class GroupChannelChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() 
         when (viewType) {
             AppConstants.VIEW_TYPE_USER_MESSAGE_ME -> {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                return MyUserHolder(layoutInflater.inflate(R.layout.group_chat_me_view, parent, false))
+                return MyUserHolder(layoutInflater.inflate(R.layout.item_gchat_me, parent, false))
             }
             AppConstants.VIEW_TYPE_USER_MESSAGE_OTHER -> {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                return OtherUserHolder(layoutInflater.inflate(R.layout.group_chat_other_view, parent, false))
+                return OtherUserHolder(layoutInflater.inflate(R.layout.item_gchat_other, parent, false))
             }
             AppConstants.VIEW_TYPE_ADMIN_MESSAGE -> {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                return AdminUserHolder(layoutInflater.inflate(R.layout.group_chat_admin_view, parent, false))
+                return AdminUserHolder(layoutInflater.inflate(R.layout.item_gchat_admin, parent, false))
             }
             else -> {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                return AdminUserHolder(layoutInflater.inflate(R.layout.group_chat_admin_view, parent, false))
+                return AdminUserHolder(layoutInflater.inflate(R.layout.item_gchat_admin, parent, false))
             }
         }
     }
@@ -111,16 +111,16 @@ class GroupChannelChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() 
 
     class MyUserHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        val messageText = view.text_group_chat_me_message
-        val date = view.text_group_chat_me_date
-        val messageDate = view.text_group_chat_me_message_date
-        val read = view.text_group_chat_me_read
+        val messageText = view.text_gchat_message_me
+        val date = view.text_gchat_date_me
+        val messageDate = view.text_gchat_timestamp_me
+        val read = view.text_gchat_read_me
 
-        val urlContainer = view.layout_group_chat_me_link
-        val urlName = view.text_group_chat_me_site
-        val urlTitle = view.text_group_chat_me_title
-        val urlDescription = view.text_group_chat_me_description
-        val urlImage = view.image_group_chat_me_url
+        val urlContainer = view.layout_gchat_link_me
+        val urlName = view.text_gchat_site_me
+        val urlTitle = view.text_gchat_title_me
+        val urlDescription = view.text_gchat_description_me
+        val urlImage = view.image_gchat_url_me
 
         fun bindView(message: UserMessage, position: Int, isNewDay: Boolean) {
 
@@ -141,18 +141,18 @@ class GroupChannelChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() 
 
     class OtherUserHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        val messageText = view.text_group_chat_other_message
-        val date = view.text_group_chat_other_date
-        val messageDate = view.text_group_chat_other_message_date
-        val read = view.text_group_chat_other_read
-        val profileImage = view.image_group_chat_other_profile
-        val user = view.text_group_chat_other_user
+        val messageText = view.text_gchat_message_other
+        val date = view.text_gchat_date_other
+        val messageDate = view.text_gchat_timestamp_other
+        val read = view.text_gchat_read_other
+        val profileImage = view.image_gchat_profile_other
+        val user = view.text_gchat_user_other
 
-        val urlContainer = view.layout_group_chat_other_link
-        val urlName = view.text_group_chat_other_site
-        val urlTitle = view.text_group_chat_other_title
-        val urlDescription = view.text_group_chat_other_description
-        val urlImage = view.image_group_chat_other_url
+        val urlContainer = view.layout_gchat_link_other
+        val urlName = view.text_gchat_site_other
+        val urlTitle = view.text_gchat_title_other
+        val urlDescription = view.text_gchat_description_other
+        val urlImage = view.image_gchat_url_other
 
         fun bindView(message: UserMessage, position: Int, isNewDay: Boolean) {
 

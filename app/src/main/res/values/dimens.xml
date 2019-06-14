@@ -40,12 +40,15 @@
     <!--Padding-->
     <dimen name="date_vertical_padding">4dp</dimen>
     <dimen name="date_horizontal_padding">8dp</dimen>
+    <dimen name="layout_padding">8dp</dimen>
+    <dimen name="admin_padding_top">12dp</dimen>
+    <dimen name="admin_padding_sides">16dp</dimen>
+
 
     <dimen name="card_corners">12dp</dimen>
     <dimen name="card_elevation">0dp</dimen>
     <dimen name="card_max_width">260dp</dimen>
     <dimen name="card_line_spacing">12dp</dimen>
-    <dimen name="layout_padding">8dp</dimen>
 
 
 

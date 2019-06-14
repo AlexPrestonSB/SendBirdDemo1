@@ -48,5 +48,6 @@
     <string name="message_count_placeholder">1</string>
     <string name="link_preview">Link Preview</string>
     <string name="thumbnail_image">Thumbnail Image</string>
+    <string name="admin_text">User has entered chat</string>
 
 </resources>

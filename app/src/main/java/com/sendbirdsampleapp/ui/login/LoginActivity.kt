@@ -42,7 +42,7 @@ class LoginActivity : AppCompatActivity(), LoginView {
             SendBird.getSDKVersion().toString()
         )
 
-        textview_login_version.text = version
+        text_login_version.text = version
 
     }
 

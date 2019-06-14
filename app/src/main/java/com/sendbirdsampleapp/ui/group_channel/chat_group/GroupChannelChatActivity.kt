@@ -20,7 +20,7 @@ import com.sendbirdsampleapp.R
 import com.sendbirdsampleapp.ui.group_channel.chat_group.presenter.GroupChannelChatPresenterImpl
 import com.sendbirdsampleapp.ui.group_channel.chat_group.view.GroupChannelChatView
 import com.sendbirdsampleapp.ui.group_channel.list_group.GroupChannelActivity
-import kotlinx.android.synthetic.main.activity_group_chat.*
+import kotlinx.android.synthetic.main.activity_gchat.*
 
 class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView {
 
@@ -36,7 +36,7 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_group_chat)
+        setContentView(R.layout.activity_gchat)
 
 
         presenter = GroupChannelChatPresenterImpl()
@@ -69,17 +69,17 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView {
     override fun typingIndicator(message: String) {
         recyclerView.scrollToPosition(0)
         if (message != "") {
-            text_group_chat_indicator.visibility = View.VISIBLE
-            text_group_chat_indicator.setText(message)
+            text_gchat_indicator.visibility = View.VISIBLE
+            text_gchat_indicator.setText(message)
         } else {
-            text_group_chat_indicator.setText(message)
-            text_group_chat_indicator.visibility = View.GONE
+            text_gchat_indicator.setText(message)
+            text_gchat_indicator.visibility = View.GONE
         }
     }
 
     override fun sendMessage(message: UserMessage) {
         adapter.addFirst(message)
-        edit_group_chat_message.setText("")
+        edit_gchat_message.setText("")
         recyclerView.scrollToPosition(0)
     }
 
@@ -97,7 +97,7 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView {
     }
 
     override fun displayChatTitle(title: String) {
-        text_group_chat_name.text = title
+        text_gchat_name.text = title
     }
 
     override fun displayPushNotification(message: UserMessage, channelUrl: String?) {
@@ -150,11 +150,11 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView {
     }
 
     private fun setListeners() {
-        button_group_chat_back.setOnClickListener { presenter.backPressed() }
-        button_group_chat_send.setOnClickListener { presenter.sendMessage(edit_group_chat_message.text.toString()) }
-        button_group_chat_upload.setOnClickListener { presenter.requestMedia() }
+        button_gchat_back.setOnClickListener { presenter.backPressed() }
+        button_gchat_send.setOnClickListener { presenter.sendMessage(edit_gchat_message.text.toString()) }
+        button_gchat_upload.setOnClickListener { presenter.requestMedia() }
 
-        edit_group_chat_message.addTextChangedListener(object : TextWatcher {
+        edit_gchat_message.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -171,7 +171,7 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView {
 
     private fun setUpRecyclerView() {
         adapter = GroupChannelChatAdapter()
-        recyclerView = recycler_group_chat
+        recyclerView = recycler_gchat
         recyclerView.adapter = adapter
         val layoutManager = LinearLayoutManager(this)
         layoutManager.reverseLayout = true
