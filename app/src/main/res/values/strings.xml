@@ -49,5 +49,7 @@
     <string name="link_preview">Link Preview</string>
     <string name="thumbnail_image">Thumbnail Image</string>
     <string name="admin_text">User has entered chat</string>
+    <string name="file_icon">File Icon</string>
+    <string name="file_name">FileName.txt</string>
 
 </resources>

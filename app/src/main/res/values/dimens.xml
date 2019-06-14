@@ -29,6 +29,7 @@
     <dimen name="channel_image_width">40dp</dimen>
     <dimen name="profile_margin">8dp</dimen>
     <dimen name="thumbnail_height">148dp</dimen>
+    <dimen name="icon_size">25dp</dimen>
     <dimen name="thumbnail_width">228dp</dimen>
 
     <!--Text-->
@@ -49,6 +50,7 @@
     <dimen name="card_elevation">0dp</dimen>
     <dimen name="card_max_width">260dp</dimen>
     <dimen name="card_line_spacing">12dp</dimen>
+    <dimen name="link_line">24dp</dimen>
 
 
 

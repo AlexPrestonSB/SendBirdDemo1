@@ -25,6 +25,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:background="@drawable/group_chat_admin_background"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:gravity="center"
         android:paddingStart="@dimen/admin_padding_sides"
         android:paddingTop="@dimen/admin_padding_top"

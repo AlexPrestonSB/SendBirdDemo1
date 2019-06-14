@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <TextView
         android:id="@+id/text_gchat_date_me"
         android:layout_width="wrap_content"
@@ -21,29 +20,52 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/card_gchat_message_me"
+    <RelativeLayout
+        android:id="@+id/layout_gchat_file"
         android:layout_width="wrap_content"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="@dimen/card_corners"
-        app:cardElevation="@dimen/card_elevation"
-        app:cardPreventCornerOverlap="false"
         android:background="@drawable/group_chat_file_background"
-        app:cardUseCompatPadding="true"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:padding="@dimen/admin_padding_top"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_gchat_date_me">
+        app:layout_constraintTop_toBottomOf="@+id/text_gchat_date_me">
 
         <ImageView
-            android:id="@+id/image_gchat_thumbnail_me"
-            android:layout_width="@dimen/thumbnail_width"
-            android:layout_height="@dimen/thumbnail_height"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/thumbnail_image"
-            android:scaleType="centerCrop" />
+            android:id="@+id/image_gchat_icon"
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
+            android:contentDescription="@string/file_icon"
+            android:src="@drawable/ic_file_message" />
 
+        <TextView
+            android:id="@+id/text_gchat_filename_me"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_toEndOf="@+id/image_gchat_icon"
+            android:text="@string/file_name" />
 
-    </android.support.v7.widget.CardView>
+        <View
+            android:id="@+id/line_gchat"
+            android:layout_width="2dp"
+            android:layout_height="@dimen/link_line"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/card_line_spacing"
+            android:layout_toEndOf="@+id/text_gchat_filename_me"
+            android:background="#d8d8d8" />
+
+        <Button
+            android:id="@+id/button_gchat_download_me"
+            android:layout_width="@dimen/activity_vertical_margin"
+            android:layout_height="@dimen/activity_vertical_margin"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/card_line_spacing"
+            android:layout_toEndOf="@id/line_gchat"
+            android:background="@drawable/ic_file_message_download" />
+
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/text_gchat_read_me"
@@ -53,7 +75,7 @@
         android:textColor="@color/groupChatReadReceiptOther"
         android:textSize="@dimen/text_message_date_size"
         app:layout_constraintBottom_toTopOf="@+id/text_gchat_timestamp_me"
-        app:layout_constraintEnd_toStartOf="@id/card_gchat_message_me" />
+        app:layout_constraintEnd_toStartOf="@id/layout_gchat_file" />
 
     <TextView
         android:id="@+id/text_gchat_timestamp_me"
@@ -62,8 +84,9 @@
         android:text="@string/message_time_placeholder"
         android:textColor="@color/groupChatDateBackground"
         android:textSize="@dimen/text_message_date_size"
-        app:layout_constraintBottom_toBottomOf="@+id/card_gchat_message_me"
-        app:layout_constraintEnd_toStartOf="@+id/card_gchat_message_me" />
+        app:layout_constraintBottom_toBottomOf="@+id/layout_gchat_file"
+        app:layout_constraintEnd_toStartOf="@+id/layout_gchat_file" />
+
 
 
 </android.support.constraint.ConstraintLayout>
