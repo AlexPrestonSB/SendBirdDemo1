@@ -28,7 +28,8 @@
     <dimen name="channel_image_height">40dp</dimen>
     <dimen name="channel_image_width">40dp</dimen>
     <dimen name="profile_margin">8dp</dimen>
-    <dimen name="chat_image_height">148dp</dimen>
+    <dimen name="thumbnail_height">148dp</dimen>
+    <dimen name="thumbnail_width">228dp</dimen>
 
     <!--Text-->
     <dimen name="text_version_size">12sp</dimen>
