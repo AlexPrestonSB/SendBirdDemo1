@@ -9,8 +9,8 @@ import com.sendbirdsampleapp.R
 import com.sendbirdsampleapp.util.AppConstants
 import com.sendbirdsampleapp.util.DateUtils
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.channel_chat_me_view.view.*
-import kotlinx.android.synthetic.main.channel_chat_other_view.view.*
+import kotlinx.android.synthetic.main.group_chat_me_view.view.*
+import kotlinx.android.synthetic.main.group_chat_other_view.view.*
 
 class GroupChannelChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -36,19 +36,19 @@ class GroupChannelChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() 
         when (viewType) {
             AppConstants.VIEW_TYPE_USER_MESSAGE_ME -> {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                return MyUserHolder(layoutInflater.inflate(R.layout.channel_chat_me_view, parent, false))
+                return MyUserHolder(layoutInflater.inflate(R.layout.group_chat_me_view, parent, false))
             }
             AppConstants.VIEW_TYPE_USER_MESSAGE_OTHER -> {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                return OtherUserHolder(layoutInflater.inflate(R.layout.channel_chat_other_view, parent, false))
+                return OtherUserHolder(layoutInflater.inflate(R.layout.group_chat_other_view, parent, false))
             }
             AppConstants.VIEW_TYPE_ADMIN_MESSAGE -> {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                return AdminUserHolder(layoutInflater.inflate(R.layout.channel_chat_admin, parent, false))
+                return AdminUserHolder(layoutInflater.inflate(R.layout.group_chat_admin_view, parent, false))
             }
             else -> {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                return AdminUserHolder(layoutInflater.inflate(R.layout.channel_chat_admin, parent, false))
+                return AdminUserHolder(layoutInflater.inflate(R.layout.group_chat_admin_view, parent, false))
             }
         }
     }

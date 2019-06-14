@@ -23,7 +23,7 @@
                 android:id="@+id/button_channel_group_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_gravity="center_vertical"
                 android:contentDescription="@string/back"
                 android:src="@drawable/ic_arrow_left_white_24_dp" />
 

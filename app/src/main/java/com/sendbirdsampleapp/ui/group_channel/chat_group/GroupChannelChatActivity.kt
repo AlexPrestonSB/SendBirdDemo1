@@ -1,9 +1,6 @@
 package com.sendbirdsampleapp.ui.group_channel.chat_group
 
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -18,22 +15,17 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import com.sendbird.android.BaseMessage
-import com.sendbird.android.GroupChannel
-import com.sendbird.android.Member
-import com.sendbird.android.UserMessage
+import com.sendbird.android.*
 import com.sendbirdsampleapp.R
 import com.sendbirdsampleapp.ui.group_channel.chat_group.presenter.GroupChannelChatPresenterImpl
 import com.sendbirdsampleapp.ui.group_channel.chat_group.view.GroupChannelChatView
-import com.sendbirdsampleapp.ui.group_channel.create_group.GroupChannelCreateAdapter
 import com.sendbirdsampleapp.ui.group_channel.list_group.GroupChannelActivity
-import kotlinx.android.synthetic.main.activity_group_channel.*
 import kotlinx.android.synthetic.main.activity_group_chat.*
-import kotlinx.android.synthetic.main.activity_group_create.*
 
 class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView {
 
     private val EXTRA_CHANNEL_URL = "EXTRA_CHANNEL_URL"
+    private val INTENT_REQUEST_CHOOSE_MEDIA = 301
 
 
     private lateinit var presenter: GroupChannelChatPresenterImpl
@@ -139,9 +131,28 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView {
         notificationManager.notify(0, builder.build())
     }
 
+    override fun selectMedia(intent: Intent) {
+        startActivityForResult(Intent.createChooser(intent, "Select Media"), INTENT_REQUEST_CHOOSE_MEDIA)
+        SendBird.setAutoBackgroundDetection(false)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        SendBird.setAutoBackgroundDetection(true)
+
+        if (requestCode == INTENT_REQUEST_CHOOSE_MEDIA && resultCode == Activity.RESULT_OK) {
+            if (data == null) {
+                return
+            }
+            presenter.sendMessageThumbnail(data.data)
+        }
+    }
+
     private fun setListeners() {
         button_group_chat_back.setOnClickListener { presenter.backPressed() }
         button_group_chat_send.setOnClickListener { presenter.sendMessage(edit_group_chat_message.text.toString()) }
+        button_group_chat_upload.setOnClickListener { presenter.requestMedia() }
 
         edit_group_chat_message.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}

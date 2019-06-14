@@ -1,5 +1,6 @@
 package com.sendbirdsampleapp.ui.group_channel.chat_group.view
 
+import android.content.Intent
 import com.sendbird.android.BaseMessage
 import com.sendbird.android.GroupChannel
 import com.sendbird.android.Member
@@ -22,5 +23,7 @@ interface GroupChannelChatView {
     fun displayChatTitle(title: String)
 
     fun displayPushNotification(message: UserMessage, channelUrl: String?)
+
+    fun selectMedia(intent: Intent)
 
 }

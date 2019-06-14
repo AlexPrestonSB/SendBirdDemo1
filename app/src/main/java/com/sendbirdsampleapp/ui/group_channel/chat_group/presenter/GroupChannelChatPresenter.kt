@@ -1,7 +1,9 @@
 package com.sendbirdsampleapp.ui.group_channel.chat_group.presenter
 
+import android.net.Uri
 import com.sendbird.android.GroupChannel
 import com.sendbirdsampleapp.ui.group_channel.chat_group.view.GroupChannelChatView
+import java.net.URI
 
 interface GroupChannelChatPresenter {
 
@@ -11,7 +13,9 @@ interface GroupChannelChatPresenter {
 
     fun sendMessage(message: String)
 
-    fun uploadImage()
+    fun requestMedia()
+
+    fun sendMessageThumbnail(uri: Uri?)
 
     fun backPressed()
 

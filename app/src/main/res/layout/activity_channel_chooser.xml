@@ -23,14 +23,14 @@
             app:popupTheme="@style/Theme.AppCompat.Light">
 
             <TextView
-                android:layout_marginTop="@dimen/text_version_size"
                 android:id="@+id/button_channel_logout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center_vertical"
                 android:text="@string/logout"
                 android:textColor="@color/light_gray"
-                android:textStyle="bold"
-                android:textSize="@dimen/text_standard"/>
+                android:textSize="@dimen/text_standard"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"

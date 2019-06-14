@@ -1,15 +1,12 @@
 package com.sendbirdsampleapp.ui.group_channel.list_group
 
 import android.content.Context
-import android.provider.Settings.Global.getString
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.sendbird.android.*
-import com.sendbirdsampleapp.BuildConfig
 import com.sendbirdsampleapp.R
-import com.sendbirdsampleapp.ui.group_channel.create_group.GroupChannelCreateAdapter
 import com.sendbirdsampleapp.util.DateUtils
 import kotlinx.android.synthetic.main.channel_chooser_view.view.*
 import kotlin.collections.ArrayList

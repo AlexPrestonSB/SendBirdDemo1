@@ -1,8 +1,14 @@
 package com.sendbirdsampleapp.ui.group_channel.chat_group.presenter
 
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
+import android.support.v4.content.ContextCompat
 import com.sendbird.android.*
 import com.sendbirdsampleapp.ui.group_channel.chat_group.view.GroupChannelChatView
 import com.sendbirdsampleapp.util.AppConstants
+import java.net.URI
+import java.util.jar.Manifest
 
 class GroupChannelChatPresenterImpl : GroupChannelChatPresenter {
 
@@ -21,6 +27,7 @@ class GroupChannelChatPresenterImpl : GroupChannelChatPresenter {
                 if (sendBirdException != null) {
                     view.showValidationMessage(AppConstants.FAILED_CHANNEL_GET)
                 } else {
+
                     loadPreviousMessages(groupChannel)
                     view.displayChatTitle(groupChannel.name)
                     channel = groupChannel
@@ -44,8 +51,20 @@ class GroupChannelChatPresenterImpl : GroupChannelChatPresenter {
         view.backPressed()
     }
 
-    override fun uploadImage() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun requestMedia() {
+        val intent = Intent()
+        intent.type = "*/*"
+        val mimeTypes = arrayOf("image/*", "video/*")
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
+        intent.setAction(Intent.ACTION_GET_CONTENT)
+
+        view.selectMedia(intent)
+    }
+
+    override fun sendMessageThumbnail(uri: Uri?) {
+        val thumbnailSize = ArrayList<FileMessage.ThumbnailSize>()
+        thumbnailSize.add(FileMessage.ThumbnailSize(240,240))
+        thumbnailSize.add(FileMessage.ThumbnailSize(320,320))
     }
 
     override fun onResume() {

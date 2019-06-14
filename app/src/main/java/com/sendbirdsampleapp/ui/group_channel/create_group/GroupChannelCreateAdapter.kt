@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import com.sendbird.android.User
 import com.sendbirdsampleapp.R
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.channel_create_view.view.*
+import kotlinx.android.synthetic.main.group_create_view.view.*
 
 
 
@@ -42,7 +42,7 @@ class GroupChannelCreateAdapter(context: Context, listener: OnItemCheckedChangeL
 
     override fun onCreateViewHolder(parent: ViewGroup, position: Int): UserHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        return UserHolder(layoutInflater.inflate(R.layout.channel_create_view, parent, false))
+        return UserHolder(layoutInflater.inflate(R.layout.group_create_view, parent, false))
     }
 
     override fun getItemCount() = users.size
