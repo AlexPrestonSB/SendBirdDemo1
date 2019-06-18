@@ -9,6 +9,7 @@ import com.sendbirdsampleapp.R
 import com.sendbirdsampleapp.util.AppConstants
 import com.sendbirdsampleapp.util.DateUtils
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.item_gchat_admin.view.*
 import kotlinx.android.synthetic.main.item_gchat_me.view.*
 import kotlinx.android.synthetic.main.item_gchat_other.view.*
 
@@ -103,7 +104,7 @@ class GroupChannelChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() 
             }
             AppConstants.VIEW_TYPE_ADMIN_MESSAGE -> {
                 holder as AdminUserHolder
-                holder.bindView(messages.get(position), position)
+                holder.bindView(messages.get(position) as AdminMessage, position, isNewDay)
             }
         }
 
@@ -178,9 +179,20 @@ class GroupChannelChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() 
 
     class AdminUserHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        fun bindView(message: BaseMessage, position: Int) {
+        val messageText = view.text_gchat_admin
+        val date = view.text_gchat_date
+
+        fun bindView(message: AdminMessage, position: Int, isNewDay: Boolean) {
+
+            messageText.text = message.message
+
+            if (isNewDay) {
+                date.visibility = View.VISIBLE
+                date.text = DateUtils.formatDate(message.createdAt)
+            } else {
+                date.visibility = View.GONE
+            }
 
         }
-
     }
 }

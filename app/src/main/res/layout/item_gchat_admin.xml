@@ -2,10 +2,11 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/activity_vertical_margin">
 
     <TextView
-        android:id="@+id/text_gchat_date_me"
+        android:id="@+id/text_gchat_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin_x2"
@@ -21,12 +22,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/text_gchat_admin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:background="@drawable/group_chat_admin_background"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:background="@drawable/group_chat_admin_background"
         android:gravity="center"
         android:paddingStart="@dimen/admin_padding_sides"
         android:paddingTop="@dimen/admin_padding_top"
@@ -37,6 +39,6 @@
         android:textSize="@dimen/text_standard"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_gchat_date_me" />
+        app:layout_constraintTop_toBottomOf="@+id/text_gchat_date" />
 
 </android.support.constraint.ConstraintLayout>
