@@ -48,7 +48,7 @@ class LoginPresenterImpl @Inject constructor(private val preferenceHelper: AppPr
 
                 FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener {
                     if (!it.isSuccessful) {
-//                        loginView.showValidationMessage()
+                        loginView.showValidationMessage(AppConstants.FAILED_FIREBASE_CONNECTION)
                         return@addOnCompleteListener
                     }
                     updateCurrentUserInfo(userId, nickname, it.result?.token)
@@ -62,7 +62,7 @@ class LoginPresenterImpl @Inject constructor(private val preferenceHelper: AppPr
 
         SendBird.updateCurrentUserInfo(nickname, null) { e ->
             if (e != null) {
-                Log.e("TEST", "TEST") //TODO
+                loginView.showValidationMessage(AppConstants.FAILED_UPDATE_USER)
             }
             updateUserInSharedPrefs(userId, nickname, token)
 

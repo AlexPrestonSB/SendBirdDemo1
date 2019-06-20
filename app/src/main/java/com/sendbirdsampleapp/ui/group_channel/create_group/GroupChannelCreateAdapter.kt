@@ -6,9 +6,10 @@ import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.sendbird.android.User
 import com.sendbirdsampleapp.R
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_gcreate.view.*
 
 
@@ -48,7 +49,7 @@ class GroupChannelCreateAdapter(context: Context, listener: OnItemCheckedChangeL
     override fun getItemCount() = users.size
 
     override fun onBindViewHolder(holder: UserHolder, position: Int) {
-        holder.bindViews(users[position], position, checkedListener)
+        holder.bindViews(context, users[position], position, checkedListener)
     }
 
     class UserHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -57,12 +58,12 @@ class GroupChannelCreateAdapter(context: Context, listener: OnItemCheckedChangeL
         val userImage = view.image_gcreate
         val userId = view.text_gcreate_user
 
-        fun bindViews(user: User, position: Int, listener: OnItemCheckedChangeListener) {
+        fun bindViews(context: Context, user: User, position: Int, listener: OnItemCheckedChangeListener) {
 
             userId.text = user.userId
             val profile = user.profileUrl
             if (profile != "") {
-                Picasso.get().load(user.profileUrl).resize(100,100).into(userImage)
+                Glide.with(context).load(user.profileUrl).apply(RequestOptions().override(100,100)).into(userImage)
             }
 
             checkbox.isChecked = sparseArray().get(position, false)

@@ -170,7 +170,7 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView {
     }
 
     private fun setUpRecyclerView() {
-        adapter = GroupChannelChatAdapter()
+        adapter = GroupChannelChatAdapter(this)
         recyclerView = recycler_gchat
         recyclerView.adapter = adapter
         val layoutManager = LinearLayoutManager(this)
