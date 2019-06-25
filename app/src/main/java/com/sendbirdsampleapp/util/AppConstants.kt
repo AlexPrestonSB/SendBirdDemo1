@@ -15,7 +15,6 @@ object AppConstants {
     internal val FAILED_UPDATE_USER = 1007
     internal val FAILED_FIREBASE_CONNECTION = 1008
 
-
     //Constant viewTypes for chat
     internal val VIEW_TYPE_USER_MESSAGE_ME = 1
     internal val VIEW_TYPE_USER_MESSAGE_OTHER = 2

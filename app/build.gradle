@@ -27,6 +27,8 @@ android {
 
     repositories {
         maven { url "https://raw.githubusercontent.com/smilefam/SendBird-SDK-Android/master/" }
+        maven { url 'https://github.com/leonardocardoso/mvn-repo/raw/master/maven-deploy' }
+
     }
 
     kapt {
@@ -69,8 +71,12 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.3.1'
 
     //Firebase
-    implementation 'com.google.firebase:firebase-core:16.0.9'
+    implementation 'com.google.firebase:firebase-core:16.0.0'
     implementation 'com.google.firebase:firebase-messaging:18.0.0'
+
+    //Leo card
+    implementation 'org.jsoup:jsoup:1.11.2' // required
+    implementation 'com.leocardz:link-preview:2.0.0@aar'
 
 
     //implementation 'androidx.core:core-ktx:1.0.2'

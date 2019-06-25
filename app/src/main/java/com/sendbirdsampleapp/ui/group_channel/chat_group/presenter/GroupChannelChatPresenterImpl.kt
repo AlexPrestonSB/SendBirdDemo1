@@ -4,9 +4,15 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.support.v4.content.ContextCompat
+import android.util.Log
+import com.leocardz.link.preview.library.LinkPreviewCallback
+import com.leocardz.link.preview.library.SourceContent
 import com.sendbird.android.*
+import com.sendbirdsampleapp.data.UrlInfo
+import com.sendbirdsampleapp.ui.group_channel.chat_group.GroupChannelChatAdapter
 import com.sendbirdsampleapp.ui.group_channel.chat_group.view.GroupChannelChatView
 import com.sendbirdsampleapp.util.AppConstants
+import com.sendbirdsampleapp.util.UrlUtil
 import java.net.URI
 import java.util.jar.Manifest
 
@@ -15,6 +21,7 @@ class GroupChannelChatPresenterImpl : GroupChannelChatPresenter {
     private lateinit var view: GroupChannelChatView
     private lateinit var channel: GroupChannel
     private lateinit var channelUrl: String
+    private lateinit var message: String
 
     override fun setView(view: GroupChannelChatView) {
         this.view = view
@@ -38,13 +45,20 @@ class GroupChannelChatPresenterImpl : GroupChannelChatPresenter {
 
     override fun sendMessage(message: String) {
 
-        val tempMessage = channel.sendUserMessage(message) { userMessage, sendBirdException ->
-            if (sendBirdException != null) {
-                //TODO handle error
-            } else {
-                view.sendMessage(userMessage)
+        val urls = UrlUtil.extractUrl(message)
+        if (urls.size > 0) {
+            sendMessageWithUrl(message, urls.get(0))
+        } else {
+            channel.sendUserMessage(message) { userMessage, sendBirdException ->
+                if (sendBirdException != null) {
+                    view.showValidationMessage(1)
+                } else {
+                    view.sendMessage(userMessage)
+                }
             }
         }
+
+
     }
 
     override fun backPressed() {
@@ -59,12 +73,13 @@ class GroupChannelChatPresenterImpl : GroupChannelChatPresenter {
         intent.setAction(Intent.ACTION_GET_CONTENT)
 
         view.selectMedia(intent)
+
     }
 
     override fun sendMessageThumbnail(uri: Uri?) {
         val thumbnailSize = ArrayList<FileMessage.ThumbnailSize>()
-        thumbnailSize.add(FileMessage.ThumbnailSize(240,240))
-        thumbnailSize.add(FileMessage.ThumbnailSize(320,320))
+        thumbnailSize.add(FileMessage.ThumbnailSize(240, 240))
+        thumbnailSize.add(FileMessage.ThumbnailSize(320, 320))
     }
 
     override fun onResume() {
@@ -99,6 +114,38 @@ class GroupChannelChatPresenterImpl : GroupChannelChatPresenter {
             channel.startTyping()
         } else {
             channel.endTyping()
+        }
+    }
+
+    fun sendMessageWithUrl(text: String, url: String) {
+        message = text
+        UrlUtil.generateLinkPreviewCallback(url, linkPreviewCallback)
+    }
+
+    val linkPreviewCallback = object : LinkPreviewCallback {
+        override fun onPre() {
+
+        }
+
+        override fun onPos(sourceContent: SourceContent?, isNull: Boolean) {
+            if (!isNull) {
+                val urlInfo = UrlInfo()
+                urlInfo.title = sourceContent?.title.toString()
+                urlInfo.description = sourceContent?.description.toString()
+                urlInfo.imageUrl = sourceContent?.images?.get(0).toString()
+                urlInfo.url = sourceContent?.url.toString()
+                urlInfo.siteName = sourceContent?.cannonicalUrl.toString()
+
+                val string = urlInfo.toJsonString()
+                channel.sendUserMessage(message, urlInfo.toJsonString(), "url_preview", null) { userMessage, e ->
+                    if (e != null) {
+                        view.showValidationMessage(1)
+                    } else {
+                        view.sendMessage(userMessage)
+                    }
+                }
+            }
+
         }
     }
 

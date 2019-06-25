@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.NotificationCompat
@@ -20,9 +21,12 @@ import com.sendbirdsampleapp.R
 import com.sendbirdsampleapp.ui.group_channel.chat_group.presenter.GroupChannelChatPresenterImpl
 import com.sendbirdsampleapp.ui.group_channel.chat_group.view.GroupChannelChatView
 import com.sendbirdsampleapp.ui.group_channel.list_group.GroupChannelActivity
+import com.sendbirdsampleapp.util.AppConstants
 import kotlinx.android.synthetic.main.activity_gchat.*
+import org.json.JSONException
+import org.json.JSONObject
 
-class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView {
+class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, GroupChannelChatAdapter.OnItemClickListener {
 
     private val EXTRA_CHANNEL_URL = "EXTRA_CHANNEL_URL"
     private val INTENT_REQUEST_CHOOSE_MEDIA = 301
@@ -128,6 +132,8 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView {
 
         builder.setContentText(message.message)
 
+
+
         notificationManager.notify(0, builder.build())
     }
 
@@ -146,6 +152,29 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView {
                 return
             }
             presenter.sendMessageThumbnail(data.data)
+        }
+    }
+
+    override fun onUserMessageClick(message: UserMessage) {
+        if (message.customType.equals("url_preview")) {
+            try {
+                val obj = JSONObject(message.data)
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(obj.getString("url")))
+                startActivity(intent)
+            } catch (exception: JSONException) {
+                Log.e("JSON", exception.toString())
+            }
+
+        }
+    }
+
+    override fun onFileMessageClicked(message: FileMessage) {
+        if (message.customType.toLowerCase().startsWith("video")) {
+            //TODO
+        } else if (message.customType.toLowerCase().startsWith("image")) {
+            //TODO
+        } else {
+            //TODO
         }
     }
 
@@ -170,7 +199,7 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView {
     }
 
     private fun setUpRecyclerView() {
-        adapter = GroupChannelChatAdapter(this)
+        adapter = GroupChannelChatAdapter(this, this)
         recyclerView = recycler_gchat
         recyclerView.adapter = adapter
         val layoutManager = LinearLayoutManager(this)

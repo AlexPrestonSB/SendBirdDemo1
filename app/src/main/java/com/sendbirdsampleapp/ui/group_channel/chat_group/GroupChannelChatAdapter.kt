@@ -10,10 +10,14 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.sendbird.android.*
 import com.sendbirdsampleapp.R
+import com.sendbirdsampleapp.data.UrlInfo
 import com.sendbirdsampleapp.util.AppConstants
 import com.sendbirdsampleapp.util.DateUtils
 import kotlinx.android.synthetic.main.item_gchat_admin.view.*
-import kotlinx.android.synthetic.main.item_gchat_image_other.view.image_gchat_thumbnail_other
+import kotlinx.android.synthetic.main.item_gchat_file_me.view.*
+import kotlinx.android.synthetic.main.item_gchat_file_other.view.*
+import kotlinx.android.synthetic.main.item_gchat_image_me.view.*
+import kotlinx.android.synthetic.main.item_gchat_image_other.view.*
 import kotlinx.android.synthetic.main.item_gchat_me.view.*
 import kotlinx.android.synthetic.main.item_gchat_me.view.text_gchat_date_me
 import kotlinx.android.synthetic.main.item_gchat_me.view.text_gchat_read_me
@@ -25,19 +29,28 @@ import kotlinx.android.synthetic.main.item_gchat_other.view.text_gchat_read_othe
 import kotlinx.android.synthetic.main.item_gchat_other.view.text_gchat_timestamp_other
 import kotlinx.android.synthetic.main.item_gchat_other.view.text_gchat_user_other
 import kotlinx.android.synthetic.main.item_gchat_video_me.view.*
+import kotlinx.android.synthetic.main.item_gchat_video_other.view.*
 import org.json.JSONException
 import org.json.JSONObject
 import kotlin.collections.ArrayList
 
-class GroupChannelChatAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    interface OnItemClickListener {
+        fun onUserMessageClick(message: UserMessage)
+        fun onFileMessageClicked(message: FileMessage)
+    }
 
 
     private var messages: MutableList<BaseMessage>
     private var context: Context
+    private var listener: OnItemClickListener
 
     init {
         messages = ArrayList()
         this.context = context
+        this.listener = listener
     }
 
     fun loadMessages(messages: MutableList<BaseMessage>) {
@@ -135,35 +148,35 @@ class GroupChannelChatAdapter(context: Context) : RecyclerView.Adapter<RecyclerV
         when (holder.itemViewType) {
             AppConstants.VIEW_TYPE_USER_MESSAGE_ME -> {
                 holder as MyUserHolder
-                holder.bindView(context, messages.get(position) as UserMessage, isNewDay)
+                holder.bindView(context, messages.get(position) as UserMessage, isNewDay, listener)
             }
             AppConstants.VIEW_TYPE_USER_MESSAGE_OTHER -> {
                 holder as OtherUserHolder
-                holder.bindView(context, messages.get(position) as UserMessage, isNewDay)
+                holder.bindView(context, messages.get(position) as UserMessage, isNewDay, listener)
             }
             AppConstants.VIEW_TYPE_IMAGE_MESSAGE_ME -> {
                 holder as MyImageHolder
-                holder.bindView(context, messages.get(position) as FileMessage, isNewDay)
+                holder.bindView(context, messages.get(position) as FileMessage, isNewDay, listener)
             }
             AppConstants.VIEW_TYPE_IMAGE_MESSAGE_OTHER -> {
                 holder as OtherImageHolder
-                holder.bindView(context, messages.get(position) as FileMessage, isNewDay)
+                holder.bindView(context, messages.get(position) as FileMessage, isNewDay, listener)
             }
             AppConstants.VIEW_TYPE_VIDEO_MESSAGE_ME -> {
                 holder as MyVideoHolder
-                holder.bindView(context, messages.get(position) as FileMessage, isNewDay)
+                holder.bindView(context, messages.get(position) as FileMessage, isNewDay, listener)
             }
             AppConstants.VIEW_TYPE_VIDEO_MESSAGE_OTHER -> {
                 holder as OtherVideoHolder
-                holder.bindView(context, messages.get(position) as FileMessage, isNewDay)
+                holder.bindView(context, messages.get(position) as FileMessage, isNewDay, listener)
             }
             AppConstants.VIEW_TYPE_FILE_MESSAGE_ME -> {
                 holder as MyFileMessage
-                holder.bindView(context, messages.get(position) as FileMessage, isNewDay)
+                holder.bindView(context, messages.get(position) as FileMessage, isNewDay, listener)
             }
             AppConstants.VIEW_TYPE_FILE_MESSAGE_OTHER -> {
                 holder as OtherFileMessage
-                holder.bindView(context, messages.get(position) as FileMessage, isNewDay)
+                holder.bindView(context, messages.get(position) as FileMessage, isNewDay, listener)
             }
             AppConstants.VIEW_TYPE_ADMIN_MESSAGE -> {
                 holder as AdminUserHolder
@@ -186,7 +199,7 @@ class GroupChannelChatAdapter(context: Context) : RecyclerView.Adapter<RecyclerV
         val urlDescription = view.text_gchat_description_me
         val urlImage = view.image_gchat_url_me
 
-        fun bindView(context: Context, message: UserMessage, isNewDay: Boolean) {
+        fun bindView(context: Context, message: UserMessage, isNewDay: Boolean, listener: OnItemClickListener) {
 
             messageText.text = message.message
             messageDate.text = DateUtils.formatTime(message.createdAt)
@@ -199,7 +212,24 @@ class GroupChannelChatAdapter(context: Context) : RecyclerView.Adapter<RecyclerV
             }
 
             urlContainer.visibility = View.GONE
-            //TODO set the rest
+            if (message.customType.equals("url_preview")) {
+                try {
+                    urlContainer.visibility = View.VISIBLE
+                    val obj = UrlInfo()
+                    obj.setUrlInfo(message.data)
+                    urlName.text = "@" + obj.siteName
+                    urlTitle.text = obj.title
+                    urlDescription.text = obj.description
+                    Glide.with(context).load(obj.imageUrl).into(urlImage)
+                    messageText.text = message.message.replace(obj.url, "")
+                } catch (exception: JSONException) {
+                    Log.e("JSON", exception.toString())
+                }
+            }
+
+            itemView.setOnClickListener {
+                listener.onUserMessageClick(message)
+            }
         }
     }
 
@@ -218,7 +248,7 @@ class GroupChannelChatAdapter(context: Context) : RecyclerView.Adapter<RecyclerV
         val urlDescription = view.text_gchat_description_other
         val urlImage = view.image_gchat_url_other
 
-        fun bindView(context: Context, message: UserMessage, isNewDay: Boolean) {
+        fun bindView(context: Context, message: UserMessage, isNewDay: Boolean, listener: OnItemClickListener) {
 
             messageText.text = message.message
             timestamp.text = DateUtils.formatTime(message.createdAt)
@@ -239,33 +269,41 @@ class GroupChannelChatAdapter(context: Context) : RecyclerView.Adapter<RecyclerV
             if (message.customType.equals("url_preview")) {
                 try {
                     urlContainer.visibility = View.VISIBLE
-                    val obj = JSONObject(message.data)
-                    urlName.text = obj.getString("url")
-                    urlTitle.text = obj.getString("title")
-                    urlDescription.text = obj.getString("description")
-                    Glide.with(context).load(obj.getString("image")).into(urlImage)
-                } catch (exception: JSONException){
+                    val obj = UrlInfo()
+                    obj.setUrlInfo(message.data)
+                    urlName.text = "@" + obj.siteName
+                    urlTitle.text = obj.title
+                    urlDescription.text = obj.description
+                    Glide.with(context).load(obj.imageUrl).into(urlImage)
+                    messageText.text = message.message.replace(obj.url, "")
+                } catch (exception: JSONException) {
                     Log.e("JSON", exception.toString())
                 }
             }
 
+            itemView.setOnClickListener {
+                listener.onUserMessageClick(message)
+            }
         }
+
     }
 
     class OtherImageHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val thumbnail = view.image_gchat_thumbnail_other
-        val date = view.text_gchat_date_other
-        val profileImage = view.image_gchat_profile_other
-        val username = view.text_gchat_user_other
-        val timestamp = view.text_gchat_timestamp_other
-        val read = view.text_gchat_read_other
+        val thumbnail = view.image_gchat_image_thumbnail_other
+        val date = view.text_gchat_image_date_other
+        val profileImage = view.image_gchat_image_profile_other
+        val username = view.text_gchat_image_user_other
+        val timestamp = view.text_gchat_image_timestamp_other
+        val read = view.text_gchat_image_read_other
 
-        fun bindView(context: Context, message: FileMessage, isNewDay: Boolean) {
+
+        fun bindView(context: Context, message: FileMessage, isNewDay: Boolean, listener: OnItemClickListener) {
 
             username.text = message.sender.nickname
             timestamp.text = DateUtils.formatTime(message.createdAt)
 
-            Glide.with(context).load(message.sender.profileUrl).apply(RequestOptions().override(75,75)).into(profileImage)
+            Glide.with(context).load(message.sender.profileUrl).apply(RequestOptions().override(75, 75))
+                .into(profileImage)
             if (isNewDay) {
                 date.visibility = View.VISIBLE
                 date.text = DateUtils.formatDate(message.createdAt)
@@ -275,31 +313,30 @@ class GroupChannelChatAdapter(context: Context) : RecyclerView.Adapter<RecyclerV
 
             val thumbnails = message.thumbnails
 
-            if  (thumbnails.size > 0) {
-                if  (message.type.equals("gif")) {
+            if (thumbnails.size > 0) {
+                if (message.type.equals("gif")) {
                     //TODO
                 } else {
                     Glide.with(context).load(thumbnails.get(0).url).into(thumbnail)
                 }
+            }
+
+            itemView.setOnClickListener {
+                listener.onFileMessageClicked(message)
             }
 
         }
     }
 
     class MyImageHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val thumbnail = view.image_gchat_thumbnail_me
-        val date = view.text_gchat_date_other
-        val profileImage = view.image_gchat_profile_other
-        val username = view.text_gchat_user_other
-        val timestamp = view.text_gchat_timestamp_other
-        val read = view.text_gchat_read_other
+        val thumbnail = view.image_gchat_image_thumbnail_me
+        val date = view.text_gchat_image_date_me
+        val timestamp = view.text_gchat_image_timestamp_me
+        val read = view.text_gchat_image_read_me
 
-        fun bindView(context: Context, message: FileMessage, isNewDay: Boolean) {
+        fun bindView(context: Context, message: FileMessage, isNewDay: Boolean, listener: OnItemClickListener) {
 
-            username.text = message.sender.nickname
             timestamp.text = DateUtils.formatTime(message.createdAt)
-
-            Glide.with(context).load(message.sender.profileUrl).apply(RequestOptions().override(75,75)).into(profileImage)
 
             if (isNewDay) {
                 date.visibility = View.VISIBLE
@@ -311,32 +348,63 @@ class GroupChannelChatAdapter(context: Context) : RecyclerView.Adapter<RecyclerV
 
             val thumbnails = message.thumbnails
 
-            if  (thumbnails.size > 0) {
-                if  (message.type.equals("gif")) {
+            if (thumbnails.size > 0) {
+                if (message.type.equals("gif")) {
                     //TODO
                 } else {
                     Glide.with(context).load(thumbnails.get(0).url).into(thumbnail)
                 }
+            }
+
+            itemView.setOnClickListener {
+                listener.onFileMessageClicked(message)
             }
         }
     }
 
     class MyVideoHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val thumbnail = view.image_gchat_video_thumbnail_me
+        val date = view.text_gchat_video_date_me
+        val timestamp = view.text_gchat_video_timestamp_me
+        val read = view.text_gchat_video_read_me
 
-        fun bindView(context: Context, message: FileMessage, isNewDay: Boolean) {
 
+        fun bindView(context: Context, message: FileMessage, isNewDay: Boolean, listener: OnItemClickListener) {
+            timestamp.text = DateUtils.formatTime(message.createdAt)
+
+            if (isNewDay) {
+                date.visibility = View.VISIBLE
+                date.text = DateUtils.formatDate(message.createdAt)
+            } else {
+                date.visibility = View.GONE
+            }
+
+
+            val thumbnails = message.thumbnails
+
+            if (thumbnails.size > 0) {
+                if (message.type.equals("gif")) {
+                    //TODO
+                } else {
+                    Glide.with(context).load(thumbnails.get(0).url).into(thumbnail)
+                }
+            }
+
+            itemView.setOnClickListener {
+                listener.onFileMessageClicked(message)
+            }
         }
     }
 
     class OtherVideoHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val thumbnail = view.image_gchat_thumbnail_other
-        val date = view.text_gchat_date_other
-        val profileImage = view.image_gchat_profile_other
-        val username = view.text_gchat_user_other
-        val timestamp = view.text_gchat_timestamp_other
-        val read = view.text_gchat_read_other
+        val thumbnail = view.image_gchat_video_thumbnail_other
+        val date = view.text_gchat_video_date_other
+        val profileImage = view.image_gchat_video_profile_other
+        val username = view.text_gchat_video_user_other
+        val timestamp = view.text_gchat_video_timestamp_other
+        val read = view.text_gchat_video_read_other
 
-        fun bindView(context: Context, message: FileMessage, isNewDay: Boolean) {
+        fun bindView(context: Context, message: FileMessage, isNewDay: Boolean, listener: OnItemClickListener) {
             username.text = message.sender.nickname
             timestamp.text = DateUtils.formatTime(message.createdAt)
 
@@ -347,32 +415,79 @@ class GroupChannelChatAdapter(context: Context) : RecyclerView.Adapter<RecyclerV
                 date.visibility = View.GONE
             }
 
-            Glide.with(context).load(message.sender.profileUrl).apply(RequestOptions().override(75,75)).into(profileImage)
+            Glide.with(context).load(message.sender.profileUrl).apply(RequestOptions().override(75, 75))
+                .into(profileImage)
 
 
             val thumbnails = message.thumbnails
 
-            if  (thumbnails.size > 0) {
-                if  (message.type.equals("gif")) {
+            if (thumbnails.size > 0) {
+                if (message.type.equals("gif")) {
                     //TODO
                 } else {
                     Glide.with(context).load(thumbnails.get(0).url).into(thumbnail)
                 }
+            }
+
+            itemView.setOnClickListener {
+                listener.onFileMessageClicked(message)
             }
 
         }
     }
 
     class MyFileMessage(view: View) : RecyclerView.ViewHolder(view) {
+        val filename = view.text_gchat_filename_me
+        val date = view.text_gchat_file_date_me
+        val timestamp = view.text_gchat_file_timestamp_me
+        val read = view.text_gchat_file_read_me
 
-        fun bindView(context: Context, message: FileMessage, isNewDay: Boolean) {
+        fun bindView(context: Context, message: FileMessage, isNewDay: Boolean, listener: OnItemClickListener) {
+
+            filename.text = message.name
+            timestamp.text = DateUtils.formatTime(message.createdAt)
+
+            if (isNewDay) {
+                date.visibility = View.VISIBLE
+                date.text = DateUtils.formatDate(message.createdAt)
+            } else {
+                date.visibility = View.GONE
+            }
+
+            itemView.setOnClickListener {
+                listener.onFileMessageClicked(message)
+            }
 
         }
     }
 
     class OtherFileMessage(view: View) : RecyclerView.ViewHolder(view) {
+        val filename = view.text_gchat_filename_me
+        val profileImage = view.image_gchat_file_profile_other
+        val username = view.text_gchat_file_user_other
+        val date = view.text_gchat_file_date_other
+        val timestamp = view.text_gchat_timestamp_other
+        val read = view
 
-        fun bindView(context: Context, message: FileMessage, isNewDay: Boolean) {
+        fun bindView(context: Context, message: FileMessage, isNewDay: Boolean, listener: OnItemClickListener) {
+
+            filename.text = message.name
+            username.text = message.sender.nickname
+            timestamp.text = DateUtils.formatTime(message.createdAt)
+
+            Glide.with(context).load(message.sender.profileUrl).apply(RequestOptions().override(75, 75))
+                .into(profileImage)
+
+            if (isNewDay) {
+                date.visibility = View.VISIBLE
+                date.text = DateUtils.formatDate(message.createdAt)
+            } else {
+                date.visibility = View.GONE
+            }
+
+            itemView.setOnClickListener {
+                listener.onFileMessageClicked(message)
+            }
 
         }
     }

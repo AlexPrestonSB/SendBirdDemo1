@@ -79,6 +79,9 @@ class GroupChannelCreateActivity : AppCompatActivity(), GroupChannelCreateAdapte
     private fun loadUsers() {
         Thread {
             val userListQuery = SendBird.createApplicationUserListQuery()
+            val list = ArrayList<String>()
+
+            list.add("Al")
 
             userListQuery.setLimit(100) //TODO change don't use constants
             userListQuery.next() { list, e ->
