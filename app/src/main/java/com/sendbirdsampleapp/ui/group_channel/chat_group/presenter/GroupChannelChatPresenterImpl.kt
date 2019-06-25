@@ -134,7 +134,8 @@ class GroupChannelChatPresenterImpl : GroupChannelChatPresenter {
                 urlInfo.description = sourceContent?.description.toString()
                 urlInfo.imageUrl = sourceContent?.images?.get(0).toString()
                 urlInfo.url = sourceContent?.url.toString()
-                urlInfo.siteName = sourceContent?.cannonicalUrl.toString()
+                var siteName = sourceContent?.cannonicalUrl?.replace("www.", "")
+                urlInfo.siteName = siteName?.replace(".com", "").toString()
 
                 val string = urlInfo.toJsonString()
                 channel.sendUserMessage(message, urlInfo.toJsonString(), "url_preview", null) { userMessage, e ->

@@ -60,17 +60,19 @@
                 android:orientation="vertical">
 
                 <View
+                    android:id="@+id/text_gchat_separator_me"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/line_height"
                     android:layout_marginLeft="@dimen/card_corners"
                     android:layout_marginRight="@dimen/card_corners"
-                    android:layout_marginBottom="@dimen/profile_margin"
                     android:background="@android:color/darker_gray"
                     android:maxWidth="@dimen/card_max_width" />
 
                 <TextView
                     android:id="@+id/text_gchat_site_me"
                     android:layout_width="wrap_content"
+                    android:layout_marginTop="@dimen/profile_margin"
+                    android:textAllCaps="true"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxWidth="@dimen/card_max_width"

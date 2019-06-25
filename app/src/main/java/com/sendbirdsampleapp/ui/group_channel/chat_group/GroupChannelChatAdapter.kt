@@ -193,6 +193,7 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
         val messageDate = view.text_gchat_timestamp_me
         val read = view.text_gchat_read_me
 
+        val separator = view.text_gchat_separator_me
         val urlContainer = view.layout_gchat_link_me
         val urlName = view.text_gchat_site_me
         val urlTitle = view.text_gchat_title_me
@@ -222,6 +223,10 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
                     urlDescription.text = obj.description
                     Glide.with(context).load(obj.imageUrl).into(urlImage)
                     messageText.text = message.message.replace(obj.url, "")
+                    if (messageText.text.equals("")){
+                        messageText.visibility = View.GONE
+                        separator.visibility = View.GONE
+                    }
                 } catch (exception: JSONException) {
                     Log.e("JSON", exception.toString())
                 }
@@ -242,6 +247,7 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
         val profileImage = view.image_gchat_profile_other
         val user = view.text_gchat_user_other
 
+        val separator = view.text_gchat_separator_other
         val urlContainer = view.layout_gchat_link_other
         val urlName = view.text_gchat_site_other
         val urlTitle = view.text_gchat_title_other
@@ -276,6 +282,10 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
                     urlDescription.text = obj.description
                     Glide.with(context).load(obj.imageUrl).into(urlImage)
                     messageText.text = message.message.replace(obj.url, "")
+                    if (messageText.text.equals("")){
+                        messageText.visibility = View.GONE
+                        separator.visibility = View.GONE
+                    }
                 } catch (exception: JSONException) {
                     Log.e("JSON", exception.toString())
                 }
