@@ -1,20 +1,18 @@
 package com.sendbirdsampleapp.ui.group_channel.chat_group.presenter
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
-import android.support.v4.content.ContextCompat
-import android.util.Log
 import com.leocardz.link.preview.library.LinkPreviewCallback
 import com.leocardz.link.preview.library.SourceContent
 import com.sendbird.android.*
 import com.sendbirdsampleapp.data.UrlInfo
-import com.sendbirdsampleapp.ui.group_channel.chat_group.GroupChannelChatAdapter
 import com.sendbirdsampleapp.ui.group_channel.chat_group.view.GroupChannelChatView
 import com.sendbirdsampleapp.util.AppConstants
+import com.sendbirdsampleapp.util.FileUtil
 import com.sendbirdsampleapp.util.UrlUtil
-import java.net.URI
-import java.util.jar.Manifest
+import java.io.File
+import java.lang.Exception
 
 class GroupChannelChatPresenterImpl : GroupChannelChatPresenter {
 
@@ -57,8 +55,6 @@ class GroupChannelChatPresenterImpl : GroupChannelChatPresenter {
                 }
             }
         }
-
-
     }
 
     override fun backPressed() {
@@ -76,10 +72,42 @@ class GroupChannelChatPresenterImpl : GroupChannelChatPresenter {
 
     }
 
-    override fun sendMessageThumbnail(uri: Uri?) {
+    override fun sendMessageThumbnail(context: Context, uri: Uri) {
         val thumbnailSize = ArrayList<FileMessage.ThumbnailSize>()
         thumbnailSize.add(FileMessage.ThumbnailSize(240, 240))
         thumbnailSize.add(FileMessage.ThumbnailSize(320, 320))
+
+        val info = FileUtil.getFileInfo(context, uri)
+
+        if (info == null) {
+            view.showValidationMessage(101) //TODO CHANGE
+        }
+
+        val path = info?.get("path") as String
+        val file = File(path)
+        val fileName = file.name
+        val mime = info.get("mime") as String
+        val size = info.get("size") as Int
+
+        if (!path.equals("")){
+           val handler =  object : BaseChannel.SendFileMessageWithProgressHandler {
+               override fun onSent(fileMessage: FileMessage?, exception: SendBirdException?) {
+                   if (exception != null){
+                       view.showValidationMessage(1)
+                   } else {
+                       view.sendMessage(fileMessage as BaseMessage)
+                   }
+               }
+
+               override fun onProgress(bytesSent: Int, totalBytesSent: Int, totalBytesToSend: Int) {
+                   //TODO when you have it
+               }
+           }
+            channel.sendFileMessage(file, fileName, mime, size, "", null, thumbnailSize, handler)
+        }
+
+
+
     }
 
     override fun onResume() {
@@ -129,15 +157,8 @@ class GroupChannelChatPresenterImpl : GroupChannelChatPresenter {
 
         override fun onPos(sourceContent: SourceContent?, isNull: Boolean) {
             if (!isNull) {
-                val urlInfo = UrlInfo()
-                urlInfo.title = sourceContent?.title.toString()
-                urlInfo.description = sourceContent?.description.toString()
-                urlInfo.imageUrl = sourceContent?.images?.get(0).toString()
-                urlInfo.url = sourceContent?.url.toString()
-                var siteName = sourceContent?.cannonicalUrl?.replace("www.", "")
-                urlInfo.siteName = siteName?.replace(".com", "").toString()
+                val urlInfo = UrlUtil.parseContent(sourceContent!!)
 
-                val string = urlInfo.toJsonString()
                 channel.sendUserMessage(message, urlInfo.toJsonString(), "url_preview", null) { userMessage, e ->
                     if (e != null) {
                         view.showValidationMessage(1)

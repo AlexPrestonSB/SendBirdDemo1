@@ -46,6 +46,24 @@ object UrlUtil {
         textCrawler.makePreview(linkPreviewCallback, url)
     }
 
+    fun parseContent(sourceContent: SourceContent): UrlInfo {
+
+        val urlInfo = UrlInfo()
+        urlInfo.title = sourceContent.title.toString()
+        if (urlInfo.title == "Twitter") {
+            urlInfo.imageUrl = sourceContent.images?.get(7).toString()
+        } else {
+            urlInfo.imageUrl = sourceContent.images?.get(0).toString()
+        }
+        urlInfo.description = sourceContent.description.toString()
+        urlInfo.url = sourceContent.url.toString()
+        val siteName = sourceContent.cannonicalUrl?.replace("www.", "")
+        urlInfo.siteName = siteName?.replace(".com", "").toString()
+
+        return urlInfo
+    }
+
+
 
     fun onDestroy() {
         textCrawler.cancel()

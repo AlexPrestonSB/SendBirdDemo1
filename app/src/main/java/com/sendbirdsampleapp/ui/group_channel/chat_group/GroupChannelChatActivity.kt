@@ -81,7 +81,7 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, Grou
         }
     }
 
-    override fun sendMessage(message: UserMessage) {
+    override fun sendMessage(message: BaseMessage) {
         adapter.addFirst(message)
         edit_gchat_message.setText("")
         recyclerView.scrollToPosition(0)
@@ -151,7 +151,7 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, Grou
             if (data == null) {
                 return
             }
-            presenter.sendMessageThumbnail(data.data)
+            presenter.sendMessageThumbnail(this, data.data)
         }
     }
 

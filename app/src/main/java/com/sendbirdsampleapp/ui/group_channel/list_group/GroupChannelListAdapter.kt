@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.sendbird.android.*
 import com.sendbirdsampleapp.R
-import com.sendbirdsampleapp.util.DateUtils
+import com.sendbirdsampleapp.util.DateUtil
 import kotlinx.android.synthetic.main.item_channel_chooser.view.*
 import kotlin.collections.ArrayList
 
@@ -59,7 +59,7 @@ class GroupChannelListAdapter(context: Context, listener: OnChannelClickedListen
             val lastMessage = groupChannel.lastMessage
 
             if (lastMessage != null) {
-                channelDate.text = DateUtils.formatDateTime(lastMessage.createdAt)
+                channelDate.text = DateUtil.formatDateTime(lastMessage.createdAt)
 
                 if (lastMessage is UserMessage) {
                     channelRecentMessage.text = lastMessage.message

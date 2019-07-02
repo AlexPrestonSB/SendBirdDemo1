@@ -89,5 +89,4 @@
         app:layout_constraintEnd_toStartOf="@+id/layout_gchat_file_me" />
 
 
-
 </android.support.constraint.ConstraintLayout>

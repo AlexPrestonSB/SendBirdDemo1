@@ -3,7 +3,7 @@ package com.sendbirdsampleapp.util
 import java.text.SimpleDateFormat
 import java.util.*
 
-object DateUtils {
+object DateUtil {
 
 
     fun formatDateTime(timeInMillis: Long): String {

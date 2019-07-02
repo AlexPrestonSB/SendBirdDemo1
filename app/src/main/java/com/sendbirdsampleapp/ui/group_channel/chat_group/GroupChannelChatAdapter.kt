@@ -12,7 +12,7 @@ import com.sendbird.android.*
 import com.sendbirdsampleapp.R
 import com.sendbirdsampleapp.data.UrlInfo
 import com.sendbirdsampleapp.util.AppConstants
-import com.sendbirdsampleapp.util.DateUtils
+import com.sendbirdsampleapp.util.DateUtil
 import kotlinx.android.synthetic.main.item_gchat_admin.view.*
 import kotlinx.android.synthetic.main.item_gchat_file_me.view.*
 import kotlinx.android.synthetic.main.item_gchat_file_other.view.*
@@ -31,7 +31,6 @@ import kotlinx.android.synthetic.main.item_gchat_other.view.text_gchat_user_othe
 import kotlinx.android.synthetic.main.item_gchat_video_me.view.*
 import kotlinx.android.synthetic.main.item_gchat_video_other.view.*
 import org.json.JSONException
-import org.json.JSONObject
 import kotlin.collections.ArrayList
 
 class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
@@ -138,7 +137,7 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
             (position < messages.size - 1) -> {
                 val previousMessage = messages.get(position + 1)
 
-                isNewDay = !DateUtils.isSameDay(message.createdAt, previousMessage.createdAt)
+                isNewDay = !DateUtil.isSameDay(message.createdAt, previousMessage.createdAt)
             }
             (position == messages.size - 1) -> {
                 isNewDay = true
@@ -203,11 +202,11 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
         fun bindView(context: Context, message: UserMessage, isNewDay: Boolean, listener: OnItemClickListener) {
 
             messageText.text = message.message
-            messageDate.text = DateUtils.formatTime(message.createdAt)
+            messageDate.text = DateUtil.formatTime(message.createdAt)
 
             if (isNewDay) {
                 date.visibility = View.VISIBLE
-                date.text = DateUtils.formatDate(message.createdAt)
+                date.text = DateUtil.formatDate(message.createdAt)
             } else {
                 date.visibility = View.GONE
             }
@@ -257,11 +256,11 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
         fun bindView(context: Context, message: UserMessage, isNewDay: Boolean, listener: OnItemClickListener) {
 
             messageText.text = message.message
-            timestamp.text = DateUtils.formatTime(message.createdAt)
+            timestamp.text = DateUtil.formatTime(message.createdAt)
 
             if (isNewDay) {
                 date.visibility = View.VISIBLE
-                date.text = DateUtils.formatDate(message.createdAt)
+                date.text = DateUtil.formatDate(message.createdAt)
             } else {
                 date.visibility = View.GONE
             }
@@ -310,13 +309,13 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
         fun bindView(context: Context, message: FileMessage, isNewDay: Boolean, listener: OnItemClickListener) {
 
             username.text = message.sender.nickname
-            timestamp.text = DateUtils.formatTime(message.createdAt)
+            timestamp.text = DateUtil.formatTime(message.createdAt)
 
             Glide.with(context).load(message.sender.profileUrl).apply(RequestOptions().override(75, 75))
                 .into(profileImage)
             if (isNewDay) {
                 date.visibility = View.VISIBLE
-                date.text = DateUtils.formatDate(message.createdAt)
+                date.text = DateUtil.formatDate(message.createdAt)
             } else {
                 date.visibility = View.GONE
             }
@@ -346,11 +345,11 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
 
         fun bindView(context: Context, message: FileMessage, isNewDay: Boolean, listener: OnItemClickListener) {
 
-            timestamp.text = DateUtils.formatTime(message.createdAt)
+            timestamp.text = DateUtil.formatTime(message.createdAt)
 
             if (isNewDay) {
                 date.visibility = View.VISIBLE
-                date.text = DateUtils.formatDate(message.createdAt)
+                date.text = DateUtil.formatDate(message.createdAt)
             } else {
                 date.visibility = View.GONE
             }
@@ -380,11 +379,11 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
 
 
         fun bindView(context: Context, message: FileMessage, isNewDay: Boolean, listener: OnItemClickListener) {
-            timestamp.text = DateUtils.formatTime(message.createdAt)
+            timestamp.text = DateUtil.formatTime(message.createdAt)
 
             if (isNewDay) {
                 date.visibility = View.VISIBLE
-                date.text = DateUtils.formatDate(message.createdAt)
+                date.text = DateUtil.formatDate(message.createdAt)
             } else {
                 date.visibility = View.GONE
             }
@@ -416,11 +415,11 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
 
         fun bindView(context: Context, message: FileMessage, isNewDay: Boolean, listener: OnItemClickListener) {
             username.text = message.sender.nickname
-            timestamp.text = DateUtils.formatTime(message.createdAt)
+            timestamp.text = DateUtil.formatTime(message.createdAt)
 
             if (isNewDay) {
                 date.visibility = View.VISIBLE
-                date.text = DateUtils.formatDate(message.createdAt)
+                date.text = DateUtil.formatDate(message.createdAt)
             } else {
                 date.visibility = View.GONE
             }
@@ -455,11 +454,11 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
         fun bindView(context: Context, message: FileMessage, isNewDay: Boolean, listener: OnItemClickListener) {
 
             filename.text = message.name
-            timestamp.text = DateUtils.formatTime(message.createdAt)
+            timestamp.text = DateUtil.formatTime(message.createdAt)
 
             if (isNewDay) {
                 date.visibility = View.VISIBLE
-                date.text = DateUtils.formatDate(message.createdAt)
+                date.text = DateUtil.formatDate(message.createdAt)
             } else {
                 date.visibility = View.GONE
             }
@@ -483,14 +482,14 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
 
             filename.text = message.name
             username.text = message.sender.nickname
-            timestamp.text = DateUtils.formatTime(message.createdAt)
+            timestamp.text = DateUtil.formatTime(message.createdAt)
 
             Glide.with(context).load(message.sender.profileUrl).apply(RequestOptions().override(75, 75))
                 .into(profileImage)
 
             if (isNewDay) {
                 date.visibility = View.VISIBLE
-                date.text = DateUtils.formatDate(message.createdAt)
+                date.text = DateUtil.formatDate(message.createdAt)
             } else {
                 date.visibility = View.GONE
             }
@@ -514,7 +513,7 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
 
             if (isNewDay) {
                 date.visibility = View.VISIBLE
-                date.text = DateUtils.formatDate(message.createdAt)
+                date.text = DateUtil.formatDate(message.createdAt)
             } else {
                 date.visibility = View.GONE
             }

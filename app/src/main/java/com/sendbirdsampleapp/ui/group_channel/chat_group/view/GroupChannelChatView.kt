@@ -14,7 +14,7 @@ interface GroupChannelChatView {
 
     fun backPressed()
 
-    fun sendMessage(message: UserMessage)
+    fun sendMessage(message: BaseMessage)
 
     fun receiveMessage(message: BaseMessage)
 
