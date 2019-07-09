@@ -27,8 +27,8 @@ android {
 
     repositories {
         maven { url "https://raw.githubusercontent.com/smilefam/SendBird-SDK-Android/master/" }
+        maven { url "https://raw.githubusercontent.com/sendbird/sendbird-syncmanager-android/master/" }
         maven { url 'https://github.com/leonardocardoso/mvn-repo/raw/master/maven-deploy' }
-
     }
 
     kapt {
@@ -44,7 +44,9 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     //SendBird
-    implementation 'com.sendbird.sdk:sendbird-android-sdk:3.0.94'
+    implementation 'com.sendbird.sdk:sendbird-android-sdk:3.0.96'
+    implementation 'com.sendbird.sdk:sendbird-syncmanager:1.1.2'
+
 
     //Android support libraries
     implementation 'com.android.support:appcompat-v7:28.0.0'
@@ -66,19 +68,15 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
-
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.3.1'
 
     //Firebase
-    implementation 'com.google.firebase:firebase-core:16.0.0'
-    implementation 'com.google.firebase:firebase-messaging:18.0.0'
+    implementation 'com.google.firebase:firebase-core:17.0.0'
+    implementation 'com.google.firebase:firebase-messaging:19.0.1'
 
     //Leo card
     implementation 'org.jsoup:jsoup:1.11.2' // required
     implementation 'com.leocardz:link-preview:2.0.0@aar'
-
-
-    //implementation 'androidx.core:core-ktx:1.0.2'
 
 }

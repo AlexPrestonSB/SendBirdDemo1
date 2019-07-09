@@ -1,5 +1,6 @@
 package com.sendbirdsampleapp.ui.group_channel.list_group.presenter
 
+import android.content.Context
 import com.sendbirdsampleapp.ui.group_channel.list_group.view.GroupChannelView
 
 interface GroupChannelPresenter {
@@ -9,5 +10,7 @@ interface GroupChannelPresenter {
     fun createGroupPressed()
 
     fun backPressed()
+
+    fun onResume(context: Context)
 
 }

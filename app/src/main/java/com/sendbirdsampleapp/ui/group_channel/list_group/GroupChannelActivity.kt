@@ -49,6 +49,11 @@ class GroupChannelActivity : AppCompatActivity(), GroupChannelView, GroupChannel
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        presenter.onResume(this)
+    }
+
     override fun backPressed() {
         val intent = Intent(this, ChannelActivity::class.java)
         startActivity(intent)
