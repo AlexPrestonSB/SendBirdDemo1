@@ -1,18 +1,22 @@
 package com.sendbirdsampleapp.ui.group_channel.chat_group
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
+import android.graphics.drawable.Drawable
+import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.sendbird.android.*
 import com.sendbirdsampleapp.R
 import com.sendbirdsampleapp.data.UrlInfo
 import com.sendbirdsampleapp.util.AppConstants
 import com.sendbirdsampleapp.util.DateUtil
+import com.sendbirdsampleapp.util.MediaUtil
 import kotlinx.android.synthetic.main.item_gchat_admin.view.*
 import kotlinx.android.synthetic.main.item_gchat_file_me.view.*
 import kotlinx.android.synthetic.main.item_gchat_file_other.view.*
@@ -34,7 +38,7 @@ import org.json.JSONException
 import kotlin.collections.ArrayList
 
 class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder>() {
 
     interface OnItemClickListener {
         fun onUserMessageClick(message: UserMessage)
@@ -62,7 +66,7 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): androidx.recyclerview.widget.RecyclerView.ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
 
         when (viewType) {
@@ -128,7 +132,7 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
 
     override fun getItemCount() = messages.size
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: androidx.recyclerview.widget.RecyclerView.ViewHolder, position: Int) {
 
         val message = messages.get(position)
         var isNewDay = false
@@ -185,7 +189,7 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
 
     }
 
-    class MyUserHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class MyUserHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
 
         val messageText = view.text_gchat_message_me
         val date = view.text_gchat_date_me
@@ -237,7 +241,7 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
         }
     }
 
-    class OtherUserHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class OtherUserHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
 
         val messageText = view.text_gchat_message_other
         val date = view.text_gchat_date_other
@@ -297,7 +301,7 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
 
     }
 
-    class OtherImageHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class OtherImageHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
         val thumbnail = view.image_gchat_image_thumbnail_other
         val date = view.text_gchat_image_date_other
         val profileImage = view.image_gchat_image_profile_other
@@ -323,8 +327,8 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
             val thumbnails = message.thumbnails
 
             if (thumbnails.size > 0) {
-                if (message.type.equals("gif")) {
-                    //TODO
+                if (message.type.toLowerCase().contains("gif")) {
+                    MediaUtil.displayGifImageFromUrl(context, message.url, thumbnail, thumbnails.get(0).url)
                 } else {
                     Glide.with(context).load(thumbnails.get(0).url).into(thumbnail)
                 }
@@ -337,7 +341,7 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
         }
     }
 
-    class MyImageHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class MyImageHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
         val thumbnail = view.image_gchat_image_thumbnail_me
         val date = view.text_gchat_image_date_me
         val timestamp = view.text_gchat_image_timestamp_me
@@ -358,8 +362,8 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
             val thumbnails = message.thumbnails
 
             if (thumbnails.size > 0) {
-                if (message.type.equals("gif")) {
-                    //TODO
+                if (message.type.toLowerCase().contains("gif")) {
+                    MediaUtil.displayGifImageFromUrl(context, message.url, thumbnail, thumbnails.get(0).url)
                 } else {
                     Glide.with(context).load(thumbnails.get(0).url).into(thumbnail)
                 }
@@ -371,7 +375,7 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
         }
     }
 
-    class MyVideoHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class MyVideoHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
         val thumbnail = view.image_gchat_video_thumbnail_me
         val date = view.text_gchat_video_date_me
         val timestamp = view.text_gchat_video_timestamp_me
@@ -405,7 +409,7 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
         }
     }
 
-    class OtherVideoHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class OtherVideoHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
         val thumbnail = view.image_gchat_video_thumbnail_other
         val date = view.text_gchat_video_date_other
         val profileImage = view.image_gchat_video_profile_other
@@ -445,7 +449,7 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
         }
     }
 
-    class MyFileMessage(view: View) : RecyclerView.ViewHolder(view) {
+    class MyFileMessage(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
         val filename = view.text_gchat_filename_me
         val date = view.text_gchat_file_date_me
         val timestamp = view.text_gchat_file_timestamp_me
@@ -470,7 +474,7 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
         }
     }
 
-    class OtherFileMessage(view: View) : RecyclerView.ViewHolder(view) {
+    class OtherFileMessage(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
         val filename = view.text_gchat_filename_me
         val profileImage = view.image_gchat_file_profile_other
         val username = view.text_gchat_file_user_other
@@ -502,7 +506,7 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
     }
 
 
-    class AdminUserHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class AdminUserHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
 
         val messageText = view.text_gchat_admin
         val date = view.text_gchat_date

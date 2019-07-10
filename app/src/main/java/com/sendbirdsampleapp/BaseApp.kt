@@ -10,6 +10,7 @@ import com.sendbirdsampleapp.util.AppConstants
 
 class BaseApp : Application() {
 
+    private var isSyncManagerSetup = false
 
     override fun onCreate() {
         super.onCreate()
@@ -21,6 +22,12 @@ class BaseApp : Application() {
             .application(this)
             .build()
 
+    }
+
+    fun isSyncSetUp() = isSyncManagerSetup
+
+    fun setSyncManagerSetUp(setup: Boolean) {
+        isSyncManagerSetup = setup
     }
 
     lateinit var injector: AppComponent

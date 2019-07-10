@@ -2,9 +2,9 @@ package com.sendbirdsampleapp.ui.group_channel.create_group
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import com.sendbird.android.SendBird
 import com.sendbird.android.User
@@ -22,7 +22,7 @@ class GroupChannelCreateActivity : AppCompatActivity(), GroupChannelCreateAdapte
     private val EXTRA_CHANNEL_URL = "EXTRA_CHANNEL_URL"
 
 
-    private lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerView: androidx.recyclerview.widget.RecyclerView
 
     private lateinit var adapter: GroupChannelCreateAdapter
 
@@ -42,7 +42,7 @@ class GroupChannelCreateActivity : AppCompatActivity(), GroupChannelCreateAdapte
         adapter = GroupChannelCreateAdapter(this, this)
         recyclerView = recycler_gcreate
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
 
         button_gcreate.setOnClickListener { presenter.createChannel(selectedUsers) }
 

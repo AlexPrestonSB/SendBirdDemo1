@@ -8,10 +8,10 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.support.v4.app.NotificationCompat
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.core.app.NotificationCompat
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -34,7 +34,7 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, Grou
 
     private lateinit var presenter: GroupChannelChatPresenterImpl
 
-    private lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerView: androidx.recyclerview.widget.RecyclerView
 
     private lateinit var adapter: GroupChannelChatAdapter
 
@@ -202,7 +202,7 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, Grou
         adapter = GroupChannelChatAdapter(this, this)
         recyclerView = recycler_gchat
         recyclerView.adapter = adapter
-        val layoutManager = LinearLayoutManager(this)
+        val layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
         layoutManager.reverseLayout = true
         recyclerView.layoutManager = layoutManager
         recyclerView.scrollToPosition(0)

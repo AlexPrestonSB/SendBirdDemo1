@@ -9,9 +9,8 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
-import java.io.BufferedOutputStream
-import java.io.File
-import java.io.FileOutputStream
+import android.util.Log
+import java.io.*
 import java.lang.Exception
 import java.lang.IllegalArgumentException
 import java.util.*
@@ -57,16 +56,38 @@ object FileUtil {
         } else if (uri.scheme.equals("content", true)) {
             if (isGooglePhoto(uri)) {
                 val result = getDataColumn(context, uri, null, null)
-                val bitmap: Bitmap?
-                try {
+
+                if (result?.contains("image/gif")!!) {
                     val input = context.contentResolver.openInputStream(uri)
-                    bitmap = BitmapFactory.decodeStream(input)
-                    val file = File.createTempFile("sendbird", ".jpg")
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 80, BufferedOutputStream(FileOutputStream(file)))
-                    result?.put("path", file.absolutePath)
-                    result?.put("size", file.length().toInt())
-                } catch (e: Exception) {
-                    e.printStackTrace()
+
+                    val file = File.createTempFile("sendbird", ".gif")
+                    val bytes = getBytes(input)
+
+                    try {
+                        val os = FileOutputStream(file)
+                        os.write(bytes)
+                        os.close()
+                    } catch (e: Exception) {
+                        Log.e("TAG", e.localizedMessage)
+                    }
+
+
+
+                    result.put("path", file.absolutePath)
+                    result.put("size", file.length().toInt())
+
+                } else {
+                    val bitmap: Bitmap?
+                    try {
+                        val input = context.contentResolver.openInputStream(uri)
+                        bitmap = BitmapFactory.decodeStream(input)
+                        val file = File.createTempFile("sendbird", ".jpg")
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, BufferedOutputStream(FileOutputStream(file)))
+                        result?.put("path", file.absolutePath)
+                        result?.put("size", file.length().toInt())
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
                 }
                 return result
             } else {
@@ -141,6 +162,18 @@ object FileUtil {
         }
 
         return null
+    }
+
+    private fun getBytes(inputStream: InputStream) : ByteArray  {
+        val byteBuffer = ByteArrayOutputStream()
+        val bufferSize = 1024
+        val buffer = ByteArray(bufferSize)
+
+        var len = -1
+        while (inputStream.read(buffer).let { len = it; it != -1 }) {
+            byteBuffer.write(buffer, 0, len)
+        }
+        return byteBuffer.toByteArray()
     }
 
 

@@ -2,11 +2,12 @@ package com.sendbirdsampleapp.ui.group_channel.list_group
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import com.sendbird.android.*
+import com.sendbirdsampleapp.BaseApp
 import com.sendbirdsampleapp.R
 import com.sendbirdsampleapp.ui.channel.ChannelActivity
 import com.sendbirdsampleapp.ui.group_channel.create_group.GroupChannelCreateActivity
@@ -14,6 +15,7 @@ import com.sendbirdsampleapp.ui.group_channel.list_group.presenter.GroupChannelP
 import com.sendbirdsampleapp.ui.group_channel.list_group.view.GroupChannelView
 import com.sendbirdsampleapp.ui.group_channel.chat_group.GroupChannelChatActivity
 import kotlinx.android.synthetic.main.activity_gchannel.*
+import javax.inject.Inject
 
 class GroupChannelActivity : AppCompatActivity(), GroupChannelView, GroupChannelListAdapter.OnChannelClickedListener {
 
@@ -21,6 +23,7 @@ class GroupChannelActivity : AppCompatActivity(), GroupChannelView, GroupChannel
     private val EXTRA_CHANNEL_URL = "EXTRA_CHANNEL_URL";
 
 
+    @Inject
     lateinit var presenter: GroupChannelPresenterImpl
 
     lateinit var recyclerView: RecyclerView
@@ -30,16 +33,15 @@ class GroupChannelActivity : AppCompatActivity(), GroupChannelView, GroupChannel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gchannel)
+        BaseApp.app(this).injector.inject(this)
 
-
-        presenter = GroupChannelPresenterImpl()
 
         presenter.setView(this)
 
         adapter = GroupChannelListAdapter(this, this)
         recyclerView = recycler_group_channels
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
 
         setUserChannels()
 

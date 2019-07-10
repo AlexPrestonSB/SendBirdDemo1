@@ -2,7 +2,7 @@ package com.sendbirdsampleapp.ui.channel
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.sendbird.android.SendBird
 import com.sendbirdsampleapp.BaseApp
 import com.sendbirdsampleapp.BuildConfig

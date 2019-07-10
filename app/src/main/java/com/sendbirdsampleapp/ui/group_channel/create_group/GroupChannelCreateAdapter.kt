@@ -1,7 +1,7 @@
 package com.sendbirdsampleapp.ui.group_channel.create_group
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.item_gcreate.view.*
 
 
 
-class GroupChannelCreateAdapter(context: Context, listener: OnItemCheckedChangeListener) : RecyclerView.Adapter<GroupChannelCreateAdapter.UserHolder>() {
+class GroupChannelCreateAdapter(context: Context, listener: OnItemCheckedChangeListener) : androidx.recyclerview.widget.RecyclerView.Adapter<GroupChannelCreateAdapter.UserHolder>() {
 
     interface OnItemCheckedChangeListener {
         fun onItemChecked(user: User, checked: Boolean)
@@ -52,7 +52,7 @@ class GroupChannelCreateAdapter(context: Context, listener: OnItemCheckedChangeL
         holder.bindViews(context, users[position], position, checkedListener)
     }
 
-    class UserHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class UserHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
 
         val checkbox = view.checkbox_gcreate
         val userImage = view.image_gcreate

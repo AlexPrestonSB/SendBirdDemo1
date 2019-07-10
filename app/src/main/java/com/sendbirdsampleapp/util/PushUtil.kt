@@ -1,6 +1,5 @@
 package com.sendbirdsampleapp.util
 
-import com.google.firebase.iid.FirebaseInstanceId
 import com.sendbird.android.SendBird
 
 object PushUtil {
