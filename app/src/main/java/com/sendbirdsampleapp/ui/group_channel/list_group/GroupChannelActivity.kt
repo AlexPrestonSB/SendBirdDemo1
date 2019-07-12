@@ -20,7 +20,7 @@ import javax.inject.Inject
 class GroupChannelActivity : AppCompatActivity(), GroupChannelView, GroupChannelListAdapter.OnChannelClickedListener {
 
     private val TAG = "GROUP_CHANNEL_ACTIVITY"
-    private val EXTRA_CHANNEL_URL = "EXTRA_CHANNEL_URL";
+    private val EXTRA_CHANNEL_URL = "EXTRA_CHANNEL_URL"
 
 
     @Inject
@@ -41,9 +41,9 @@ class GroupChannelActivity : AppCompatActivity(), GroupChannelView, GroupChannel
         adapter = GroupChannelListAdapter(this, this)
         recyclerView = recycler_group_channels
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
+        recyclerView.layoutManager = LinearLayoutManager(this)
 
-        setUserChannels()
+        //presenter.refresh()
 
         fab_group_channel_create.setOnClickListener { presenter.createGroupPressed() }
 
@@ -77,18 +77,26 @@ class GroupChannelActivity : AppCompatActivity(), GroupChannelView, GroupChannel
 
     }
 
-    private fun setUserChannels() {
-
-        val channelListQuery = GroupChannel.createMyGroupChannelListQuery()
-        channelListQuery.isIncludeEmpty = true
-        channelListQuery.limit = 100
-
-        channelListQuery.next() { channels, e ->
-            if (e != null) {
-                Log.e("TAG", e.printStackTrace().toString())
-            } else {
-                adapter.addChannels(channels)
-            }
+    override fun setUserChannels(channels: MutableList<GroupChannel>) {
+        runOnUiThread{
+            adapter.addChannels(channels)
         }
     }
+//
+//    private fun setUserChannels() {
+//
+//
+//
+//        val channelListQuery = GroupChannel.createMyGroupChannelListQuery()
+//        channelListQuery.isIncludeEmpty = true
+//        channelListQuery.limit = 100
+//
+//        channelListQuery.next() { channels, e ->
+//            if (e != null) {
+//                Log.e("TAG", e.printStackTrace().toString())
+//            } else {
+//                adapter.addChannels(channels)
+//            }
+//        }
+//    }
 }

@@ -75,28 +75,22 @@ class GroupChannelCreateActivity : AppCompatActivity(), GroupChannelCreateAdapte
 
     }
 
-    //TODO rewrite this function it is so bad
     private fun loadUsers() {
-        Thread {
-            val userListQuery = SendBird.createApplicationUserListQuery()
-            val list = ArrayList<String>()
+        val userListQuery = SendBird.createApplicationUserListQuery()
+        val list = ArrayList<String>()
 
-            list.add("Al")
+        list.add("Al")
 
-            userListQuery.setLimit(100) //TODO change don't use constants
-            userListQuery.next() { list, e ->
-                if (e != null) {
-                    Log.e(TAG, "Failed to load users")
-                } else {
-
-                    this.runOnUiThread {
-                        adapter.addUsers(list)
-                    }
-                }
+        userListQuery.setLimit(100) //TODO change don't use constants
+        userListQuery.next() { list, e ->
+            if (e != null) {
+                Log.e(TAG, "Failed to load users")
+            } else {
+                adapter.addUsers(list)
 
             }
 
-        }.start()
+        }
 
 
     }

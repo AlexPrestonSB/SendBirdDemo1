@@ -1,5 +1,7 @@
 package com.sendbirdsampleapp.ui.group_channel.list_group.view
 
+import com.sendbird.android.GroupChannel
+
 
 interface GroupChannelView {
 
@@ -8,6 +10,8 @@ interface GroupChannelView {
     fun createGroupPressed()
 
     fun backPressed()
+
+    fun setUserChannels(channels: MutableList<GroupChannel>)
 
 
 

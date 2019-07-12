@@ -132,8 +132,6 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, Grou
 
         builder.setContentText(message.message)
 
-
-
         notificationManager.notify(0, builder.build())
     }
 

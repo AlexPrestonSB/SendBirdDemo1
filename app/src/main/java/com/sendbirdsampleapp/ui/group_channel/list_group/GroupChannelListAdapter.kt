@@ -34,6 +34,11 @@ class GroupChannelListAdapter(context: Context, listener: OnChannelClickedListen
         notifyDataSetChanged()
     }
 
+    fun clearChannels() {
+        channels.clear()
+        notifyDataSetChanged()
+    }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChannelHolder {
         val layoutInflater = LayoutInflater.from(parent.context)

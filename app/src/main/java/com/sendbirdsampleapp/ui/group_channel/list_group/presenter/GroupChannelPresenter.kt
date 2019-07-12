@@ -13,4 +13,6 @@ interface GroupChannelPresenter {
 
     fun onResume(context: Context)
 
+    fun refresh()
+
 }
