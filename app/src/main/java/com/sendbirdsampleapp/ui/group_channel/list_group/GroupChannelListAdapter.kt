@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import com.sendbird.android.*
 import com.sendbirdsampleapp.R
 import com.sendbirdsampleapp.util.DateUtil
+import com.sendbirdsampleapp.util.SyncManagerUtil
 import kotlinx.android.synthetic.main.item_channel_chooser.view.*
 import kotlin.collections.ArrayList
 
@@ -32,6 +33,48 @@ class GroupChannelListAdapter(context: Context, listener: OnChannelClickedListen
     fun addChannels(channels: MutableList<GroupChannel>) {
         this.channels = channels
         notifyDataSetChanged()
+    }
+
+    fun insertChannels(channelList: List<GroupChannel>, order: GroupChannelListQuery.Order) {
+        for (newChannel in channelList) {
+            val index = SyncManagerUtil.findIndexOfChannel(channels, newChannel, order)
+            channels.add(index, newChannel)
+        }
+
+        notifyDataSetChanged()
+    }
+
+    fun updateChannels(channelList: List<GroupChannel>) {
+        for (updatedChannel in channelList) {
+            val index = SyncManagerUtil.getIndexOfChannel(channels, updatedChannel)
+            if (index != -1) {
+                channels.set(index, updatedChannel)
+                notifyItemChanged(index)
+            }
+        }
+    }
+
+    fun moveChannels(channelList: List<GroupChannel>, order: GroupChannelListQuery.Order) {
+        for (movedChannel in channelList) {
+            val fromIndex = SyncManagerUtil.getIndexOfChannel(channels, movedChannel)
+            val toIndex = SyncManagerUtil.findIndexOfChannel(channels, movedChannel, order)
+            if (fromIndex != -1) {
+                channels.removeAt(fromIndex)
+                channels.add(toIndex, movedChannel)
+                notifyItemMoved(fromIndex, toIndex)
+                notifyItemChanged(toIndex)
+            }
+        }
+    }
+
+    fun removeChannels(channelList: List<GroupChannel>) {
+        for (removedChannel in channelList) {
+            val index = SyncManagerUtil.getIndexOfChannel(channels, removedChannel)
+            if (index != -1) {
+                channels.removeAt(index)
+                notifyItemRemoved(index)
+            }
+        }
     }
 
     fun clearChannels() {

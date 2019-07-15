@@ -14,9 +14,9 @@ interface GroupChannelChatView {
 
     fun backPressed()
 
-    fun sendMessage(message: BaseMessage)
+    fun sendMessage(message: BaseMessage) //TODO Maybe remove?
 
-    fun receiveMessage(message: BaseMessage)
+    fun receiveMessage(message: BaseMessage) //TODO Maybe remove?
 
     fun typingIndicator(message: String)
 
@@ -25,5 +25,18 @@ interface GroupChannelChatView {
     fun displayPushNotification(message: UserMessage, channelUrl: String?)
 
     fun selectMedia(intent: Intent)
+
+    //SyncManager below
+
+    fun insert(messages: MutableList<BaseMessage>)
+
+    fun update(messages: MutableList<BaseMessage>)
+
+    fun remove(messages: MutableList<BaseMessage>)
+
+    fun markAllRead()
+
+    fun clear()
+
 
 }

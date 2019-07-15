@@ -6,6 +6,7 @@ import com.sendbirdsampleapp.BaseApp
 import com.sendbirdsampleapp.di.module.AppModule
 import com.sendbirdsampleapp.di.module.PresenterModule
 import com.sendbirdsampleapp.ui.channel.ChannelActivity
+import com.sendbirdsampleapp.ui.group_channel.chat_group.GroupChannelChatActivity
 import com.sendbirdsampleapp.ui.group_channel.list_group.GroupChannelActivity
 import com.sendbirdsampleapp.ui.login.LoginActivity
 import dagger.BindsInstance
@@ -32,5 +33,7 @@ interface AppComponent {
     fun inject(channelActivity: ChannelActivity)
 
     fun inject(groupChannelActivity: GroupChannelActivity)
+
+    fun inject(groupChannelChatActivity: GroupChannelChatActivity)
 
 }

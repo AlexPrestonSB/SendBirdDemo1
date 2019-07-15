@@ -5,7 +5,7 @@ import com.sendbird.syncmanager.SendBirdSyncManager
 
 object ConnectionUtil {
 
-    fun addConnectionManagementHandler(handlerId: String, userId: String,  handler: ConnectionManagementHandler){
+    fun addConnectionManagementHandler(handlerId: String, userId: String, handler: ConnectionManagementHandler){
         SendBird.addConnectionHandler(handlerId, object: SendBird.ConnectionHandler {
             override fun onReconnectStarted() {
                SendBirdSyncManager.getInstance().pauseSync()
@@ -13,7 +13,7 @@ object ConnectionUtil {
 
             override fun onReconnectSucceeded() {
                 SendBirdSyncManager.getInstance().resumeSync()
-                handler.onConnected(true)
+                handler?.onConnected(true)
             }
 
             override fun onReconnectFailed() {
@@ -21,16 +21,24 @@ object ConnectionUtil {
         })
 
         if (SendBird.getConnectionState() == SendBird.ConnectionState.OPEN) {
-            handler.onConnected(false)
+            if (handler != null) {
+                handler.onConnected(false)
+            }
         } else if (SendBird.getConnectionState() == SendBird.ConnectionState.CLOSED) {
             SendBird.connect(userId) { user, e ->
                 if (e != null) {
                     return@connect
                 }
                 SendBirdSyncManager.getInstance().resumeSync()
-                handler.onConnected(true)
+                if (handler != null) {
+                    handler.onConnected(false)
+                }
             }
         }
+    }
+
+    fun removeConnectionManagementHandler(handlerId: String) {
+        SendBird.removeConnectionHandler(handlerId)
     }
 
     interface ConnectionManagementHandler {

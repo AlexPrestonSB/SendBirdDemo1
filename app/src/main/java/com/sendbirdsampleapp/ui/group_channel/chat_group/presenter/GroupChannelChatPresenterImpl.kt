@@ -1,25 +1,42 @@
 package com.sendbirdsampleapp.ui.group_channel.chat_group.presenter
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Message
+import android.util.Log
 import com.leocardz.link.preview.library.LinkPreviewCallback
 import com.leocardz.link.preview.library.SourceContent
 import com.sendbird.android.*
+import com.sendbird.syncmanager.MessageCollection
+import com.sendbird.syncmanager.MessageEventAction
+import com.sendbird.syncmanager.MessageFilter
+import com.sendbird.syncmanager.SendBirdSyncManager
+import com.sendbird.syncmanager.handler.MessageCollectionHandler
 import com.sendbirdsampleapp.data.UrlInfo
+import com.sendbirdsampleapp.data.preferences.AppPreferenceHelper
 import com.sendbirdsampleapp.ui.group_channel.chat_group.view.GroupChannelChatView
 import com.sendbirdsampleapp.util.AppConstants
+import com.sendbirdsampleapp.util.ConnectionUtil
 import com.sendbirdsampleapp.util.FileUtil
 import com.sendbirdsampleapp.util.UrlUtil
 import java.io.File
 import java.lang.Exception
+import javax.inject.Inject
 
-class GroupChannelChatPresenterImpl : GroupChannelChatPresenter {
+class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHelper: AppPreferenceHelper) :
+    GroupChannelChatPresenter {
 
     private lateinit var view: GroupChannelChatView
-    private lateinit var channel: GroupChannel
     private lateinit var channelUrl: String
     private lateinit var message: String
+    private lateinit var context: Context
+
+    private var channel: GroupChannel? = null
+
+    private var messageCollection: MessageCollection? = null
+    private val messageFilter = MessageFilter(BaseChannel.MessageTypeFilter.ALL, null, null)
 
     override fun setView(view: GroupChannelChatView) {
         this.view = view
@@ -43,15 +60,17 @@ class GroupChannelChatPresenterImpl : GroupChannelChatPresenter {
 
     override fun sendMessage(message: String) {
 
+
         val urls = UrlUtil.extractUrl(message)
         if (urls.size > 0) {
             sendMessageWithUrl(message, urls.get(0))
         } else {
-            channel.sendUserMessage(message) { userMessage, sendBirdException ->
+            channel!!.sendUserMessage(message) { userMessage, sendBirdException ->
                 if (sendBirdException != null) {
                     view.showValidationMessage(1)
                 } else {
                     view.sendMessage(userMessage)
+                    messageCollection?.appendMessage(userMessage as BaseMessage)
                 }
             }
         }
@@ -89,28 +108,49 @@ class GroupChannelChatPresenterImpl : GroupChannelChatPresenter {
         val mime = info.get("mime") as String
         val size = info.get("size") as Int
 
-        if (!path.equals("")){
-           val handler =  object : BaseChannel.SendFileMessageWithProgressHandler {
-               override fun onSent(fileMessage: FileMessage?, exception: SendBirdException?) {
-                   if (exception != null){
-                       view.showValidationMessage(1)
-                   } else {
-                       view.sendMessage(fileMessage as BaseMessage)
-                   }
-               }
+        if (!path.equals("")) {
+            val handler = object : BaseChannel.SendFileMessageWithProgressHandler {
+                override fun onSent(fileMessage: FileMessage?, exception: SendBirdException?) {
+                    if (exception != null) {
+                        view.showValidationMessage(1)
+                    } else {
+                        view.sendMessage(fileMessage as BaseMessage)
+                    }
+                }
 
-               override fun onProgress(bytesSent: Int, totalBytesSent: Int, totalBytesToSend: Int) {
-                   //TODO when you have it
-               }
-           }
-            channel.sendFileMessage(file, fileName, mime, size, "", null, thumbnailSize, handler)
+                override fun onProgress(bytesSent: Int, totalBytesSent: Int, totalBytesToSend: Int) {
+                    //TODO when you have it
+                }
+            }
+            channel!!.sendFileMessage(file, fileName, mime, size, "", null, thumbnailSize, handler)
         }
-
-
 
     }
 
-    override fun onResume() {
+    override fun onResume(context: Context) {
+
+        this.context = context
+        val userId = preferenceHelper.getUserId()
+
+        SendBirdSyncManager.setup(context, userId) {
+
+            val s = SendBird.getConnectionState()
+            // (context as BaseApp).setSyncManagerSetUp(true)
+            (context as Activity).runOnUiThread {
+                if (!SendBird.getConnectionState().equals(SendBird.ConnectionState.OPEN)) {
+                    refresh()
+                }
+                ConnectionUtil.addConnectionManagementHandler(
+                    AppConstants.CONNECTION_HANDLER_ID,
+                    userId,
+                    object : ConnectionUtil.ConnectionManagementHandler {
+                        override fun onConnected(connected: Boolean) {
+                            refresh()
+                        }
+                    })
+            }
+
+        }
 
         SendBird.addChannelHandler(AppConstants.CHANNEL_HANDLER_ID, object : SendBird.ChannelHandler() {
             override fun onMessageReceived(baseChannel: BaseChannel?, baseMessage: BaseMessage?) {
@@ -135,22 +175,48 @@ class GroupChannelChatPresenterImpl : GroupChannelChatPresenter {
 
     override fun onPause() {
         SendBird.removeChannelHandler(AppConstants.CHANNEL_HANDLER_ID)
+
+    }
+
+    override fun refresh() {
+        if (channel != null) {
+            channel!!.refresh {
+                if (it != null) {
+                    it.printStackTrace() // ADD MORE error handling
+                    return@refresh
+                }
+                //TODO update UI components
+            }
+
+            if (messageCollection != null) {
+                messageCollection!!.fetch(MessageCollection.Direction.NEXT, null)
+            }
+
+        } else {
+            createMessageCollection(channelUrl)
+        }
+
+
     }
 
     override fun setTypingStatus(typing: Boolean) {
+        if (channel == null) {
+            return
+        }
+
         if (typing) {
-            channel.startTyping()
+            channel!!.startTyping()
         } else {
-            channel.endTyping()
+            channel!!.endTyping()
         }
     }
 
-    fun sendMessageWithUrl(text: String, url: String) {
+    private fun sendMessageWithUrl(text: String, url: String) {
         message = text
         UrlUtil.generateLinkPreviewCallback(url, linkPreviewCallback)
     }
 
-    val linkPreviewCallback = object : LinkPreviewCallback {
+    private val linkPreviewCallback = object : LinkPreviewCallback {
         override fun onPre() {
 
         }
@@ -158,12 +224,13 @@ class GroupChannelChatPresenterImpl : GroupChannelChatPresenter {
         override fun onPos(sourceContent: SourceContent?, isNull: Boolean) {
             if (!isNull) {
                 val urlInfo = UrlUtil.parseContent(sourceContent!!)
-
-                channel.sendUserMessage(message, urlInfo.toJsonString(), "url_preview", null) { userMessage, e ->
-                    if (e != null) {
-                        view.showValidationMessage(1)
-                    } else {
-                        view.sendMessage(userMessage)
+                if (channel != null) {
+                    channel!!.sendUserMessage(message, urlInfo.toJsonString(), "url_preview", null) { userMessage, e ->
+                        if (e != null) {
+                            view.showValidationMessage(1)
+                        } else {
+                            view.sendMessage(userMessage)
+                        }
                     }
                 }
             }
@@ -172,15 +239,62 @@ class GroupChannelChatPresenterImpl : GroupChannelChatPresenter {
     }
 
     fun preparedMessage(users: MutableList<Member>): String {
-        when (users.size) {
-            0 -> return ""
+        return when (users.size) {
+            0 -> ""
             1 -> {
-                return users.get(0).nickname + " is typing.."
+                users.get(0).nickname + " is typing.."
             }
             2 -> {
-                return users.get(0).nickname + " " + users.get(1) + " are typing.."
+                users.get(0).nickname + " " + users.get(1) + " are typing.."
             }
-            else -> return "Multiple users are typing.."
+            else -> "Multiple users are typing.."
+        }
+    }
+
+    private fun createMessageCollection(channelUrl: String) {
+        if (SendBird.getConnectionState() != SendBird.ConnectionState.OPEN) {
+            MessageCollection.create(channelUrl, messageFilter, Long.MAX_VALUE) { collection, e ->
+                if (e == null) {
+                    if (messageCollection == null) {
+                        messageCollection = collection
+                        messageCollection?.setCollectionHandler(messageCollectionHandler)
+                        channel = messageCollection?.channel
+
+
+                        messageCollection?.fetch(MessageCollection.Direction.PREVIOUS) {
+                            if (it != null) {
+                                return@fetch
+                            }
+
+                            (context as Activity).runOnUiThread(){
+                               view.markAllRead()
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            GroupChannel.getChannel(channelUrl) { groupChannel, e ->
+                if (e == null){
+                    channel = groupChannel
+
+                    if (messageCollection == null) {
+                        messageCollection = MessageCollection(groupChannel, messageFilter, Long.MAX_VALUE)
+                        messageCollection?.setCollectionHandler(messageCollectionHandler)
+
+                        messageCollection?.fetch(MessageCollection.Direction.PREVIOUS) {
+                            if (it != null){
+                                return@fetch
+                            }
+                            (context as Activity).runOnUiThread(){
+                                view.markAllRead()
+                            }
+                        }
+                    }
+                }
+
+
+            }
         }
     }
 
@@ -195,5 +309,33 @@ class GroupChannelChatPresenterImpl : GroupChannelChatPresenter {
                 }
             }
         }.start()
+    }
+
+    private val messageCollectionHandler = MessageCollectionHandler { collection, messages, action ->
+        Log.d("SyncManager", "onMessageEvent: size = " + messages.size + ", action = " + action)
+
+        (context as Activity).runOnUiThread() {
+            when (action) {
+                MessageEventAction.INSERT -> {
+                    view.insert(messages)
+                    view.markAllRead()
+                }
+                MessageEventAction.REMOVE -> {
+                    view.remove(messages)
+
+                }
+                MessageEventAction.UPDATE -> {
+                    view.update(messages)
+
+                }
+                MessageEventAction.CLEAR -> {
+                    view.clear()
+                }
+                else -> {
+                    view.showValidationMessage(1)
+                }
+            }
+        }
+
     }
 }

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import com.sendbird.android.*
+import com.sendbird.syncmanager.SendBirdSyncManager
 import com.sendbirdsampleapp.BaseApp
 import com.sendbirdsampleapp.R
 import com.sendbirdsampleapp.ui.channel.ChannelActivity
@@ -43,8 +44,6 @@ class GroupChannelActivity : AppCompatActivity(), GroupChannelView, GroupChannel
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        //presenter.refresh()
-
         fab_group_channel_create.setOnClickListener { presenter.createGroupPressed() }
 
         button_gchannel_back.setOnClickListener { presenter.backPressed()}
@@ -52,8 +51,13 @@ class GroupChannelActivity : AppCompatActivity(), GroupChannelView, GroupChannel
     }
 
     override fun onResume() {
-        super.onResume()
         presenter.onResume(this)
+        super.onResume()
+    }
+
+    override fun onPause() {
+        presenter.onPause()
+        super.onPause()
     }
 
     override fun backPressed() {
@@ -82,21 +86,24 @@ class GroupChannelActivity : AppCompatActivity(), GroupChannelView, GroupChannel
             adapter.addChannels(channels)
         }
     }
-//
-//    private fun setUserChannels() {
-//
-//
-//
-//        val channelListQuery = GroupChannel.createMyGroupChannelListQuery()
-//        channelListQuery.isIncludeEmpty = true
-//        channelListQuery.limit = 100
-//
-//        channelListQuery.next() { channels, e ->
-//            if (e != null) {
-//                Log.e("TAG", e.printStackTrace().toString())
-//            } else {
-//                adapter.addChannels(channels)
-//            }
-//        }
-//    }
+
+    override fun updateChannels(channels: MutableList<GroupChannel>) {
+        adapter.updateChannels(channels)
+    }
+
+    override fun removeChannels(channels: MutableList<GroupChannel>) {
+       adapter.removeChannels(channels)
+    }
+
+    override fun insertChannels(channels: MutableList<GroupChannel>, order: GroupChannelListQuery.Order) {
+        adapter.insertChannels(channels, order)
+    }
+
+    override fun moveChannels(channels: MutableList<GroupChannel>, order: GroupChannelListQuery.Order) {
+        adapter.moveChannels(channels, order)
+    }
+
+    override fun clearChannels() {
+       adapter.clearChannels()
+    }
 }

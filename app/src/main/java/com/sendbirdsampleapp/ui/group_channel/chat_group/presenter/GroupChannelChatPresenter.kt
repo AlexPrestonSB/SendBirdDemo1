@@ -18,9 +18,11 @@ interface GroupChannelChatPresenter {
 
     fun backPressed()
 
-    fun onResume()
+    fun onResume(context: Context)
 
     fun onPause()
+
+    fun refresh()
 
     fun setTypingStatus(typing: Boolean)
 }

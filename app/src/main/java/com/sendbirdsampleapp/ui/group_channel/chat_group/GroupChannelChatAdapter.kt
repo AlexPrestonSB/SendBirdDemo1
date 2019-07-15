@@ -1,15 +1,12 @@
 package com.sendbirdsampleapp.ui.group_channel.chat_group
 
 import android.content.Context
-import android.graphics.drawable.Drawable
-import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.sendbird.android.*
 import com.sendbirdsampleapp.R
@@ -17,6 +14,7 @@ import com.sendbirdsampleapp.data.UrlInfo
 import com.sendbirdsampleapp.util.AppConstants
 import com.sendbirdsampleapp.util.DateUtil
 import com.sendbirdsampleapp.util.MediaUtil
+import com.sendbirdsampleapp.util.SyncManagerUtil
 import kotlinx.android.synthetic.main.item_gchat_admin.view.*
 import kotlinx.android.synthetic.main.item_gchat_file_me.view.*
 import kotlinx.android.synthetic.main.item_gchat_file_other.view.*
@@ -38,7 +36,7 @@ import org.json.JSONException
 import kotlin.collections.ArrayList
 
 class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
-    androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder>() {
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface OnItemClickListener {
         fun onUserMessageClick(message: UserMessage)
@@ -66,7 +64,47 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): androidx.recyclerview.widget.RecyclerView.ViewHolder {
+    fun insert(messages: MutableList<BaseMessage>) {
+        for (message in messages) {
+            val index = SyncManagerUtil.findIndexOfMessage(messages, message)
+            this.messages.add(index, message)
+            notifyItemInserted(index)
+        }
+    }
+
+    fun update(messages: MutableList<BaseMessage>) {
+        for (message in messages) {
+            val index = SyncManagerUtil.findIndexOfMessage(messages, message)
+            if (index != -1) {
+                this.messages.add(index, message)
+                notifyItemChanged(index)
+            }
+        }
+    }
+
+    fun remove(messages: MutableList<BaseMessage>) {
+        for (message in messages) {
+            val index = SyncManagerUtil.findIndexOfMessage(messages, message)
+            if (index != -1) {
+                this.messages.removeAt(index)
+                notifyItemRemoved(index)
+            }
+        }
+    }
+
+    fun clear() {
+        messages.clear()
+        notifyDataSetChanged()
+    }
+
+    fun markAsRead() {
+
+    }
+
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): RecyclerView.ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
 
         when (viewType) {
@@ -132,7 +170,7 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
 
     override fun getItemCount() = messages.size
 
-    override fun onBindViewHolder(holder: androidx.recyclerview.widget.RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         val message = messages.get(position)
         var isNewDay = false
@@ -189,7 +227,7 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
 
     }
 
-    class MyUserHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
+    class MyUserHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         val messageText = view.text_gchat_message_me
         val date = view.text_gchat_date_me
@@ -226,7 +264,7 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
                     urlDescription.text = obj.description
                     Glide.with(context).load(obj.imageUrl).into(urlImage)
                     messageText.text = message.message.replace(obj.url, "")
-                    if (messageText.text.equals("")){
+                    if (messageText.text.equals("")) {
                         messageText.visibility = View.GONE
                         separator.visibility = View.GONE
                     }
@@ -241,7 +279,7 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
         }
     }
 
-    class OtherUserHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
+    class OtherUserHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         val messageText = view.text_gchat_message_other
         val date = view.text_gchat_date_other
@@ -285,7 +323,7 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
                     urlDescription.text = obj.description
                     Glide.with(context).load(obj.imageUrl).into(urlImage)
                     messageText.text = message.message.replace(obj.url, "")
-                    if (messageText.text.equals("")){
+                    if (messageText.text.equals("")) {
                         messageText.visibility = View.GONE
                         separator.visibility = View.GONE
                     }
@@ -301,7 +339,7 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
 
     }
 
-    class OtherImageHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
+    class OtherImageHolder(view: View) : RecyclerView.ViewHolder(view) {
         val thumbnail = view.image_gchat_image_thumbnail_other
         val date = view.text_gchat_image_date_other
         val profileImage = view.image_gchat_image_profile_other
@@ -341,7 +379,7 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
         }
     }
 
-    class MyImageHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
+    class MyImageHolder(view: View) : RecyclerView.ViewHolder(view) {
         val thumbnail = view.image_gchat_image_thumbnail_me
         val date = view.text_gchat_image_date_me
         val timestamp = view.text_gchat_image_timestamp_me
@@ -375,7 +413,7 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
         }
     }
 
-    class MyVideoHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
+    class MyVideoHolder(view: View) : RecyclerView.ViewHolder(view) {
         val thumbnail = view.image_gchat_video_thumbnail_me
         val date = view.text_gchat_video_date_me
         val timestamp = view.text_gchat_video_timestamp_me
@@ -409,7 +447,7 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
         }
     }
 
-    class OtherVideoHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
+    class OtherVideoHolder(view: View) : RecyclerView.ViewHolder(view) {
         val thumbnail = view.image_gchat_video_thumbnail_other
         val date = view.text_gchat_video_date_other
         val profileImage = view.image_gchat_video_profile_other
@@ -449,7 +487,7 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
         }
     }
 
-    class MyFileMessage(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
+    class MyFileMessage(view: View) : RecyclerView.ViewHolder(view) {
         val filename = view.text_gchat_filename_me
         val date = view.text_gchat_file_date_me
         val timestamp = view.text_gchat_file_timestamp_me
@@ -474,7 +512,7 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
         }
     }
 
-    class OtherFileMessage(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
+    class OtherFileMessage(view: View) : RecyclerView.ViewHolder(view) {
         val filename = view.text_gchat_filename_me
         val profileImage = view.image_gchat_file_profile_other
         val username = view.text_gchat_file_user_other
@@ -506,7 +544,7 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
     }
 
 
-    class AdminUserHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
+    class AdminUserHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         val messageText = view.text_gchat_admin
         val date = view.text_gchat_date

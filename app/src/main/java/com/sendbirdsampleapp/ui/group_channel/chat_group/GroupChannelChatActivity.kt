@@ -10,21 +10,21 @@ import android.os.Build
 import android.os.Bundle
 import androidx.core.app.NotificationCompat
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import com.sendbird.android.*
+import com.sendbirdsampleapp.BaseApp
 import com.sendbirdsampleapp.R
 import com.sendbirdsampleapp.ui.group_channel.chat_group.presenter.GroupChannelChatPresenterImpl
 import com.sendbirdsampleapp.ui.group_channel.chat_group.view.GroupChannelChatView
 import com.sendbirdsampleapp.ui.group_channel.list_group.GroupChannelActivity
-import com.sendbirdsampleapp.util.AppConstants
 import kotlinx.android.synthetic.main.activity_gchat.*
 import org.json.JSONException
 import org.json.JSONObject
+import javax.inject.Inject
 
 class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, GroupChannelChatAdapter.OnItemClickListener {
 
@@ -32,9 +32,10 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, Grou
     private val INTENT_REQUEST_CHOOSE_MEDIA = 301
 
 
-    private lateinit var presenter: GroupChannelChatPresenterImpl
+    @Inject
+    lateinit var presenter: GroupChannelChatPresenterImpl
 
-    private lateinit var recyclerView: androidx.recyclerview.widget.RecyclerView
+    private lateinit var recyclerView: RecyclerView
 
     private lateinit var adapter: GroupChannelChatAdapter
 
@@ -42,8 +43,10 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, Grou
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gchat)
 
+        BaseApp.app(this).injector.inject(this)
 
-        presenter = GroupChannelChatPresenterImpl()
+
+
         presenter.setView(this)
 
 
@@ -56,7 +59,7 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, Grou
 
     override fun onResume() {
         super.onResume()
-        presenter.onResume()
+        presenter.onResume(this)
     }
 
     override fun onPause() {
@@ -174,6 +177,26 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, Grou
         } else {
             //TODO
         }
+    }
+
+    override fun insert(messages: MutableList<BaseMessage>) {
+        adapter.insert(messages)
+    }
+
+    override fun update(messages: MutableList<BaseMessage>) {
+        adapter.update(messages)
+    }
+
+    override fun remove(messages: MutableList<BaseMessage>) {
+        adapter.remove(messages)
+    }
+
+    override fun markAllRead() {
+        adapter.markAsRead()
+    }
+
+    override fun clear() {
+        adapter.clear()
     }
 
     private fun setListeners() {

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.sendbird.android.SendBird
+import com.sendbird.syncmanager.SendBirdSyncManager
 import com.sendbirdsampleapp.BaseApp
 import com.sendbirdsampleapp.BuildConfig
 import com.sendbirdsampleapp.R
@@ -53,6 +54,7 @@ class ChannelActivity : AppCompatActivity(), ChannelView {
     }
 
     override fun logoutPressed() {
+        SendBirdSyncManager.getInstance().clearCache()
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
     }

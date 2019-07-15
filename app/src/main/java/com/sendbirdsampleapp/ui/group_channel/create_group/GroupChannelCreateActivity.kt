@@ -46,7 +46,7 @@ class GroupChannelCreateActivity : AppCompatActivity(), GroupChannelCreateAdapte
 
         button_gcreate.setOnClickListener { presenter.createChannel(selectedUsers) }
 
-        button_gcreate_back.setOnClickListener{ presenter.backPressed()}
+        button_gcreate_back.setOnClickListener { presenter.backPressed() }
 
         loadUsers()
     }
@@ -77,22 +77,21 @@ class GroupChannelCreateActivity : AppCompatActivity(), GroupChannelCreateAdapte
 
     private fun loadUsers() {
         val userListQuery = SendBird.createApplicationUserListQuery()
-        val list = ArrayList<String>()
 
-        list.add("Al")
+        val state = SendBird.getConnectionState()
 
-        userListQuery.setLimit(100) //TODO change don't use constants
-        userListQuery.next() { list, e ->
-            if (e != null) {
-                Log.e(TAG, "Failed to load users")
-            } else {
-                adapter.addUsers(list)
+        Thread() {
+            userListQuery.setLimit(100) //TODO change don't use constants
+            userListQuery.next() { list, e ->
+                if (e != null) {
+                    Log.e(TAG, "Failed to load users")
+                } else {
+                    adapter.addUsers(list)
+
+                }
 
             }
-
-        }
-
-
+        }.start()
     }
-
 }
+
