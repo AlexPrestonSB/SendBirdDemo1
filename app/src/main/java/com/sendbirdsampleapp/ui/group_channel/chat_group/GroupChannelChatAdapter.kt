@@ -5,16 +5,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.sendbird.android.*
 import com.sendbirdsampleapp.R
 import com.sendbirdsampleapp.data.UrlInfo
-import com.sendbirdsampleapp.util.AppConstants
-import com.sendbirdsampleapp.util.DateUtil
-import com.sendbirdsampleapp.util.MediaUtil
-import com.sendbirdsampleapp.util.SyncManagerUtil
+import com.sendbirdsampleapp.util.*
 import kotlinx.android.synthetic.main.item_gchat_admin.view.*
 import kotlinx.android.synthetic.main.item_gchat_file_me.view.*
 import kotlinx.android.synthetic.main.item_gchat_file_other.view.*
@@ -33,6 +31,7 @@ import kotlinx.android.synthetic.main.item_gchat_other.view.text_gchat_user_othe
 import kotlinx.android.synthetic.main.item_gchat_video_me.view.*
 import kotlinx.android.synthetic.main.item_gchat_video_other.view.*
 import org.json.JSONException
+import org.w3c.dom.Text
 import kotlin.collections.ArrayList
 
 class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
@@ -243,7 +242,7 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
 
         fun bindView(context: Context, message: UserMessage, isNewDay: Boolean, listener: OnItemClickListener) {
 
-            messageText.text = message.message
+            messageText.setText(TextUtil.formatText(message.message), TextView.BufferType.SPANNABLE)
             messageDate.text = DateUtil.formatTime(message.createdAt)
 
             if (isNewDay) {
@@ -263,7 +262,7 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
                     urlTitle.text = obj.title
                     urlDescription.text = obj.description
                     Glide.with(context).load(obj.imageUrl).into(urlImage)
-                    messageText.text = message.message.replace(obj.url, "")
+                    messageText.setText(TextUtil.formatText(message.message.replace(obj.url, "")), TextView.BufferType.SPANNABLE)
                     if (messageText.text.equals("")) {
                         messageText.visibility = View.GONE
                         separator.visibility = View.GONE
@@ -297,8 +296,10 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
 
         fun bindView(context: Context, message: UserMessage, isNewDay: Boolean, listener: OnItemClickListener) {
 
-            messageText.text = message.message
+            messageText.setText(TextUtil.formatText(message.message), TextView.BufferType.SPANNABLE)
+
             timestamp.text = DateUtil.formatTime(message.createdAt)
+
 
             if (isNewDay) {
                 date.visibility = View.VISIBLE
@@ -322,7 +323,8 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
                     urlTitle.text = obj.title
                     urlDescription.text = obj.description
                     Glide.with(context).load(obj.imageUrl).into(urlImage)
-                    messageText.text = message.message.replace(obj.url, "")
+                    messageText.setText(TextUtil.formatText(message.message.replace(obj.url, "")), TextView.BufferType.SPANNABLE)
+                   // messageText.text = message.message.replace(obj.url, "")
                     if (messageText.text.equals("")) {
                         messageText.visibility = View.GONE
                         separator.visibility = View.GONE
@@ -434,11 +436,7 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
             val thumbnails = message.thumbnails
 
             if (thumbnails.size > 0) {
-                if (message.type.equals("gif")) {
-                    //TODO
-                } else {
-                    Glide.with(context).load(thumbnails.get(0).url).into(thumbnail)
-                }
+                Glide.with(context).load(thumbnails.get(0).url).into(thumbnail)
             }
 
             itemView.setOnClickListener {
@@ -473,11 +471,8 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
             val thumbnails = message.thumbnails
 
             if (thumbnails.size > 0) {
-                if (message.type.equals("gif")) {
-                    //TODO
-                } else {
-                    Glide.with(context).load(thumbnails.get(0).url).into(thumbnail)
-                }
+                Glide.with(context).load(thumbnails.get(0).url).into(thumbnail)
+
             }
 
             itemView.setOnClickListener {

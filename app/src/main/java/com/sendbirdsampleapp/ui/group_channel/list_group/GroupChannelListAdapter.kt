@@ -5,10 +5,12 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.sendbird.android.*
 import com.sendbirdsampleapp.R
 import com.sendbirdsampleapp.util.DateUtil
 import com.sendbirdsampleapp.util.SyncManagerUtil
+import com.sendbirdsampleapp.util.TextUtil
 import kotlinx.android.synthetic.main.item_channel_chooser.view.*
 import kotlin.collections.ArrayList
 
@@ -109,19 +111,17 @@ class GroupChannelListAdapter(context: Context, listener: OnChannelClickedListen
             if (lastMessage != null) {
                 channelDate.text = DateUtil.formatDateTime(lastMessage.createdAt)
 
-                if (lastMessage is UserMessage) {
-                    channelRecentMessage.text = lastMessage.message
+                when (lastMessage) {
+                    is UserMessage -> channelRecentMessage.setText(TextUtil.formatText(lastMessage.message), TextView.BufferType.SPANNABLE)
+                    is AdminMessage -> channelRecentMessage.setText(TextUtil.formatText(lastMessage.message), TextView.BufferType.SPANNABLE)
+                    else -> {
+                        val fileMessage = lastMessage as FileMessage
+                        val sender = String.format(context.getString(R.string.group_channel_list_file_message_text),
+                            fileMessage.sender.nickname
+                        )
+                        channelRecentMessage.text = sender
 
-                } else if (lastMessage is AdminMessage) {
-                    channelRecentMessage.text = lastMessage.message
-
-                } else {
-                    val fileMessage = lastMessage as FileMessage
-                    val sender = String.format(context.getString(R.string.group_channel_list_file_message_text),
-                        fileMessage.sender.nickname
-                    )
-                    channelRecentMessage.text = sender
-
+                    }
                 }
             }
 

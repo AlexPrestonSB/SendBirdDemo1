@@ -15,10 +15,7 @@ import com.sendbird.syncmanager.SendBirdSyncManager
 import com.sendbird.syncmanager.handler.MessageCollectionHandler
 import com.sendbirdsampleapp.data.preferences.AppPreferenceHelper
 import com.sendbirdsampleapp.ui.group_channel.chat_group.view.GroupChannelChatView
-import com.sendbirdsampleapp.util.AppConstants
-import com.sendbirdsampleapp.util.ConnectionUtil
-import com.sendbirdsampleapp.util.FileUtil
-import com.sendbirdsampleapp.util.UrlUtil
+import com.sendbirdsampleapp.util.*
 import java.io.File
 import javax.inject.Inject
 
@@ -40,8 +37,6 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
     }
 
     override fun sendMessage(message: String) {
-
-
         val urls = UrlUtil.extractUrl(message)
         if (urls.size > 0) {
             sendMessageWithUrl(message, urls.get(0))
@@ -244,8 +239,8 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
                                 return@fetch
                             }
 
-                            (context as Activity).runOnUiThread(){
-                               view.markAllRead()
+                            (context as Activity).runOnUiThread() {
+                                view.markAllRead()
                             }
                         }
                     }
@@ -253,7 +248,7 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
             }
         } else {
             GroupChannel.getChannel(channelUrl) { groupChannel, e ->
-                if (e == null){
+                if (e == null) {
                     channel = groupChannel
 
                     if (messageCollection == null) {
@@ -261,16 +256,15 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
                         messageCollection?.setCollectionHandler(messageCollectionHandler)
 
                         messageCollection?.fetch(MessageCollection.Direction.PREVIOUS) {
-                            if (it != null){
+                            if (it != null) {
                                 return@fetch
                             }
-                            (context as Activity).runOnUiThread(){
+                            (context as Activity).runOnUiThread() {
                                 view.markAllRead()
                             }
                         }
                     }
                 }
-
 
             }
         }
@@ -283,6 +277,8 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
         (context as Activity).runOnUiThread() {
             when (action) {
                 MessageEventAction.INSERT -> {
+                    val title = channel!!.members[0].nickname + ", " +  channel!!.members[1].nickname + "..."
+                    view.displayChatTitle(title)
                     view.insert(messages)
                     view.markAllRead()
                 }

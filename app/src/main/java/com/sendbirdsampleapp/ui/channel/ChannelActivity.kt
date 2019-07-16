@@ -42,7 +42,10 @@ class ChannelActivity : AppCompatActivity(), ChannelView {
         )
 
         text_channel_version.text = version
-        button_channel_logout.setOnClickListener { presenter.logoutPressed() }
+        button_channel_logout.setOnClickListener {
+           // SendBirdSyncManager.getInstance().clearCache()
+            presenter.logoutPressed()
+        }
     }
 
     private fun groupChannelPressed() {
@@ -54,7 +57,6 @@ class ChannelActivity : AppCompatActivity(), ChannelView {
     }
 
     override fun logoutPressed() {
-        SendBirdSyncManager.getInstance().clearCache()
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
     }
