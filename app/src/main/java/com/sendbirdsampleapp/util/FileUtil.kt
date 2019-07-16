@@ -13,6 +13,7 @@ import android.util.Log
 import java.io.*
 import java.lang.Exception
 import java.lang.IllegalArgumentException
+import java.lang.reflect.Field
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -61,33 +62,19 @@ object FileUtil {
                     val input = context.contentResolver.openInputStream(uri)
 
                     val file = File.createTempFile("sendbird", ".gif")
-                    val bytes = getBytes(input)
-
-                    try {
-                        val os = FileOutputStream(file)
-                        os.write(bytes)
-                        os.close()
-                    } catch (e: Exception) {
-                        Log.e("TAG", e.localizedMessage)
-                    }
-
-
+                    writeByte(file, input)
 
                     result.put("path", file.absolutePath)
                     result.put("size", file.length().toInt())
 
                 } else {
-                    val bitmap: Bitmap?
-                    try {
-                        val input = context.contentResolver.openInputStream(uri)
-                        bitmap = BitmapFactory.decodeStream(input)
-                        val file = File.createTempFile("sendbird", ".jpg")
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, BufferedOutputStream(FileOutputStream(file)))
-                        result?.put("path", file.absolutePath)
-                        result?.put("size", file.length().toInt())
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
+                    val input = context.contentResolver.openInputStream(uri)
+                    val file = File.createTempFile("sendbird", ".jpg")
+
+                    writeByte(file, input)
+
+                    result.put("path", file.absolutePath)
+                    result.put("size", file.length().toInt())
                 }
                 return result
             } else {
@@ -174,6 +161,25 @@ object FileUtil {
             byteBuffer.write(buffer, 0, len)
         }
         return byteBuffer.toByteArray()
+    }
+
+    private fun writeByte(file: File, input: InputStream?): File {
+        try {
+            val bytes = getBytes(input!!)
+
+            try {
+                val os = FileOutputStream(file)
+                os.write(bytes)
+                os.close()
+            } catch (e: Exception) {
+                Log.e("TAG", e.localizedMessage)
+            }
+
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return file
     }
 
 

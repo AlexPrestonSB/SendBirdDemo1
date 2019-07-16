@@ -64,16 +64,16 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
         notifyDataSetChanged()
     }
 
-    fun insert(messages: MutableList<BaseMessage>) {
-        for (message in messages) {
+    fun insert(messageList: MutableList<BaseMessage>) {
+        for (message in messageList) {
             val index = SyncManagerUtil.findIndexOfMessage(messages, message)
             this.messages.add(index, message)
             notifyItemInserted(index)
         }
     }
 
-    fun update(messages: MutableList<BaseMessage>) {
-        for (message in messages) {
+    fun update(messageList: MutableList<BaseMessage>) {
+        for (message in messageList) {
             val index = SyncManagerUtil.findIndexOfMessage(messages, message)
             if (index != -1) {
                 this.messages.add(index, message)
@@ -82,8 +82,8 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
         }
     }
 
-    fun remove(messages: MutableList<BaseMessage>) {
-        for (message in messages) {
+    fun remove(messageList: MutableList<BaseMessage>) {
+        for (message in messageList) {
             val index = SyncManagerUtil.findIndexOfMessage(messages, message)
             if (index != -1) {
                 this.messages.removeAt(index)

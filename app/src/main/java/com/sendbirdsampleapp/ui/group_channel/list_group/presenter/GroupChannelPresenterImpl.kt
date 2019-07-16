@@ -63,7 +63,6 @@ class GroupChannelPresenterImpl @Inject constructor(private val preferenceHelper
                     userId,
                     object : ConnectionUtil.ConnectionManagementHandler {
                         override fun onConnected(connected: Boolean) {
-                            val boo = connected
                             refresh()
                         }
                     })

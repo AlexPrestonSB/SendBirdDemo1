@@ -180,6 +180,8 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, Grou
     }
 
     override fun insert(messages: MutableList<BaseMessage>) {
+        edit_gchat_message.setText("")
+        recyclerView.scrollToPosition(0)
         adapter.insert(messages)
     }
 

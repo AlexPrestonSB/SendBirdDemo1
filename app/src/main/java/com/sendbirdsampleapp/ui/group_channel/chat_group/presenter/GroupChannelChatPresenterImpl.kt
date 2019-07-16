@@ -69,7 +69,7 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
                 if (sendBirdException != null) {
                     view.showValidationMessage(1)
                 } else {
-                    view.sendMessage(userMessage)
+                    //view.sendMessage(userMessage)
                     messageCollection?.appendMessage(userMessage as BaseMessage)
                 }
             }
@@ -114,7 +114,9 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
                     if (exception != null) {
                         view.showValidationMessage(1)
                     } else {
-                        view.sendMessage(fileMessage as BaseMessage)
+                        messageCollection?.appendMessage(fileMessage as BaseMessage)
+
+                        //view.sendMessage(fileMessage as BaseMessage)
                     }
                 }
 
@@ -134,12 +136,11 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
 
         SendBirdSyncManager.setup(context, userId) {
 
-            val s = SendBird.getConnectionState()
-            // (context as BaseApp).setSyncManagerSetUp(true)
             (context as Activity).runOnUiThread {
                 if (!SendBird.getConnectionState().equals(SendBird.ConnectionState.OPEN)) {
                     refresh()
                 }
+                createMessageCollection(channelUrl)
                 ConnectionUtil.addConnectionManagementHandler(
                     AppConstants.CONNECTION_HANDLER_ID,
                     userId,
@@ -229,7 +230,10 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
                         if (e != null) {
                             view.showValidationMessage(1)
                         } else {
-                            view.sendMessage(userMessage)
+
+                            //view.sendMessage(userMessage)
+                            messageCollection?.appendMessage(userMessage as BaseMessage)
+
                         }
                     }
                 }
@@ -299,16 +303,16 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
     }
 
     private fun loadPreviousMessages(groupChannel: GroupChannel) {
-        Thread {
-            val prevMessages = groupChannel.createPreviousMessageListQuery()
-            prevMessages.load(100, true) { messages, sendBirdException ->
-                if (sendBirdException != null) {
-                    //TODO
-                } else {
-                    view.loadPreviousMessages(messages)
-                }
-            }
-        }.start()
+//        Thread {
+//            val prevMessages = groupChannel.createPreviousMessageListQuery()
+//            prevMessages.load(100, true) { messages, sendBirdException ->
+//                if (sendBirdException != null) {
+//                    //TODO
+//                } else {
+//                    view.loadPreviousMessages(messages)
+//                }
+//            }
+//        }.start()
     }
 
     private val messageCollectionHandler = MessageCollectionHandler { collection, messages, action ->
