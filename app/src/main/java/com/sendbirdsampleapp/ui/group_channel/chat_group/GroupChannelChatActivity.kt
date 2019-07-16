@@ -21,6 +21,7 @@ import com.sendbirdsampleapp.R
 import com.sendbirdsampleapp.ui.group_channel.chat_group.presenter.GroupChannelChatPresenterImpl
 import com.sendbirdsampleapp.ui.group_channel.chat_group.view.GroupChannelChatView
 import com.sendbirdsampleapp.ui.group_channel.list_group.GroupChannelActivity
+import com.sendbirdsampleapp.util.MediaPlayerActivity
 import kotlinx.android.synthetic.main.activity_gchat.*
 import org.json.JSONException
 import org.json.JSONObject
@@ -153,9 +154,12 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, Grou
     }
 
     override fun onFileMessageClicked(message: FileMessage) {
-        if (message.customType.toLowerCase().startsWith("video")) {
-            //TODO
-        } else if (message.customType.toLowerCase().startsWith("image")) {
+        if (message.type.toLowerCase().startsWith("video")) {
+            val intent = Intent(this, MediaPlayerActivity::class.java)
+            intent.putExtra("url", message.url)
+            intent.putExtra("name", message.name)
+            startActivity(intent)
+        } else if (message.type.toLowerCase().startsWith("image")) {
             //TODO
         } else {
             //TODO

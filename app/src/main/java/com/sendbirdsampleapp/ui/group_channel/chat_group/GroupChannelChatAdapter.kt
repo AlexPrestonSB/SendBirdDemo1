@@ -31,7 +31,6 @@ import kotlinx.android.synthetic.main.item_gchat_other.view.text_gchat_user_othe
 import kotlinx.android.synthetic.main.item_gchat_video_me.view.*
 import kotlinx.android.synthetic.main.item_gchat_video_other.view.*
 import org.json.JSONException
-import org.w3c.dom.Text
 import kotlin.collections.ArrayList
 
 class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
@@ -368,9 +367,9 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
 
             if (thumbnails.size > 0) {
                 if (message.type.toLowerCase().contains("gif")) {
-                    MediaUtil.displayGifImageFromUrl(context, message.url, thumbnail, thumbnails.get(0).url)
+                    ImageUtil.displayGifImageFromUrl(context, message.url, thumbnail, thumbnails.get(0).url)
                 } else {
-                    Glide.with(context).load(thumbnails.get(0).url).into(thumbnail)
+                    Glide.with(context).load(thumbnails.get(0).url).into(thumbnail) //TODO move into imageUtil
                 }
             }
 
@@ -403,7 +402,7 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
 
             if (thumbnails.size > 0) {
                 if (message.type.toLowerCase().contains("gif")) {
-                    MediaUtil.displayGifImageFromUrl(context, message.url, thumbnail, thumbnails.get(0).url)
+                    ImageUtil.displayGifImageFromUrl(context, message.url, thumbnail, thumbnails.get(0).url)
                 } else {
                     Glide.with(context).load(thumbnails.get(0).url).into(thumbnail)
                 }
