@@ -8,8 +8,6 @@ interface GroupChannelChatPresenter {
 
     fun setView(view: GroupChannelChatView)
 
-    fun enterChannel(channelUrl: String)
-
     fun sendMessage(message: String)
 
     fun requestMedia()
@@ -18,7 +16,7 @@ interface GroupChannelChatPresenter {
 
     fun backPressed()
 
-    fun onResume(context: Context)
+    fun onResume(context: Context, channelUrl: String)
 
     fun onPause()
 

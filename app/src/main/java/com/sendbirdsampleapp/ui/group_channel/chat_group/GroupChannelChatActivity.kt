@@ -45,12 +45,7 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, Grou
 
         BaseApp.app(this).injector.inject(this)
 
-
-
         presenter.setView(this)
-
-
-        presenter.enterChannel(getChannelURl())
 
         setListeners()
         setUpRecyclerView()
@@ -59,7 +54,7 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, Grou
 
     override fun onResume() {
         super.onResume()
-        presenter.onResume(this)
+        presenter.onResume(this, getChannelURl())
     }
 
     override fun onPause() {
@@ -68,10 +63,7 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, Grou
         presenter.onPause()
     }
 
-    override fun receiveMessage(message: BaseMessage) {
-        adapter.addFirst(message)
-        recyclerView.scrollToPosition(0)
-    }
+
 
     override fun typingIndicator(message: String) {
         recyclerView.scrollToPosition(0)
@@ -84,15 +76,6 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, Grou
         }
     }
 
-    override fun sendMessage(message: BaseMessage) {
-        adapter.addFirst(message)
-        edit_gchat_message.setText("")
-        recyclerView.scrollToPosition(0)
-    }
-
-    override fun loadPreviousMessages(messages: MutableList<BaseMessage>) {
-        adapter.loadMessages(messages)
-    }
 
     override fun showValidationMessage(errorCode: Int) {
         Log.e("TEST", errorCode.toString())

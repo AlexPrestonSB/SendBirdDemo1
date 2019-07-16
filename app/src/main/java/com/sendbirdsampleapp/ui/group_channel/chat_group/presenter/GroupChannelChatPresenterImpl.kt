@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Message
 import android.util.Log
 import com.leocardz.link.preview.library.LinkPreviewCallback
 import com.leocardz.link.preview.library.SourceContent
@@ -14,7 +13,6 @@ import com.sendbird.syncmanager.MessageEventAction
 import com.sendbird.syncmanager.MessageFilter
 import com.sendbird.syncmanager.SendBirdSyncManager
 import com.sendbird.syncmanager.handler.MessageCollectionHandler
-import com.sendbirdsampleapp.data.UrlInfo
 import com.sendbirdsampleapp.data.preferences.AppPreferenceHelper
 import com.sendbirdsampleapp.ui.group_channel.chat_group.view.GroupChannelChatView
 import com.sendbirdsampleapp.util.AppConstants
@@ -22,7 +20,6 @@ import com.sendbirdsampleapp.util.ConnectionUtil
 import com.sendbirdsampleapp.util.FileUtil
 import com.sendbirdsampleapp.util.UrlUtil
 import java.io.File
-import java.lang.Exception
 import javax.inject.Inject
 
 class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHelper: AppPreferenceHelper) :
@@ -42,22 +39,6 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
         this.view = view
     }
 
-    override fun enterChannel(channelUrl: String) {
-        this.channelUrl = channelUrl
-        Thread {
-            GroupChannel.getChannel(channelUrl) { groupChannel, sendBirdException ->
-                if (sendBirdException != null) {
-                    view.showValidationMessage(AppConstants.FAILED_CHANNEL_GET)
-                } else {
-
-                    loadPreviousMessages(groupChannel)
-                    view.displayChatTitle(groupChannel.name)
-                    channel = groupChannel
-                }
-            }
-        }.start()
-    }
-
     override fun sendMessage(message: String) {
 
 
@@ -69,7 +50,6 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
                 if (sendBirdException != null) {
                     view.showValidationMessage(1)
                 } else {
-                    //view.sendMessage(userMessage)
                     messageCollection?.appendMessage(userMessage as BaseMessage)
                 }
             }
@@ -116,7 +96,6 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
                     } else {
                         messageCollection?.appendMessage(fileMessage as BaseMessage)
 
-                        //view.sendMessage(fileMessage as BaseMessage)
                     }
                 }
 
@@ -129,10 +108,11 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
 
     }
 
-    override fun onResume(context: Context) {
+    override fun onResume(context: Context, channelUrl: String) {
 
         this.context = context
         val userId = preferenceHelper.getUserId()
+        this.channelUrl = channelUrl
 
         SendBirdSyncManager.setup(context, userId) {
 
@@ -155,11 +135,7 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
 
         SendBird.addChannelHandler(AppConstants.CHANNEL_HANDLER_ID, object : SendBird.ChannelHandler() {
             override fun onMessageReceived(baseChannel: BaseChannel?, baseMessage: BaseMessage?) {
-                if (baseChannel?.url.equals(channelUrl)) {
-                    if (baseMessage != null) {
-                        view.receiveMessage(baseMessage)
-                    }
-                } else {
+                if (!baseChannel?.url.equals(channelUrl)) {
                     view.displayPushNotification(baseMessage as UserMessage, baseChannel?.url)
                 }
             }
@@ -231,7 +207,6 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
                             view.showValidationMessage(1)
                         } else {
 
-                            //view.sendMessage(userMessage)
                             messageCollection?.appendMessage(userMessage as BaseMessage)
 
                         }
@@ -263,7 +238,6 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
                         messageCollection = collection
                         messageCollection?.setCollectionHandler(messageCollectionHandler)
                         channel = messageCollection?.channel
-
 
                         messageCollection?.fetch(MessageCollection.Direction.PREVIOUS) {
                             if (it != null) {
@@ -302,18 +276,6 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
         }
     }
 
-    private fun loadPreviousMessages(groupChannel: GroupChannel) {
-//        Thread {
-//            val prevMessages = groupChannel.createPreviousMessageListQuery()
-//            prevMessages.load(100, true) { messages, sendBirdException ->
-//                if (sendBirdException != null) {
-//                    //TODO
-//                } else {
-//                    view.loadPreviousMessages(messages)
-//                }
-//            }
-//        }.start()
-    }
 
     private val messageCollectionHandler = MessageCollectionHandler { collection, messages, action ->
         Log.d("SyncManager", "onMessageEvent: size = " + messages.size + ", action = " + action)

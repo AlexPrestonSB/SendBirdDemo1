@@ -8,15 +8,9 @@ import com.sendbird.android.UserMessage
 
 interface GroupChannelChatView {
 
-    fun loadPreviousMessages(messages: MutableList<BaseMessage>)
-
     fun showValidationMessage(errorCode: Int)
 
     fun backPressed()
-
-    fun sendMessage(message: BaseMessage) //TODO Maybe remove?
-
-    fun receiveMessage(message: BaseMessage) //TODO Maybe remove?
 
     fun typingIndicator(message: String)
 
