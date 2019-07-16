@@ -33,6 +33,7 @@
         <activity android:name=".ui.group_channel.create_group.GroupChannelCreateActivity"></activity>
         <activity android:name=".ui.group_channel.chat_group.GroupChannelChatActivity"></activity>
         <activity android:name=".util.MediaPlayerActivity"></activity>
+        <activity android:name=".util.PhotoViewerActivity"></activity>
         <service android:name=".data.firebase.FirebaseMessagingService"
             android:exported="false">
             <intent-filter>

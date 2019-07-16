@@ -22,6 +22,7 @@ import com.sendbirdsampleapp.ui.group_channel.chat_group.presenter.GroupChannelC
 import com.sendbirdsampleapp.ui.group_channel.chat_group.view.GroupChannelChatView
 import com.sendbirdsampleapp.ui.group_channel.list_group.GroupChannelActivity
 import com.sendbirdsampleapp.util.MediaPlayerActivity
+import com.sendbirdsampleapp.util.PhotoViewerActivity
 import kotlinx.android.synthetic.main.activity_gchat.*
 import org.json.JSONException
 import org.json.JSONObject
@@ -111,7 +112,7 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, Grou
             .setSmallIcon(R.drawable.img_notification)
             .setColor(Color.parseColor("#7469C4"))
             .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.img_notification_large))
-            .setContentTitle(this.getResources().getString(R.string.app_name))
+            .setContentTitle(this.resources.getString(R.string.app_name))
             .setAutoCancel(true)
             .setPriority(Notification.PRIORITY_MAX)
             .setDefaults(Notification.DEFAULT_ALL)
@@ -154,15 +155,22 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, Grou
     }
 
     override fun onFileMessageClicked(message: FileMessage) {
-        if (message.type.toLowerCase().startsWith("video")) {
-            val intent = Intent(this, MediaPlayerActivity::class.java)
-            intent.putExtra("url", message.url)
-            intent.putExtra("name", message.name)
-            startActivity(intent)
-        } else if (message.type.toLowerCase().startsWith("image")) {
-            //TODO
-        } else {
-            //TODO
+        when {
+            message.type.toLowerCase().startsWith("video") -> {
+                val intent = Intent(this, MediaPlayerActivity::class.java)
+                intent.putExtra("url", message.url)
+                intent.putExtra("name", message.name)
+                startActivity(intent)
+            }
+            message.type.toLowerCase().startsWith("image") -> {
+                val intent = Intent(this, PhotoViewerActivity::class.java)
+                intent.putExtra("url", message.url)
+                intent.putExtra("type", message.type)
+                startActivity(intent)
+            }
+            else -> {
+                //TODO
+            }
         }
     }
 

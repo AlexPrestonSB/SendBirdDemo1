@@ -49,12 +49,12 @@ class MediaPlayerActivity : Activity(), SurfaceHolder.Callback, MediaPlayer.OnCo
         }
 
         progress_bar_media_buffering.visibility = View.VISIBLE
-        container = media_player_layout
+        container = media_player_layout as View
         setContainerLayoutListener(false)
     }
 
     private fun setContainerLayoutListener(screenRotated: Boolean) {
-        container.getViewTreeObserver().addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+        container.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
 
                 container.viewTreeObserver.removeOnGlobalLayoutListener(this)
