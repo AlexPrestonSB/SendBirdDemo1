@@ -86,6 +86,7 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, Grou
     override fun backPressed() {
         val intent = Intent(this, GroupChannelActivity::class.java)
         startActivity(intent)
+
     }
 
     override fun displayChatTitle(title: String) {
