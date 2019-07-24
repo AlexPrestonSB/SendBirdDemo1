@@ -1,17 +1,17 @@
 package com.sendbirdsampleapp.ui.group_channel.list_group
 
 import android.content.Context
-import android.provider.Settings.Global.getString
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.sendbird.android.*
-import com.sendbirdsampleapp.BuildConfig
 import com.sendbirdsampleapp.R
-import com.sendbirdsampleapp.ui.group_channel.create_group.GroupChannelCreateAdapter
-import com.sendbirdsampleapp.util.DateUtils
-import kotlinx.android.synthetic.main.channel_chooser_view.view.*
+import com.sendbirdsampleapp.util.DateUtil
+import com.sendbirdsampleapp.util.SyncManagerUtil
+import com.sendbirdsampleapp.util.TextUtil
+import kotlinx.android.synthetic.main.item_channel_chooser.view.*
 import kotlin.collections.ArrayList
 
 class GroupChannelListAdapter(context: Context, listener: OnChannelClickedListener) : RecyclerView.Adapter<GroupChannelListAdapter.ChannelHolder>() {
@@ -37,10 +37,57 @@ class GroupChannelListAdapter(context: Context, listener: OnChannelClickedListen
         notifyDataSetChanged()
     }
 
+    fun insertChannels(channelList: List<GroupChannel>, order: GroupChannelListQuery.Order) {
+        for (newChannel in channelList) {
+            val index = SyncManagerUtil.findIndexOfChannel(channels, newChannel, order)
+            channels.add(index, newChannel)
+        }
+
+        notifyDataSetChanged()
+    }
+
+    fun updateChannels(channelList: List<GroupChannel>) {
+        for (updatedChannel in channelList) {
+            val index = SyncManagerUtil.getIndexOfChannel(channels, updatedChannel)
+            if (index != -1) {
+                channels.set(index, updatedChannel)
+                notifyItemChanged(index)
+            }
+        }
+    }
+
+    fun moveChannels(channelList: List<GroupChannel>, order: GroupChannelListQuery.Order) {
+        for (movedChannel in channelList) {
+            val fromIndex = SyncManagerUtil.getIndexOfChannel(channels, movedChannel)
+            val toIndex = SyncManagerUtil.findIndexOfChannel(channels, movedChannel, order)
+            if (fromIndex != -1) {
+                channels.removeAt(fromIndex)
+                channels.add(toIndex, movedChannel)
+                notifyItemMoved(fromIndex, toIndex)
+                notifyItemChanged(toIndex)
+            }
+        }
+    }
+
+    fun removeChannels(channelList: List<GroupChannel>) {
+        for (removedChannel in channelList) {
+            val index = SyncManagerUtil.getIndexOfChannel(channels, removedChannel)
+            if (index != -1) {
+                channels.removeAt(index)
+                notifyItemRemoved(index)
+            }
+        }
+    }
+
+    fun clearChannels() {
+        channels.clear()
+        notifyDataSetChanged()
+    }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChannelHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        return ChannelHolder(layoutInflater.inflate(R.layout.channel_chooser_view, parent, false))
+        return ChannelHolder(layoutInflater.inflate(R.layout.item_channel_chooser, parent, false))
     }
 
     override fun getItemCount() = channels.size
@@ -62,21 +109,19 @@ class GroupChannelListAdapter(context: Context, listener: OnChannelClickedListen
             val lastMessage = groupChannel.lastMessage
 
             if (lastMessage != null) {
-                channelDate.text = DateUtils.formatDateTime(lastMessage.createdAt)
+                channelDate.text = DateUtil.formatDateTime(lastMessage.createdAt)
 
-                if (lastMessage is UserMessage) {
-                    channelRecentMessage.text = lastMessage.message
+                when (lastMessage) {
+                    is UserMessage -> channelRecentMessage.setText(TextUtil.formatText(lastMessage.message), TextView.BufferType.SPANNABLE)
+                    is AdminMessage -> channelRecentMessage.setText(TextUtil.formatText(lastMessage.message), TextView.BufferType.SPANNABLE)
+                    else -> {
+                        val fileMessage = lastMessage as FileMessage
+                        val sender = String.format(context.getString(R.string.group_channel_list_file_message_text),
+                            fileMessage.sender.nickname
+                        )
+                        channelRecentMessage.text = sender
 
-                } else if (lastMessage is AdminMessage) {
-                    channelRecentMessage.text = lastMessage.message
-
-                } else {
-                    val fileMessage = lastMessage as FileMessage
-                    val sender = String.format(context.getString(R.string.group_channel_list_file_message_text),
-                        fileMessage.sender.nickname
-                    )
-                    channelRecentMessage.text = sender
-
+                    }
                 }
             }
 

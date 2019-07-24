@@ -2,8 +2,9 @@ package com.sendbirdsampleapp.ui.channel
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.sendbird.android.SendBird
+import com.sendbird.syncmanager.SendBirdSyncManager
 import com.sendbirdsampleapp.BaseApp
 import com.sendbirdsampleapp.BuildConfig
 import com.sendbirdsampleapp.R
@@ -11,7 +12,7 @@ import com.sendbirdsampleapp.ui.channel.presenter.ChannelPresenterImpl
 import com.sendbirdsampleapp.ui.channel.view.ChannelView
 import com.sendbirdsampleapp.ui.group_channel.list_group.GroupChannelActivity
 import com.sendbirdsampleapp.ui.login.LoginActivity
-import com.sendbirdsampleapp.ui.open_channel.view.OpenChannelActivity
+import com.sendbirdsampleapp.ui.open_channel.OpenChannelActivity
 import kotlinx.android.synthetic.main.activity_channel_chooser.*
 import javax.inject.Inject
 
@@ -31,8 +32,8 @@ class ChannelActivity : AppCompatActivity(), ChannelView {
         presenter.setView(this)
 
 
-        textview_channel_group.setOnClickListener { groupChannelPressed() }
-        textview_channel_open.setOnClickListener { openChannelPressed() }
+        text_channel_group.setOnClickListener { groupChannelPressed() }
+        text_channel_open.setOnClickListener { openChannelPressed() }
 
         val version = String.format(
             resources.getString(R.string.sample_version),
@@ -40,8 +41,11 @@ class ChannelActivity : AppCompatActivity(), ChannelView {
             SendBird.getSDKVersion().toString()
         )
 
-        textview_channel_version.text = version
-        button_channel_logout.setOnClickListener { presenter.logoutPressed() }
+        text_channel_version.text = version
+        button_channel_logout.setOnClickListener {
+           // SendBirdSyncManager.getInstance().clearCache()
+            presenter.logoutPressed()
+        }
     }
 
     private fun groupChannelPressed() {

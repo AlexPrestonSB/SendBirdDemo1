@@ -3,7 +3,7 @@ package com.sendbirdsampleapp.util
 import java.text.SimpleDateFormat
 import java.util.*
 
-object DateUtils {
+object DateUtil {
 
 
     fun formatDateTime(timeInMillis: Long): String {
@@ -20,7 +20,6 @@ object DateUtils {
     }
 
 
-
     fun formatDate(timeInMillis: Long): String {
         val dateFormat = SimpleDateFormat("MMMM dd", Locale.getDefault())
         return dateFormat.format(timeInMillis)
@@ -30,5 +29,10 @@ object DateUtils {
         val dateFormat = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
         val date = dateFormat.format(timeInMillis)
         return date.equals(dateFormat.format(System.currentTimeMillis()))
+    }
+
+    fun isSameDay(milisFirst: Long, milisSecond: Long): Boolean {
+        val dateFormat = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
+        return dateFormat.format(milisFirst).equals(dateFormat.format(milisSecond))
     }
 }

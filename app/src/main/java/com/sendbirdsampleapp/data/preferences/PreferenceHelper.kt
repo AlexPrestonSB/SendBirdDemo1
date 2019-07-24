@@ -14,4 +14,8 @@ interface PreferenceHelper {
     fun getConnected(): Boolean
 
     fun setConnected(connected: Boolean)
+
+    fun getToken(): String
+
+    fun setToken(token: String?)
 }

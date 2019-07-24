@@ -3,7 +3,8 @@
     android:shape="rectangle" >
 
     <!-- View background color -->
-    <solid>
+    <solid
+        android:color="@color/groupChatDateBackground" >
     </solid>
 
     <!-- The radius makes the corners rounded -->

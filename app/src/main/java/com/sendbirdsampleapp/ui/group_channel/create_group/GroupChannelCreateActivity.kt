@@ -2,9 +2,9 @@ package com.sendbirdsampleapp.ui.group_channel.create_group
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import com.sendbird.android.SendBird
 import com.sendbird.android.User
@@ -12,19 +12,19 @@ import com.sendbirdsampleapp.R
 import com.sendbirdsampleapp.ui.group_channel.create_group.presenter.GroupChannelCreatePresenterImpl
 import com.sendbirdsampleapp.ui.group_channel.create_group.view.GroupChannelCreateView
 import com.sendbirdsampleapp.ui.group_channel.list_group.GroupChannelActivity
-import com.sendbirdsampleapp.ui.group_channel.message_group.GroupChannelMessageActivity
-import kotlinx.android.synthetic.main.activity_group_create.*
+import com.sendbirdsampleapp.ui.group_channel.chat_group.GroupChannelChatActivity
+import kotlinx.android.synthetic.main.activity_gcreate.*
 
 class GroupChannelCreateActivity : AppCompatActivity(), GroupChannelCreateAdapter.OnItemCheckedChangeListener,
     GroupChannelCreateView {
 
     private val TAG = "GROUP_CREATE_ACTIVITY"
-    private val EXTRA_NEW_CHANNEL_URL = "EXTRA_NEW_CHANNEL_URL";
+    private val EXTRA_CHANNEL_URL = "EXTRA_CHANNEL_URL"
 
 
-    lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerView: androidx.recyclerview.widget.RecyclerView
 
-    lateinit var adapter: GroupChannelCreateAdapter
+    private lateinit var adapter: GroupChannelCreateAdapter
 
     private lateinit var selectedUsers: ArrayList<String>
     private lateinit var presenter: GroupChannelCreatePresenterImpl
@@ -32,7 +32,7 @@ class GroupChannelCreateActivity : AppCompatActivity(), GroupChannelCreateAdapte
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_group_create)
+        setContentView(R.layout.activity_gcreate)
 
         presenter = GroupChannelCreatePresenterImpl()
         presenter.setView(this)
@@ -40,13 +40,13 @@ class GroupChannelCreateActivity : AppCompatActivity(), GroupChannelCreateAdapte
         selectedUsers = ArrayList()
 
         adapter = GroupChannelCreateAdapter(this, this)
-        recyclerView = recycler_group_create
+        recyclerView = recycler_gcreate
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
 
-        text_channel_create.setOnClickListener { presenter.createChannel(selectedUsers) }
+        button_gcreate.setOnClickListener { presenter.createChannel(selectedUsers) }
 
-        button_channel_create_back.setOnClickListener{ presenter.backPressed()}
+        button_gcreate_back.setOnClickListener { presenter.backPressed() }
 
         loadUsers()
     }
@@ -57,8 +57,8 @@ class GroupChannelCreateActivity : AppCompatActivity(), GroupChannelCreateAdapte
     }
 
     override fun createChannelPressed(channelId: String) {
-        val intent = Intent(this, GroupChannelMessageActivity::class.java)
-        intent.putExtra(EXTRA_NEW_CHANNEL_URL, channelId)
+        val intent = Intent(this, GroupChannelChatActivity::class.java)
+        intent.putExtra(EXTRA_CHANNEL_URL, channelId)
         startActivity(intent)
 
     }
@@ -75,27 +75,23 @@ class GroupChannelCreateActivity : AppCompatActivity(), GroupChannelCreateAdapte
 
     }
 
-    //TODO rewrite this function it is so bad
     private fun loadUsers() {
-        Thread {
-            val userListQuery = SendBird.createApplicationUserListQuery()
+        val userListQuery = SendBird.createApplicationUserListQuery()
 
+        val state = SendBird.getConnectionState()
+
+        Thread() {
             userListQuery.setLimit(100) //TODO change don't use constants
             userListQuery.next() { list, e ->
                 if (e != null) {
                     Log.e(TAG, "Failed to load users")
                 } else {
+                    adapter.addUsers(list)
 
-                    this.runOnUiThread {
-                        adapter.addUsers(list)
-                    }
                 }
 
             }
-
         }.start()
-
-
     }
-
 }
+

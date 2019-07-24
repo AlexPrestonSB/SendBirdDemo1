@@ -1,11 +1,12 @@
 package com.sendbirdsampleapp.ui.login.presenter
 
 import android.util.Log
-import com.sendbird.android.GroupChannel
+import com.google.firebase.iid.FirebaseInstanceId
 import com.sendbird.android.SendBird
 import com.sendbirdsampleapp.data.preferences.AppPreferenceHelper
 import com.sendbirdsampleapp.ui.login.view.LoginView
 import com.sendbirdsampleapp.util.AppConstants
+import com.sendbirdsampleapp.util.PushUtil
 import javax.inject.Inject
 
 class LoginPresenterImpl @Inject constructor(private val preferenceHelper: AppPreferenceHelper) : LoginPresenter {
@@ -40,33 +41,43 @@ class LoginPresenterImpl @Inject constructor(private val preferenceHelper: AppPr
 
     private fun connectToSendBird(userId: String, nickname: String) {
         SendBird.connect(userId) { user, e ->
-            if (e != null){
+            if (e != null) {
                 loginView.showValidationMessage(AppConstants.FAILED_LOGIN)
                 Log.e(AppConstants.FAILED_LOGIN.toString(), "Failed Login")
             } else {
-                updateCurrentUserInfo(userId, nickname)
-                loginView.navigateToChannels()
+
+                FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener {
+                    if (!it.isSuccessful) {
+                        loginView.showValidationMessage(AppConstants.FAILED_FIREBASE_CONNECTION)
+                        return@addOnCompleteListener
+                    }
+                    updateCurrentUserInfo(userId, nickname, it.result?.token)
+                    loginView.navigateToChannels()
+                }
             }
         }
     }
 
-    private fun updateCurrentUserInfo(userId: String, nickname: String) {
+    private fun updateCurrentUserInfo(userId: String, nickname: String, token: String?) {
 
         SendBird.updateCurrentUserInfo(nickname, null) { e ->
-            if(e != null) {
-              Log.e("TEST", "TEST") //TODO
+            if (e != null) {
+                loginView.showValidationMessage(AppConstants.FAILED_UPDATE_USER)
             }
-            updateUserInSharedPrefs(userId, nickname)
+            updateUserInSharedPrefs(userId, nickname, token)
 
         }
     }
 
 
-    private fun updateUserInSharedPrefs(userId: String, nickname: String) =
+    private fun updateUserInSharedPrefs(userId: String, nickname: String, token: String?) {
         preferenceHelper.let {
             it.setConnected(true)
             it.setUserId(userId)
             it.setNickname(nickname)
+            it.setToken(token)
         }
+        PushUtil.registerPushTokenForCurrentUser(preferenceHelper.getToken(), null)
+    }
 
 }

@@ -4,7 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import javax.inject.Inject
 
-class AppPreferenceHelper @Inject constructor(context: Context) : PreferenceHelper {
+class AppPreferenceHelper @Inject constructor(context: Context) :
+    PreferenceHelper {
 
     companion object {
         private val SENDBIRD = "sendbird"
@@ -14,6 +15,7 @@ class AppPreferenceHelper @Inject constructor(context: Context) : PreferenceHelp
         private val PREFERENCE_KEY_NOTIFICATIONS = "notifications"
         private val PREFERENCE_KEY_NOTIFICATIONS_SHOW_PREVIEWS = "notificationShowPreviews"
         private val PREFERENCE_KEY_NOTIFICATIONS_DO_NOT_DISTURB = "notificationsNoNotDisturb"
+        private val PREFERENCE_KEY_GCM_TOKEN = "gcmToken"
     }
 
     inline fun SharedPreferences.edit(operation: (SharedPreferences.Editor) -> Unit) {
@@ -35,6 +37,10 @@ class AppPreferenceHelper @Inject constructor(context: Context) : PreferenceHelp
     override fun getConnected(): Boolean =  mPrefs.getBoolean(PREFERENCE_KEY_CONNECTED, false)
 
     override fun setConnected(connected: Boolean) { mPrefs.edit{it.putBoolean(PREFERENCE_KEY_CONNECTED, connected)} }
+
+    override fun getToken(): String =  mPrefs.getString(PREFERENCE_KEY_GCM_TOKEN, "token")!!
+
+    override fun setToken(token: String?) { mPrefs.edit { it.putString(PREFERENCE_KEY_GCM_TOKEN, token) }}
 }
 
 

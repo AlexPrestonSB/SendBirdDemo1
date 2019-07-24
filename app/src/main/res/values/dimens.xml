@@ -2,6 +2,7 @@
 <resources>
     <dimen name="login_logo_size">127dp</dimen>
 
+
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="activity_vertical_margin_x2">32dp</dimen>
     <dimen name="activity_vertical_margin_x3">48dp</dimen>
@@ -15,20 +16,41 @@
     <dimen name="line_height">1dp</dimen>
     <dimen name="create_height">48dp</dimen>
 
-
     <!--Button-->
     <dimen name="button_vertical">44dp</dimen>
     <dimen name="button_height">56dp</dimen>
     <dimen name="button_bottom_spacing">24dp</dimen>
+    <dimen name="button_upload_size">48dp</dimen>
+    <dimen name="button_send_width">64dp</dimen>
+    <dimen name="button_send_height">48dp</dimen>
 
     <!--Images-->
     <dimen name="channel_image_height">40dp</dimen>
     <dimen name="channel_image_width">40dp</dimen>
+    <dimen name="profile_margin">8dp</dimen>
+    <dimen name="thumbnail_height">148dp</dimen>
+    <dimen name="icon_size">25dp</dimen>
+    <dimen name="thumbnail_width">228dp</dimen>
 
     <!--Text-->
     <dimen name="text_version_size">12sp</dimen>
     <dimen name="text_standard">16sp</dimen>
     <dimen name="text_toolbar_size">20sp</dimen>
+    <dimen name="text_message_date_size">10sp</dimen>
+
+    <!--Padding-->
+    <dimen name="date_vertical_padding">4dp</dimen>
+    <dimen name="date_horizontal_padding">8dp</dimen>
+    <dimen name="layout_padding">8dp</dimen>
+    <dimen name="admin_padding_top">12dp</dimen>
+    <dimen name="admin_padding_sides">16dp</dimen>
+
+
+    <dimen name="card_corners">12dp</dimen>
+    <dimen name="card_elevation">0dp</dimen>
+    <dimen name="card_max_width">260dp</dimen>
+    <dimen name="card_line_spacing">12dp</dimen>
+    <dimen name="link_line">24dp</dimen>
 
 
 

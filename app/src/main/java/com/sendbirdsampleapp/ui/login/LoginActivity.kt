@@ -2,7 +2,7 @@ package com.sendbirdsampleapp.ui.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.widget.Toast
 import com.sendbird.android.SendBird
@@ -42,7 +42,7 @@ class LoginActivity : AppCompatActivity(), LoginView {
             SendBird.getSDKVersion().toString()
         )
 
-        textview_login_version.text = version
+        text_login_version.text = version
 
     }
 

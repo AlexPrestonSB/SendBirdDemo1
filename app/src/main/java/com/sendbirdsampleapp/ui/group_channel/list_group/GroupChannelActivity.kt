@@ -2,27 +2,29 @@ package com.sendbirdsampleapp.ui.group_channel.list_group
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
-import android.widget.Toast
 import com.sendbird.android.*
+import com.sendbird.syncmanager.SendBirdSyncManager
+import com.sendbirdsampleapp.BaseApp
 import com.sendbirdsampleapp.R
 import com.sendbirdsampleapp.ui.channel.ChannelActivity
 import com.sendbirdsampleapp.ui.group_channel.create_group.GroupChannelCreateActivity
 import com.sendbirdsampleapp.ui.group_channel.list_group.presenter.GroupChannelPresenterImpl
 import com.sendbirdsampleapp.ui.group_channel.list_group.view.GroupChannelView
-import com.sendbirdsampleapp.ui.group_channel.message_group.GroupChannelMessageActivity
-import com.sendbirdsampleapp.util.AppConstants
-import kotlinx.android.synthetic.main.activity_group_channel.*
+import com.sendbirdsampleapp.ui.group_channel.chat_group.GroupChannelChatActivity
+import kotlinx.android.synthetic.main.activity_gchannel.*
+import javax.inject.Inject
 
 class GroupChannelActivity : AppCompatActivity(), GroupChannelView, GroupChannelListAdapter.OnChannelClickedListener {
 
     private val TAG = "GROUP_CHANNEL_ACTIVITY"
-    private val EXTRA_NEW_CHANNEL_URL = "EXTRA_NEW_CHANNEL_URL";
+    private val EXTRA_CHANNEL_URL = "EXTRA_CHANNEL_URL"
 
 
+    @Inject
     lateinit var presenter: GroupChannelPresenterImpl
 
     lateinit var recyclerView: RecyclerView
@@ -31,10 +33,9 @@ class GroupChannelActivity : AppCompatActivity(), GroupChannelView, GroupChannel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_group_channel)
+        setContentView(R.layout.activity_gchannel)
+        BaseApp.app(this).injector.inject(this)
 
-
-        presenter = GroupChannelPresenterImpl()
 
         presenter.setView(this)
 
@@ -43,12 +44,20 @@ class GroupChannelActivity : AppCompatActivity(), GroupChannelView, GroupChannel
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        setUserChannels()
-
         fab_group_channel_create.setOnClickListener { presenter.createGroupPressed() }
 
-        button_channel_group_back.setOnClickListener { presenter.backPressed()}
+        button_gchannel_back.setOnClickListener { presenter.backPressed()}
 
+    }
+
+    override fun onResume() {
+        presenter.onResume(this)
+        super.onResume()
+    }
+
+    override fun onPause() {
+        presenter.onPause()
+        super.onPause()
     }
 
     override fun backPressed() {
@@ -66,24 +75,35 @@ class GroupChannelActivity : AppCompatActivity(), GroupChannelView, GroupChannel
     }
 
     override fun onItemClicked(channel: GroupChannel) {
-        val intent = Intent(this, GroupChannelMessageActivity::class.java)
-        intent.putExtra(EXTRA_NEW_CHANNEL_URL, channel.url)
+        val intent = Intent(this, GroupChannelChatActivity::class.java)
+        intent.putExtra(EXTRA_CHANNEL_URL, channel.url)
         startActivity(intent)
 
     }
 
-    private fun setUserChannels() {
-
-        val channelListQuery = GroupChannel.createMyGroupChannelListQuery()
-        channelListQuery.isIncludeEmpty = true
-        channelListQuery.limit = 100
-
-        channelListQuery.next() { channels, e ->
-            if (e != null) {
-                Log.e("TAG", e.printStackTrace().toString())
-            } else {
-                adapter.addChannels(channels)
-            }
+    override fun setUserChannels(channels: MutableList<GroupChannel>) {
+        runOnUiThread{
+            adapter.addChannels(channels)
         }
+    }
+
+    override fun updateChannels(channels: MutableList<GroupChannel>) {
+        adapter.updateChannels(channels)
+    }
+
+    override fun removeChannels(channels: MutableList<GroupChannel>) {
+       adapter.removeChannels(channels)
+    }
+
+    override fun insertChannels(channels: MutableList<GroupChannel>, order: GroupChannelListQuery.Order) {
+        adapter.insertChannels(channels, order)
+    }
+
+    override fun moveChannels(channels: MutableList<GroupChannel>, order: GroupChannelListQuery.Order) {
+        adapter.moveChannels(channels, order)
+    }
+
+    override fun clearChannels() {
+       adapter.clearChannels()
     }
 }
