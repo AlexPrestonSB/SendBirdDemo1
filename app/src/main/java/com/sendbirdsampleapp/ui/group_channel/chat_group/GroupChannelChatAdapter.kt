@@ -9,6 +9,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapsInitializer
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.sendbird.android.*
 import com.sendbirdsampleapp.R
 import com.sendbirdsampleapp.data.UrlInfo
@@ -18,6 +24,8 @@ import kotlinx.android.synthetic.main.item_gchat_file_me.view.*
 import kotlinx.android.synthetic.main.item_gchat_file_other.view.*
 import kotlinx.android.synthetic.main.item_gchat_image_me.view.*
 import kotlinx.android.synthetic.main.item_gchat_image_other.view.*
+import kotlinx.android.synthetic.main.item_gchat_map_me.view.*
+import kotlinx.android.synthetic.main.item_gchat_map_other.view.*
 import kotlinx.android.synthetic.main.item_gchat_me.view.*
 import kotlinx.android.synthetic.main.item_gchat_me.view.text_gchat_date_me
 import kotlinx.android.synthetic.main.item_gchat_me.view.text_gchat_read_me
@@ -133,6 +141,12 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
             AppConstants.VIEW_TYPE_ADMIN_MESSAGE -> {
                 return AdminUserHolder(layoutInflater.inflate(R.layout.item_gchat_admin, parent, false))
             }
+            AppConstants.VIEW_TYPE_LOCATION_ME -> {
+                return MyLocationHolder(layoutInflater.inflate(R.layout.item_gchat_map_me, parent, false))
+            }
+            AppConstants.VIEW_TYPE_LOCATION_OTHER -> {
+                return OtherLocationHolder(layoutInflater.inflate(R.layout.item_gchat_map_other, parent, false))
+            }
             else ->
                 return AdminUserHolder(layoutInflater.inflate(R.layout.item_gchat_admin, parent, false))
         }
@@ -144,19 +158,30 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
 
         when (message) {
             is UserMessage -> {
-                if (message.sender.userId.equals(SendBird.getCurrentUser().userId)) return AppConstants.VIEW_TYPE_USER_MESSAGE_ME
-                else return AppConstants.VIEW_TYPE_USER_MESSAGE_OTHER
+                return if (message.sender.userId == SendBird.getCurrentUser().userId) {
+                    if (message.customType == "location") {
+                        AppConstants.VIEW_TYPE_LOCATION_ME
+                    } else {
+                        AppConstants.VIEW_TYPE_USER_MESSAGE_ME
+                    }
+                } else {
+                    if (message.customType == "location") {
+                        AppConstants.VIEW_TYPE_LOCATION_OTHER
+                    } else {
+                        AppConstants.VIEW_TYPE_USER_MESSAGE_OTHER
+                    }
+                }
             }
             is FileMessage -> {
-                if (message.type.toLowerCase().startsWith("image")) {
-                    if (message.sender.userId.equals(SendBird.getCurrentUser().userId)) return AppConstants.VIEW_TYPE_IMAGE_MESSAGE_ME
-                    else return AppConstants.VIEW_TYPE_IMAGE_MESSAGE_OTHER
+                return if (message.type.toLowerCase().startsWith("image")) {
+                    if (message.sender.userId.equals(SendBird.getCurrentUser().userId)) AppConstants.VIEW_TYPE_IMAGE_MESSAGE_ME
+                    else AppConstants.VIEW_TYPE_IMAGE_MESSAGE_OTHER
                 } else if (message.type.toLowerCase().startsWith("video")) {
-                    if (message.sender.userId.equals(SendBird.getCurrentUser().userId)) return AppConstants.VIEW_TYPE_VIDEO_MESSAGE_ME
-                    else return AppConstants.VIEW_TYPE_VIDEO_MESSAGE_OTHER
+                    if (message.sender.userId.equals(SendBird.getCurrentUser().userId)) AppConstants.VIEW_TYPE_VIDEO_MESSAGE_ME
+                    else AppConstants.VIEW_TYPE_VIDEO_MESSAGE_OTHER
                 } else {
-                    if (message.sender.userId.equals(SendBird.getCurrentUser().userId)) return AppConstants.VIEW_TYPE_FILE_MESSAGE_ME
-                    else return AppConstants.VIEW_TYPE_FILE_MESSAGE_OTHER
+                    if (message.sender.userId.equals(SendBird.getCurrentUser().userId)) AppConstants.VIEW_TYPE_FILE_MESSAGE_ME
+                    else AppConstants.VIEW_TYPE_FILE_MESSAGE_OTHER
                 }
             }
             is AdminMessage -> {
@@ -221,6 +246,15 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
                 holder as AdminUserHolder
                 holder.bindView(messages.get(position) as AdminMessage, isNewDay)
             }
+            AppConstants.VIEW_TYPE_LOCATION_ME -> {
+                holder as MyLocationHolder
+                holder.bindView(context, messages.get(position) as UserMessage, isNewDay)
+            }
+            AppConstants.VIEW_TYPE_LOCATION_OTHER -> {
+                holder as OtherLocationHolder
+                holder.bindView(context, messages.get(position) as UserMessage, isNewDay)
+
+            }
         }
 
     }
@@ -261,7 +295,10 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
                     urlTitle.text = obj.title
                     urlDescription.text = obj.description
                     Glide.with(context).load(obj.imageUrl).into(urlImage)
-                    messageText.setText(TextUtil.formatText(message.message.replace(obj.url, "")), TextView.BufferType.SPANNABLE)
+                    messageText.setText(
+                        TextUtil.formatText(message.message.replace(obj.url, "")),
+                        TextView.BufferType.SPANNABLE
+                    )
                     if (messageText.text.equals("")) {
                         messageText.visibility = View.GONE
                         separator.visibility = View.GONE
@@ -322,8 +359,11 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
                     urlTitle.text = obj.title
                     urlDescription.text = obj.description
                     Glide.with(context).load(obj.imageUrl).into(urlImage)
-                    messageText.setText(TextUtil.formatText(message.message.replace(obj.url, "")), TextView.BufferType.SPANNABLE)
-                   // messageText.text = message.message.replace(obj.url, "")
+                    messageText.setText(
+                        TextUtil.formatText(message.message.replace(obj.url, "")),
+                        TextView.BufferType.SPANNABLE
+                    )
+                    // messageText.text = message.message.replace(obj.url, "")
                     if (messageText.text.equals("")) {
                         messageText.visibility = View.GONE
                         separator.visibility = View.GONE
@@ -371,6 +411,9 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
                 } else {
                     Glide.with(context).load(thumbnails.get(0).url).into(thumbnail) //TODO move into imageUtil
                 }
+            } else {
+                Glide.with(context).load(message.url).into(thumbnail) //TODO move into imageUtil
+
             }
 
             itemView.setOnClickListener {
@@ -554,6 +597,132 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
                 date.visibility = View.GONE
             }
 
+        }
+    }
+
+    class MyLocationHolder(view: View) : RecyclerView.ViewHolder(view), OnMapReadyCallback {
+        private lateinit var map: GoogleMap
+        private lateinit var context: Context
+        private lateinit var latLng: LatLng
+        private var longitude = 0.0
+        private var latitude = 0.0
+        private val mapView = view.map_gchat_me
+        private val date = view.text_gchat_map_date_me
+        private val timestamp = view.text_gchat_map_timestamp_me
+
+
+        /** Initialises the MapView by calling its lifecycle methods */
+        init {
+            with(mapView) {
+                // Initialise the MapView
+                onCreate(null)
+                // Set the map ready callback to receive the GoogleMap object
+                getMapAsync(this@MyLocationHolder)
+            }
+        }
+
+        fun bindView(context: Context, message: UserMessage, isNewDay: Boolean) {
+            this.context = context
+            timestamp.text = DateUtil.formatTime(message.createdAt)
+            val cords = message.message.split(",")
+
+            longitude = cords[0].toDouble()
+            latitude = cords[1].toDouble()
+
+            latLng = LatLng(latitude, longitude)
+            if (isNewDay) {
+                date.visibility = View.VISIBLE
+                date.text = DateUtil.formatDate(message.createdAt)
+            } else {
+                date.visibility = View.GONE
+            }
+
+            setLocation()
+
+        }
+
+        override fun onMapReady(googleMap: GoogleMap?) {
+            MapsInitializer.initialize(context.applicationContext)
+            map = googleMap ?: return
+            setLocation()
+
+        }
+
+        private fun setLocation() {
+            if (!::map.isInitialized) return
+            with(map) {
+                moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 7f))
+                addMarker(MarkerOptions().position(latLng))
+                mapType = GoogleMap.MAP_TYPE_NORMAL
+            }
+            mapView.onResume()
+        }
+    }
+
+    class OtherLocationHolder(view: View) : RecyclerView.ViewHolder(view), OnMapReadyCallback {
+        private lateinit var map: GoogleMap
+        private lateinit var context: Context
+        private lateinit var latLng: LatLng
+        private var longitude = 0.0
+        private var latitude = 0.0
+        private val mapView = view.map_gchat_other
+        private val date = view.text_gchat_map_date_other
+        private val timestamp = view.text_gchat_map_timestamp_other
+        private val profileImage = view.image_gchat_map_profile_other
+        private val username = view.text_gchat_map_user_other
+
+
+
+
+
+        /** Initialises the MapView by calling its lifecycle methods */
+        init {
+            with(mapView) {
+                // Initialise the MapView
+                onCreate(null)
+                // Set the map ready callback to receive the GoogleMap object
+                getMapAsync(this@OtherLocationHolder)
+            }
+        }
+
+        fun bindView(context: Context, message: UserMessage, isNewDay: Boolean) {
+            this.context = context
+            val cords = message.message.split(",")
+
+            longitude = cords[0].toDouble()
+            latitude = cords[1].toDouble()
+
+            latLng = LatLng(latitude, longitude)
+
+            username.text = message.sender.nickname
+            timestamp.text = DateUtil.formatTime(message.createdAt)
+            Glide.with(context).load(message.sender.profileUrl).apply(RequestOptions().override(75, 75))
+                .into(profileImage)
+            if (isNewDay) {
+                date.visibility = View.VISIBLE
+                date.text = DateUtil.formatDate(message.createdAt)
+            } else {
+                date.visibility = View.GONE
+            }
+            setLocation()
+
+        }
+
+        override fun onMapReady(googleMap: GoogleMap?) {
+            MapsInitializer.initialize(context.applicationContext)
+            map = googleMap ?: return
+            setLocation()
+
+        }
+
+        private fun setLocation() {
+            if (!::map.isInitialized) return
+            with(map) {
+                moveCamera(com.google.android.gms.maps.CameraUpdateFactory.newLatLngZoom(latLng, 7f))
+                addMarker(com.google.android.gms.maps.model.MarkerOptions().position(latLng))
+                mapType = com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL
+            }
+            // mapView.onResume()
         }
     }
 }

@@ -1,8 +1,10 @@
 package com.sendbirdsampleapp.ui.group_channel.chat_group.presenter
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.location.LocationManager
 import android.net.Uri
 import android.util.Log
 import com.leocardz.link.preview.library.LinkPreviewCallback
@@ -36,6 +38,7 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
         this.view = view
     }
 
+    //Refactor only need one send message
     override fun sendMessage(message: String) {
         val urls = UrlUtil.extractUrl(message)
         if (urls.size > 0) {
@@ -182,6 +185,33 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
             channel!!.endTyping()
         }
     }
+
+    @SuppressLint("MissingPermission") //Should obviously implicitly check permissions and not assume they have been given. (Declared in manifest for test sake)
+    override fun shareLocation(context: Context) {
+        val lm = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+        val longitude = location.longitude
+        val latitude = location.latitude
+
+        val result = "$longitude,$latitude"
+        //TODO
+        val params = UserMessageParams()
+        params.setMessage(result)
+        params.setCustomType("location")
+
+        if (channel != null) {
+            channel!!.sendUserMessage(params) { userMessage, e ->
+                if (e != null) {
+                    view.showValidationMessage(1)
+                } else {
+                    messageCollection?.appendMessage(userMessage as BaseMessage)
+                }
+
+            }
+        }
+
+    }
+
 
     private fun sendMessageWithUrl(text: String, url: String) {
         message = text

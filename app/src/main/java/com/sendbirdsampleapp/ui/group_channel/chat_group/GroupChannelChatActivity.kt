@@ -3,6 +3,7 @@ package com.sendbirdsampleapp.ui.group_channel.chat_group
 import android.app.*
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.net.Uri
@@ -15,6 +16,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import androidx.core.content.ContextCompat
 import com.sendbird.android.*
 import com.sendbirdsampleapp.BaseApp
 import com.sendbirdsampleapp.R
@@ -26,6 +28,7 @@ import com.sendbirdsampleapp.util.PhotoViewerActivity
 import kotlinx.android.synthetic.main.activity_gchat.*
 import org.json.JSONException
 import org.json.JSONObject
+import java.util.jar.Manifest
 import javax.inject.Inject
 
 class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, GroupChannelChatAdapter.OnItemClickListener {
@@ -201,6 +204,10 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, Grou
         button_gchat_back.setOnClickListener { presenter.backPressed() }
         button_gchat_send.setOnClickListener { presenter.sendMessage(edit_gchat_message.text.toString()) }
         button_gchat_upload.setOnClickListener { presenter.requestMedia() }
+        button_gchat_share.setOnClickListener {
+            //checkPermission()
+            presenter.shareLocation(this)
+        }
 
         edit_gchat_message.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
@@ -215,6 +222,20 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, Grou
 
             }
         })
+    }
+
+    private fun checkPermission() {
+        val permission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+
+        } else {
+
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     private fun setUpRecyclerView() {

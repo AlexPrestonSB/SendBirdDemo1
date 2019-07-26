@@ -23,4 +23,6 @@ interface GroupChannelChatPresenter {
     fun refresh()
 
     fun setTypingStatus(typing: Boolean)
+
+    fun shareLocation(context: Context)
 }

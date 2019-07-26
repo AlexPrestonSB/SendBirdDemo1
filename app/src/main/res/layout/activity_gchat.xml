@@ -80,13 +80,22 @@
             android:contentDescription="@string/upload"
             android:src="@drawable/ic_add_black_24dp" />
 
+        <ImageButton
+            android:id="@+id/button_gchat_share"
+            android:layout_width="@dimen/button_upload_size"
+            android:layout_height="@dimen/button_upload_size"
+            android:contentDescription="@string/share"
+            android:layout_toEndOf="@id/button_gchat_upload"
+            android:src="@drawable/share_location"
+            android:background="?attr/selectableItemBackground" />
+
         <EditText
             android:id="@+id/edit_gchat_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toStartOf="@+id/button_gchat_send"
-            android:layout_toEndOf="@+id/button_gchat_upload"
+            android:layout_toEndOf="@+id/button_gchat_share"
             android:background="@android:color/transparent"
             android:hint="@string/hints"
             android:inputType="text"

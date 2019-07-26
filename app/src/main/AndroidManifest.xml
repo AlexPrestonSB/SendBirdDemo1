@@ -8,6 +8,11 @@
 
     <!--READ/WRITE_EXTERNAL_STORAGE permissions are required for upload and download of files. -->
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -20,26 +25,31 @@
         android:icon="@mipmap/sendbird_ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity android:name="com.sendbirdsampleapp.ui.login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.channel.ChannelActivity"></activity>
-        <activity android:name=".ui.group_channel.list_group.GroupChannelActivity"></activity>
-        <activity android:name=".ui.open_channel.OpenChannelActivity"></activity>
-        <activity android:name=".ui.group_channel.create_group.GroupChannelCreateActivity"></activity>
-        <activity android:name=".ui.group_channel.chat_group.GroupChannelChatActivity"></activity>
-        <activity android:name=".util.MediaPlayerActivity"></activity>
-        <activity android:name=".util.PhotoViewerActivity"></activity>
+        <activity android:name=".ui.channel.ChannelActivity"/>
+        <activity android:name=".ui.group_channel.list_group.GroupChannelActivity"/>
+        <activity android:name=".ui.open_channel.OpenChannelActivity"/>
+        <activity android:name=".ui.group_channel.create_group.GroupChannelCreateActivity"/>
+        <activity android:name=".ui.group_channel.chat_group.GroupChannelChatActivity" />
+        <activity android:name=".util.MediaPlayerActivity"/>
+        <activity android:name=".util.PhotoViewerActivity"/>
         <service android:name=".data.firebase.FirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
             </service>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCz8XGJwQ3lErGf0hjYsEg8bVHluuDtais"/>
 
     </application>
 

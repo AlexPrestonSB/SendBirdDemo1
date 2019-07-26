@@ -28,7 +28,7 @@
     <!--Group Channel-->
     <string name="group_channel_create_failed">Failed to create a group channel</string>
     <string name="group_channels">Group Channels</string>
-    
+
     <!--Create Channel-->
     <string name="user_icon">User Icon</string>
     <string name="create">Create</string>
@@ -36,6 +36,7 @@
 
     <!--Chat-->
     <string name="upload">Upload</string>
+    <string name="share">Share Location</string>
     <string name="hints">Enter Message</string>
     <string name="send">SEND</string>
     <string name="date_placeholder">June 10</string>

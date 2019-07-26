@@ -32,5 +32,4 @@ interface GroupChannelChatView {
 
     fun clear()
 
-
 }

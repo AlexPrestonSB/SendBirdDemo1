@@ -25,4 +25,6 @@ object AppConstants {
     internal val VIEW_TYPE_IMAGE_MESSAGE_OTHER = 8
     internal val VIEW_TYPE_FILE_MESSAGE_ME = 9
     internal val VIEW_TYPE_FILE_MESSAGE_OTHER = 10
+    internal val VIEW_TYPE_LOCATION_ME = 11
+    internal val VIEW_TYPE_LOCATION_OTHER = 12
 }
