@@ -651,7 +651,7 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
         private fun setLocation() {
             if (!::map.isInitialized) return
             with(map) {
-                moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 7f))
+                moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11f))
                 addMarker(MarkerOptions().position(latLng))
                 mapType = GoogleMap.MAP_TYPE_NORMAL
             }
@@ -670,9 +670,6 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
         private val timestamp = view.text_gchat_map_timestamp_other
         private val profileImage = view.image_gchat_map_profile_other
         private val username = view.text_gchat_map_user_other
-
-
-
 
 
         /** Initialises the MapView by calling its lifecycle methods */
@@ -718,11 +715,11 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
         private fun setLocation() {
             if (!::map.isInitialized) return
             with(map) {
-                moveCamera(com.google.android.gms.maps.CameraUpdateFactory.newLatLngZoom(latLng, 7f))
+                moveCamera(com.google.android.gms.maps.CameraUpdateFactory.newLatLngZoom(latLng, 11f))
                 addMarker(com.google.android.gms.maps.model.MarkerOptions().position(latLng))
                 mapType = com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL
             }
-            // mapView.onResume()
+            mapView.onResume()
         }
     }
 }

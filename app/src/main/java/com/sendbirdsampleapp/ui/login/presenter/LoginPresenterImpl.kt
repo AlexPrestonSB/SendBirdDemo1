@@ -3,6 +3,7 @@ package com.sendbirdsampleapp.ui.login.presenter
 import android.util.Log
 import com.google.firebase.iid.FirebaseInstanceId
 import com.sendbird.android.SendBird
+import com.sendbird.android.User
 import com.sendbirdsampleapp.data.preferences.AppPreferenceHelper
 import com.sendbirdsampleapp.ui.login.view.LoginView
 import com.sendbirdsampleapp.util.AppConstants
@@ -40,6 +41,7 @@ class LoginPresenterImpl @Inject constructor(private val preferenceHelper: AppPr
     }
 
     private fun connectToSendBird(userId: String, nickname: String) {
+
         SendBird.connect(userId) { user, e ->
             if (e != null) {
                 loginView.showValidationMessage(AppConstants.FAILED_LOGIN)

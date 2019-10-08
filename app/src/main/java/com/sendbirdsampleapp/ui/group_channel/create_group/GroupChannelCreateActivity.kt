@@ -81,13 +81,11 @@ class GroupChannelCreateActivity : AppCompatActivity(), GroupChannelCreateAdapte
         val state = SendBird.getConnectionState()
 
         Thread() {
-            userListQuery.setLimit(100) //TODO change don't use constants
             userListQuery.next() { list, e ->
                 if (e != null) {
                     Log.e(TAG, "Failed to load users")
                 } else {
                     adapter.addUsers(list)
-
                 }
 
             }

@@ -2,7 +2,9 @@ package com.sendbirdsampleapp.util
 
 object AppConstants {
 
-    internal val APP_ID = "B6DCC89A-9D92-4012-B354-CC41A1BAC5DF"
+    internal val APP_ID = "B6DCC89A-9D92-4012-B354-CC41A1BAC5DF" //Kotlin
+    //internal val APP_ID = "0BCCD895-59A5-472F-A086-3BD4D2342DED" //Tokyo
+
 
     internal val CONNECTION_HANDLER_ID = "CONNECTION_HANDLER_GROUP_CHANNEL_LIST"
     internal val CHANNEL_HANDLER_ID = "CHANNEL_HANDLER_GROUP_CHANNEL_CHAT"

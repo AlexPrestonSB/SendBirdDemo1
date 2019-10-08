@@ -56,6 +56,7 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, Grou
         setUpRecyclerView()
 
     }
+    
 
     override fun onResume() {
         super.onResume()
@@ -180,8 +181,8 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, Grou
 
     override fun insert(messages: MutableList<BaseMessage>) {
         edit_gchat_message.setText("")
-        recyclerView.scrollToPosition(0)
         adapter.insert(messages)
+        recyclerView.scrollToPosition(0)
     }
 
     override fun update(messages: MutableList<BaseMessage>) {
@@ -205,7 +206,6 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, Grou
         button_gchat_send.setOnClickListener { presenter.sendMessage(edit_gchat_message.text.toString()) }
         button_gchat_upload.setOnClickListener { presenter.requestMedia() }
         button_gchat_share.setOnClickListener {
-            //checkPermission()
             presenter.shareLocation(this)
         }
 
@@ -224,19 +224,6 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, Grou
         })
     }
 
-    private fun checkPermission() {
-        val permission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
-
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-
-        } else {
-
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    }
 
     private fun setUpRecyclerView() {
         adapter = GroupChannelChatAdapter(this, this)
