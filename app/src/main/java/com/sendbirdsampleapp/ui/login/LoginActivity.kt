@@ -5,6 +5,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.widget.Toast
+import com.google.firebase.iid.FirebaseInstanceId
+import com.sendbird.android.MessageSearchQuery
 import com.sendbird.android.SendBird
 import com.sendbirdsampleapp.BaseApp.Companion.app
 import com.sendbirdsampleapp.BuildConfig
@@ -43,6 +45,7 @@ class LoginActivity : AppCompatActivity(), LoginView {
         )
 
         text_login_version.text = version
+
 
     }
 

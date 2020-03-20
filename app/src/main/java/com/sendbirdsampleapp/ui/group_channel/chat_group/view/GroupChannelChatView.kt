@@ -20,6 +20,8 @@ interface GroupChannelChatView {
 
     fun selectMedia(intent: Intent)
 
+    fun searchMessages(message: MutableList<BaseMessage>)
+
     //SyncManager below
 
     fun insert(messages: MutableList<BaseMessage>)

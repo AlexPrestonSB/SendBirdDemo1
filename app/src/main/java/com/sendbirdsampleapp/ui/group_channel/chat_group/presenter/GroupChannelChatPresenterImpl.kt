@@ -183,6 +183,19 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
         }
     }
 
+    override fun messageSearch(word: String) {
+
+        val query = MessageSearchQuery.Builder().setKeyword(word).setChannelUrl(channelUrl).build()
+
+        query.next { message, sendBirdException ->
+            if (sendBirdException != null) {
+                Log.e("ERROR", sendBirdException.message)
+            }
+            view.clear()
+            view.insert(message)
+        }
+    }
+
     private fun sendMessageWithUrl(text: String, url: String) {
         message = text
         UrlUtil.generateLinkPreviewCallback(url, linkPreviewCallback)

@@ -2,8 +2,11 @@ package com.sendbirdsampleapp.ui.channel
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.sendbird.android.MessageSearchQuery
 import com.sendbird.android.SendBird
+import com.sendbird.android.User
 import com.sendbird.syncmanager.SendBirdSyncManager
 import com.sendbirdsampleapp.BaseApp
 import com.sendbirdsampleapp.BuildConfig
@@ -46,6 +49,7 @@ class ChannelActivity : AppCompatActivity(), ChannelView {
            // SendBirdSyncManager.getInstance().clearCache()
             presenter.logoutPressed()
         }
+
     }
 
     private fun groupChannelPressed() {

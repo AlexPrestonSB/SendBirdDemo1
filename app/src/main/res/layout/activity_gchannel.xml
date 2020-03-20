@@ -40,11 +40,17 @@
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
+    <SearchView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/message_search_channel"
+        app:layout_constraintTop_toBottomOf="@+id/layout_gchannel"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_group_channels"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/layout_gchannel">
+        app:layout_constraintTop_toBottomOf="@+id/message_search_channel">
 
     </androidx.recyclerview.widget.RecyclerView>
 

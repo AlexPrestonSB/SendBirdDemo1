@@ -44,7 +44,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     //SendBird
-    implementation 'com.sendbird.sdk:sendbird-android-sdk:3.0.96'
+    implementation 'com.sendbird.sdk:sendbird-android-sdk:3.0.118'
     implementation 'com.sendbird.sdk:sendbird-syncmanager:1.1.2'
 
 

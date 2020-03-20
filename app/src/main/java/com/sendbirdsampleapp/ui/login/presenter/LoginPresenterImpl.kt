@@ -40,22 +40,25 @@ class LoginPresenterImpl @Inject constructor(private val preferenceHelper: AppPr
     }
 
     private fun connectToSendBird(userId: String, nickname: String) {
-        SendBird.connect(userId) { user, e ->
-            if (e != null) {
-                loginView.showValidationMessage(AppConstants.FAILED_LOGIN)
-                Log.e(AppConstants.FAILED_LOGIN.toString(), "Failed Login")
-            } else {
 
-                FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener {
-                    if (!it.isSuccessful) {
-                        loginView.showValidationMessage(AppConstants.FAILED_FIREBASE_CONNECTION)
-                        return@addOnCompleteListener
+        Thread {
+            SendBird.connect(userId) { user, e ->
+                if (e != null) {
+                    loginView.showValidationMessage(AppConstants.FAILED_LOGIN)
+                    Log.e(AppConstants.FAILED_LOGIN.toString(), e.localizedMessage)
+                } else {
+
+                    FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener {
+                        if (!it.isSuccessful) {
+                            loginView.showValidationMessage(AppConstants.FAILED_FIREBASE_CONNECTION)
+                            return@addOnCompleteListener
+                        }
+                        updateCurrentUserInfo(userId, nickname, it.result?.token)
+                        loginView.navigateToChannels()
                     }
-                    updateCurrentUserInfo(userId, nickname, it.result?.token)
-                    loginView.navigateToChannels()
                 }
             }
-        }
+        }.start()
     }
 
     private fun updateCurrentUserInfo(userId: String, nickname: String, token: String?) {

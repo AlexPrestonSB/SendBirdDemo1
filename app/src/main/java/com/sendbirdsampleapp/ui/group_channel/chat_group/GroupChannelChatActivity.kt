@@ -175,6 +175,11 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, Grou
         }
     }
 
+    override fun searchMessages(message: MutableList<BaseMessage>) {
+        adapter.insert(message)
+
+    }
+
     override fun insert(messages: MutableList<BaseMessage>) {
         edit_gchat_message.setText("")
         recyclerView.scrollToPosition(0)
@@ -201,6 +206,7 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, Grou
         button_gchat_back.setOnClickListener { presenter.backPressed() }
         button_gchat_send.setOnClickListener { presenter.sendMessage(edit_gchat_message.text.toString()) }
         button_gchat_upload.setOnClickListener { presenter.requestMedia() }
+        search_button_messages.setOnClickListener { presenter.messageSearch(message_search_messages.text.toString()) }
 
         edit_gchat_message.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
