@@ -48,6 +48,8 @@ class GroupChannelActivity : AppCompatActivity(), GroupChannelView, GroupChannel
 
         button_gchannel_back.setOnClickListener { presenter.backPressed()}
 
+        presenter.setUpRecyclerView()
+
     }
 
     override fun onResume() {
@@ -85,22 +87,6 @@ class GroupChannelActivity : AppCompatActivity(), GroupChannelView, GroupChannel
         runOnUiThread{
             adapter.addChannels(channels)
         }
-    }
-
-    override fun updateChannels(channels: MutableList<GroupChannel>) {
-        adapter.updateChannels(channels)
-    }
-
-    override fun removeChannels(channels: MutableList<GroupChannel>) {
-       adapter.removeChannels(channels)
-    }
-
-    override fun insertChannels(channels: MutableList<GroupChannel>, order: GroupChannelListQuery.Order) {
-        adapter.insertChannels(channels, order)
-    }
-
-    override fun moveChannels(channels: MutableList<GroupChannel>, order: GroupChannelListQuery.Order) {
-        adapter.moveChannels(channels, order)
     }
 
     override fun clearChannels() {

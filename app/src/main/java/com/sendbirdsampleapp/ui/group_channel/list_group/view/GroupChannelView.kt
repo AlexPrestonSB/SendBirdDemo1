@@ -14,14 +14,6 @@ interface GroupChannelView {
 
     fun setUserChannels(channels: MutableList<GroupChannel>)
 
-    fun updateChannels(channels: MutableList<GroupChannel>)
-
-    fun removeChannels(channels: MutableList<GroupChannel>)
-
-    fun insertChannels(channels: MutableList<GroupChannel>, order: GroupChannelListQuery.Order)
-
-    fun moveChannels(channels: MutableList<GroupChannel>, order: GroupChannelListQuery.Order)
-
     fun clearChannels()
 
 

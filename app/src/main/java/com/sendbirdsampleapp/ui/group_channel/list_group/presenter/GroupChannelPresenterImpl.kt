@@ -24,7 +24,6 @@ class GroupChannelPresenterImpl @Inject constructor(private val preferenceHelper
 
 
     private lateinit var view: GroupChannelView
-    private var channelCollection: ChannelCollection? = null
     private lateinit var context: Context
 
     override fun setView(groupView: GroupChannelView) {
@@ -39,99 +38,29 @@ class GroupChannelPresenterImpl @Inject constructor(private val preferenceHelper
         view.backPressed()
     }
 
-    override fun refresh() {
-        refreshChannelList(CHANNEL_LIST_LIMIT)
-    }
 
     override fun onResume(context: Context) {
         this.context = context
-        val userId = preferenceHelper.getUserId()
+    }
 
-        SendBirdSyncManager.setup(context, userId) {
+    override fun setUpRecyclerView() {
+        val query = GroupChannel.createMyGroupChannelListQuery()
+        query.limit = CHANNEL_LIST_LIMIT
+        query.order = GroupChannelListQuery.Order.CHRONOLOGICAL
 
-            val s = SendBird.getConnectionState()
-            // (context as BaseApp).setSyncManagerSetUp(true)
-            (context as Activity).runOnUiThread {
-                if (SendBird.getConnectionState() != SendBird.ConnectionState.OPEN) {
-                    refresh()
-                }
-                ConnectionUtil.addConnectionManagementHandler(
-                    AppConstants.CONNECTION_HANDLER_ID,
-                    userId,
-                    object : ConnectionUtil.ConnectionManagementHandler {
-                        override fun onConnected(connected: Boolean) {
-                            refresh()
-                        }
-                    })
+        query.next() {channels, e ->
+
+            if (e != null) {
+                Log.e("TAG", e.toString())
             }
 
+            view.setUserChannels(channels)
         }
     }
 
     override fun onPause() {
         ConnectionUtil.removeConnectionManagementHandler(AppConstants.CONNECTION_HANDLER_ID)
 
-        if (channelCollection != null) {
-            channelCollection!!.setCollectionHandler(null)
-            channelCollection!!.remove()
-        }
-
     }
-
-    private fun refreshChannelList(numChannels: Int) {
-
-        if (channelCollection != null) {
-            channelCollection!!.remove()
-        }
-
-        val query = GroupChannel.createMyGroupChannelListQuery()
-        query.limit = numChannels
-        query.order = GroupChannelListQuery.Order.CHRONOLOGICAL
-
-        channelCollection = ChannelCollection(query)
-        channelCollection!!.setCollectionHandler(channelCollectionHandler)
-        channelCollection!!.fetch() {
-            if (it == null) {
-                Log.d("TAG", "Working")
-            } else {
-                val s = it.code
-                val sd = it.localizedMessage
-            }
-        }
-
-    }
-
-    private val channelCollectionHandler =
-        ChannelCollectionHandler { channelCollection, channelList, channelEventAction ->
-            Log.d("SyncManager", "onChannelEvent: size = " + channelList.size + ", action = " + channelEventAction)
-
-            (context as Activity).runOnUiThread() {
-                when (channelEventAction) {
-                    ChannelEventAction.INSERT -> {
-                        //view.setUserChannels(channelList)
-                        view.insertChannels(channelList, channelCollection.query.order)
-                    }
-                    ChannelEventAction.UPDATE -> {
-                        view.updateChannels(channelList)
-
-                    }
-                    ChannelEventAction.REMOVE -> {
-                        view.removeChannels(channelList)
-
-                    }
-                    ChannelEventAction.MOVE -> {
-                        view.moveChannels(channelList, channelCollection.query.order)
-
-                    }
-                    ChannelEventAction.CLEAR -> {
-                        view.clearChannels()
-
-                    }
-                    else -> {
-
-                    }
-                }
-            }
-        }
 
 }

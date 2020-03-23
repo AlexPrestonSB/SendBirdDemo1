@@ -11,12 +11,10 @@ interface GroupChannelPresenter {
 
     fun backPressed()
 
-    //fun setUpRecyclerView()
+    fun setUpRecyclerView()
 
     fun onResume(context: Context)
 
     fun onPause()
-
-    fun refresh()
 
 }
