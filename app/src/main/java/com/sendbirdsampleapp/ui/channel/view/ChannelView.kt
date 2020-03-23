@@ -4,8 +4,6 @@ interface ChannelView {
 
     fun navigateToGroupChannels()
 
-    fun navigateToOpenChannels()
-
     fun showValidationMessage(errorCode: Int)
 
     fun logoutPressed()

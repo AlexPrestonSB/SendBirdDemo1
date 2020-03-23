@@ -19,11 +19,6 @@ class ChannelPresenterImpl@Inject constructor(private val preferenceHelper: AppP
     override fun navigateToGroupChannels() {
         channelView.navigateToGroupChannels()
     }
-
-    override fun navigateToOpenChannels() {
-        channelView.navigateToOpenChannels()
-    }
-
     override fun logoutPressed() {
         SendBird.disconnect {
             PushUtil.unregisterPushTokenForCurrentUser(preferenceHelper.getToken(), null)

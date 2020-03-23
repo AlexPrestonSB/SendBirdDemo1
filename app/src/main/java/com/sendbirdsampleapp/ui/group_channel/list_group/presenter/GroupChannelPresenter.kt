@@ -13,6 +13,10 @@ interface GroupChannelPresenter {
 
     fun setUpRecyclerView()
 
+    fun clearSearch()
+
+    fun searchMessages(word: String)
+
     fun onResume(context: Context)
 
     fun onPause()

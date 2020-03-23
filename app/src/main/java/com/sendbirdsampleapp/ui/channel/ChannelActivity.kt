@@ -36,7 +36,6 @@ class ChannelActivity : AppCompatActivity(), ChannelView {
 
 
         text_channel_group.setOnClickListener { groupChannelPressed() }
-        text_channel_open.setOnClickListener { openChannelPressed() }
 
         val version = String.format(
             resources.getString(R.string.sample_version),
@@ -56,9 +55,6 @@ class ChannelActivity : AppCompatActivity(), ChannelView {
         presenter.navigateToGroupChannels()
     }
 
-    private fun openChannelPressed() {
-        presenter.navigateToOpenChannels()
-    }
 
     override fun logoutPressed() {
         val intent = Intent(this, LoginActivity::class.java)
@@ -69,9 +65,6 @@ class ChannelActivity : AppCompatActivity(), ChannelView {
         startActivity(Intent(this, GroupChannelActivity::class.java))
     }
 
-    override fun navigateToOpenChannels() {
-        startActivity(Intent(this, OpenChannelActivity::class.java))
-    }
 
     override fun showValidationMessage(errorCode: Int) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.

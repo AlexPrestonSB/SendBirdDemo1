@@ -16,5 +16,7 @@ interface GroupChannelView {
 
     fun clearChannels()
 
+    fun displaySearchResults(channels: MutableList<GroupChannel>)
+
 
 }

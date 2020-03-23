@@ -15,6 +15,7 @@ import com.sendbirdsampleapp.data.preferences.AppPreferenceHelper
 import com.sendbirdsampleapp.ui.group_channel.list_group.view.GroupChannelView
 import com.sendbirdsampleapp.util.AppConstants
 import com.sendbirdsampleapp.util.ConnectionUtil
+import java.util.ArrayList
 import javax.inject.Inject
 
 class GroupChannelPresenterImpl @Inject constructor(private val preferenceHelper: AppPreferenceHelper) :
@@ -46,9 +47,9 @@ class GroupChannelPresenterImpl @Inject constructor(private val preferenceHelper
     override fun setUpRecyclerView() {
         val query = GroupChannel.createMyGroupChannelListQuery()
         query.limit = CHANNEL_LIST_LIMIT
-        query.order = GroupChannelListQuery.Order.CHRONOLOGICAL
+        query.order = GroupChannelListQuery.Order.LATEST_LAST_MESSAGE
 
-        query.next() {channels, e ->
+        query.next() { channels, e ->
 
             if (e != null) {
                 Log.e("TAG", e.toString())
@@ -60,7 +61,39 @@ class GroupChannelPresenterImpl @Inject constructor(private val preferenceHelper
 
     override fun onPause() {
         ConnectionUtil.removeConnectionManagementHandler(AppConstants.CONNECTION_HANDLER_ID)
-
     }
 
+    override fun searchMessages(word: String) {
+
+        val query = MessageSearchQuery.Builder().setKeyword(word).build()
+
+        query.next { message, sendBirdException ->
+            if (sendBirdException != null) {
+                Log.e("ERROR", sendBirdException.message)
+            }
+            getChannelList(message)
+        }
+    }
+
+    override fun clearSearch() {
+        view.clearChannels()
+        setUpRecyclerView()
+    }
+
+    private fun getChannelList(results: MutableList<BaseMessage>) {
+        var channels: MutableList<GroupChannel>
+        channels = ArrayList()
+
+        for (result in results) {
+            GroupChannel.getChannel(result.channelUrl) { groupChannel, exception ->
+
+                if (exception != null) {
+                    Log.e("TAG", exception.toString())
+                }
+                channels.add(groupChannel)
+            }
+        }
+
+        view.displaySearchResults(channels)
+    }
 }

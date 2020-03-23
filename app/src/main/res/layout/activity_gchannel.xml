@@ -40,17 +40,43 @@
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <SearchView
+    <RelativeLayout
+        android:id="@+id/search_bar_channels"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/message_search_channel"
-        app:layout_constraintTop_toBottomOf="@+id/layout_gchannel"/>
+        app:layout_constraintTop_toBottomOf="@+id/layout_gchannel">
+
+        <ImageButton
+            android:id="@+id/search_button_channels"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/search_icon" />
+
+        <EditText
+            android:id="@+id/message_search_channels"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_toStartOf="@+id/search_button_channels"
+            android:hint="Search"
+            android:layout_toEndOf="@id/clear_search_channels"/>
+
+        <ImageButton
+            android:src="@drawable/clear_icon"
+            android:layout_alignParentStart="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/clear_search_channels"
+            />
+
+    </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_group_channels"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/message_search_channel">
+        app:layout_constraintTop_toBottomOf="@+id/search_bar_channels">
 
     </androidx.recyclerview.widget.RecyclerView>
 

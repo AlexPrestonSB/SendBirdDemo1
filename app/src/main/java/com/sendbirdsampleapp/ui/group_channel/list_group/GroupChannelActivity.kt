@@ -16,9 +16,11 @@ import com.sendbirdsampleapp.ui.group_channel.list_group.presenter.GroupChannelP
 import com.sendbirdsampleapp.ui.group_channel.list_group.view.GroupChannelView
 import com.sendbirdsampleapp.ui.group_channel.chat_group.GroupChannelChatActivity
 import kotlinx.android.synthetic.main.activity_gchannel.*
+import kotlinx.android.synthetic.main.activity_gchat.*
 import javax.inject.Inject
 
-class GroupChannelActivity : AppCompatActivity(), GroupChannelView, GroupChannelListAdapter.OnChannelClickedListener {
+class GroupChannelActivity : AppCompatActivity(), GroupChannelView,
+    GroupChannelListAdapter.OnChannelClickedListener {
 
     private val TAG = "GROUP_CHANNEL_ACTIVITY"
     private val EXTRA_CHANNEL_URL = "EXTRA_CHANNEL_URL"
@@ -44,10 +46,7 @@ class GroupChannelActivity : AppCompatActivity(), GroupChannelView, GroupChannel
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        fab_group_channel_create.setOnClickListener { presenter.createGroupPressed() }
-
-        button_gchannel_back.setOnClickListener { presenter.backPressed()}
-
+        setListeners()
         presenter.setUpRecyclerView()
 
     }
@@ -67,6 +66,10 @@ class GroupChannelActivity : AppCompatActivity(), GroupChannelView, GroupChannel
         startActivity(intent)
     }
 
+    override fun displaySearchResults(channels: MutableList<GroupChannel>) {
+        adapter.addChannels(channels)
+    }
+
     override fun showValidationMessage(errorCode: Int) {
 
     }
@@ -84,12 +87,25 @@ class GroupChannelActivity : AppCompatActivity(), GroupChannelView, GroupChannel
     }
 
     override fun setUserChannels(channels: MutableList<GroupChannel>) {
-        runOnUiThread{
+        runOnUiThread {
             adapter.addChannels(channels)
         }
     }
 
     override fun clearChannels() {
-       adapter.clearChannels()
+        message_search_channels.text.clear()
+        adapter.clearChannels()
+    }
+
+    private fun setListeners() {
+        fab_group_channel_create.setOnClickListener { presenter.createGroupPressed() }
+        button_gchannel_back.setOnClickListener { presenter.backPressed() }
+        search_button_channels.setOnClickListener {
+
+            if (!message_search_channels.text.isEmpty()) {
+                presenter.searchMessages(message_search_channels.text.toString())
+            }
+        }
+        clear_search_channels.setOnClickListener { presenter.clearSearch() }
     }
 }
