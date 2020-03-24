@@ -62,41 +62,9 @@ class GroupChannelChatAdapter(context: Context, listener: OnItemClickListener) :
         notifyDataSetChanged()
     }
 
-    fun insert(messageList: MutableList<BaseMessage>) {
-        for (message in messageList) {
-            val index = SyncManagerUtil.findIndexOfMessage(messages, message)
-            this.messages.add(index, message)
-            notifyItemInserted(index)
-        }
-    }
-
-    fun update(messageList: MutableList<BaseMessage>) {
-        for (message in messageList) {
-            val index = SyncManagerUtil.findIndexOfMessage(messages, message)
-            if (index != -1) {
-                this.messages.add(index, message)
-                notifyItemChanged(index)
-            }
-        }
-    }
-
-    fun remove(messageList: MutableList<BaseMessage>) {
-        for (message in messageList) {
-            val index = SyncManagerUtil.findIndexOfMessage(messages, message)
-            if (index != -1) {
-                this.messages.removeAt(index)
-                notifyItemRemoved(index)
-            }
-        }
-    }
-
     fun clear() {
         messages.clear()
         notifyDataSetChanged()
-    }
-
-    fun markAsRead() {
-
     }
 
     override fun onCreateViewHolder(

@@ -175,30 +175,24 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, Grou
         }
     }
 
-    override fun searchMessages(message: MutableList<BaseMessage>) {
-        adapter.insert(message)
+    override fun searchMessages(messages: MutableList<BaseMessage>) {
+        adapter.loadMessages(messages)
 
     }
 
-    override fun insert(messages: MutableList<BaseMessage>) {
-        edit_gchat_message.setText("")
+    override fun addFirst(message: BaseMessage) {
+        adapter.addFirst(message)
+        edit_gchat_message.text.clear()
+    }
+
+    override fun loadMessages(messages: MutableList<BaseMessage>) {
+        adapter.loadMessages(messages)
         recyclerView.scrollToPosition(0)
-        adapter.insert(messages)
-    }
 
-    override fun update(messages: MutableList<BaseMessage>) {
-        adapter.update(messages)
-    }
-
-    override fun remove(messages: MutableList<BaseMessage>) {
-        adapter.remove(messages)
-    }
-
-    override fun markAllRead() {
-        adapter.markAsRead()
     }
 
     override fun clear() {
+        message_search_messages.text.clear()
         adapter.clear()
     }
 
@@ -206,7 +200,15 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, Grou
         button_gchat_back.setOnClickListener { presenter.backPressed() }
         button_gchat_send.setOnClickListener { presenter.sendMessage(edit_gchat_message.text.toString()) }
         button_gchat_upload.setOnClickListener { presenter.requestMedia() }
-        search_button_messages.setOnClickListener { presenter.messageSearch(message_search_messages.text.toString()) }
+
+        clear_search_messages.setOnClickListener {
+            presenter.clear()
+        }
+        search_button_messages.setOnClickListener {
+            if (message_search_messages.text.isNotEmpty()) {
+                presenter.messageSearch(message_search_messages.text.toString())
+            }
+        }
 
         edit_gchat_message.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}

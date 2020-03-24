@@ -1,6 +1,5 @@
 package com.sendbirdsampleapp.ui.group_channel.chat_group.presenter
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -8,11 +7,6 @@ import android.util.Log
 import com.leocardz.link.preview.library.LinkPreviewCallback
 import com.leocardz.link.preview.library.SourceContent
 import com.sendbird.android.*
-import com.sendbird.syncmanager.MessageCollection
-import com.sendbird.syncmanager.MessageEventAction
-import com.sendbird.syncmanager.MessageFilter
-import com.sendbird.syncmanager.SendBirdSyncManager
-import com.sendbird.syncmanager.handler.MessageCollectionHandler
 import com.sendbirdsampleapp.data.preferences.AppPreferenceHelper
 import com.sendbirdsampleapp.ui.group_channel.chat_group.view.GroupChannelChatView
 import com.sendbirdsampleapp.util.*
@@ -29,9 +23,6 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
 
     private var channel: GroupChannel? = null
 
-    private var messageCollection: MessageCollection? = null
-    private val messageFilter = MessageFilter(BaseChannel.MessageTypeFilter.ALL, null, null)
-
     override fun setView(view: GroupChannelChatView) {
         this.view = view
     }
@@ -45,7 +36,7 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
                 if (sendBirdException != null) {
                     view.showValidationMessage(1)
                 } else {
-                    messageCollection?.appendMessage(userMessage as BaseMessage)
+                    view.addFirst(userMessage as BaseMessage)
                 }
             }
         }
@@ -89,8 +80,8 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
                     if (exception != null) {
                         view.showValidationMessage(1)
                     } else {
-                        messageCollection?.appendMessage(fileMessage as BaseMessage)
-
+                        //Send Message
+                        view.addFirst(fileMessage as BaseMessage)
                     }
                 }
 
@@ -106,26 +97,14 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
     override fun onResume(context: Context, channelUrl: String) {
 
         this.context = context
-        val userId = preferenceHelper.getUserId()
         this.channelUrl = channelUrl
 
-        SendBirdSyncManager.setup(context, userId) {
-
-            (context as Activity).runOnUiThread {
-                if (!SendBird.getConnectionState().equals(SendBird.ConnectionState.OPEN)) {
-                    refresh()
-                }
-                createMessageCollection(channelUrl)
-                ConnectionUtil.addConnectionManagementHandler(
-                    AppConstants.CONNECTION_HANDLER_ID,
-                    userId,
-                    object : ConnectionUtil.ConnectionManagementHandler {
-                        override fun onConnected(connected: Boolean) {
-                            refresh()
-                        }
-                    })
+        GroupChannel.getChannel(channelUrl) {groupChannel, sendBirdException ->
+            if (sendBirdException != null) {
+                Log.e("TAG", sendBirdException.toString())
             }
-
+            this.channel = groupChannel
+            loadMessages()
         }
 
         SendBird.addChannelHandler(AppConstants.CHANNEL_HANDLER_ID, object : SendBird.ChannelHandler() {
@@ -142,6 +121,7 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
                 }
             }
         })
+
     }
 
 
@@ -151,23 +131,6 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
     }
 
     override fun refresh() {
-        if (channel != null) {
-            channel!!.refresh {
-                if (it != null) {
-                    it.printStackTrace() // ADD MORE error handling
-                    return@refresh
-                }
-                //TODO update UI components
-            }
-
-            if (messageCollection != null) {
-                messageCollection!!.fetch(MessageCollection.Direction.NEXT, null)
-            }
-
-        } else {
-            createMessageCollection(channelUrl)
-        }
-
 
     }
 
@@ -183,18 +146,47 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
         }
     }
 
+    override fun loadMessages() {
+        val query = channel!!.createPreviousMessageListQuery()
+
+        query.load(30, true) { messages, sendBirdException ->
+            if (sendBirdException != null) {
+                Log.e("TAG", sendBirdException.toString())
+            }
+            view.loadMessages(messages)
+        }
+
+    }
+
+    override fun clear() {
+        view.clear()
+        loadMessages()
+    }
+
     override fun messageSearch(word: String) {
 
         val query = MessageSearchQuery.Builder().setKeyword(word).setChannelUrl(channelUrl).build()
 
-        query.next { message, sendBirdException ->
+        query.next { messages, sendBirdException ->
             if (sendBirdException != null) {
                 Log.e("ERROR", sendBirdException.message)
             }
-            view.clear()
-            view.insert(message)
+            getSearchedMessage(messages)
         }
     }
+
+    private fun getSearchedMessage(results: MutableList<BaseMessage>) {
+
+        channel!!.getNextMessagesById(results[0].messageId, true, 30, true, BaseChannel.MessageTypeFilter.ALL, "") { messages, sendBirdException ->
+
+            if (sendBirdException != null) {
+                Log.e("TAG", sendBirdException.toString())
+            }
+
+            view.loadMessages(messages)
+        }
+    }
+
 
     private fun sendMessageWithUrl(text: String, url: String) {
         message = text
@@ -215,7 +207,7 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
                             view.showValidationMessage(1)
                         } else {
 
-                            messageCollection?.appendMessage(userMessage as BaseMessage)
+                            view.addFirst(userMessage as BaseMessage)
 
                         }
                     }
@@ -238,79 +230,4 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
         }
     }
 
-    private fun createMessageCollection(channelUrl: String) {
-        if (SendBird.getConnectionState() != SendBird.ConnectionState.OPEN) {
-            MessageCollection.create(channelUrl, messageFilter, Long.MAX_VALUE) { collection, e ->
-                if (e == null) {
-                    if (messageCollection == null) {
-                        messageCollection = collection
-                        messageCollection?.setCollectionHandler(messageCollectionHandler)
-                        channel = messageCollection?.channel
-
-                        messageCollection?.fetch(MessageCollection.Direction.PREVIOUS) {
-                            if (it != null) {
-                                return@fetch
-                            }
-
-                            (context as Activity).runOnUiThread() {
-                                view.markAllRead()
-                            }
-                        }
-                    }
-                }
-            }
-        } else {
-            GroupChannel.getChannel(channelUrl) { groupChannel, e ->
-                if (e == null) {
-                    channel = groupChannel
-
-                    if (messageCollection == null) {
-                        messageCollection = MessageCollection(groupChannel, messageFilter, Long.MAX_VALUE)
-                        messageCollection?.setCollectionHandler(messageCollectionHandler)
-
-                        messageCollection?.fetch(MessageCollection.Direction.PREVIOUS) {
-                            if (it != null) {
-                                return@fetch
-                            }
-                            (context as Activity).runOnUiThread() {
-                                view.markAllRead()
-                            }
-                        }
-                    }
-                }
-
-            }
-        }
-    }
-
-
-    private val messageCollectionHandler = MessageCollectionHandler { collection, messages, action ->
-        Log.d("SyncManager", "onMessageEvent: size = " + messages.size + ", action = " + action)
-
-        (context as Activity).runOnUiThread() {
-            when (action) {
-                MessageEventAction.INSERT -> {
-                    val title = channel!!.members[0].nickname + ", " +  channel!!.members[1].nickname + "..."
-                    view.displayChatTitle(title)
-                    view.insert(messages)
-                    view.markAllRead()
-                }
-                MessageEventAction.REMOVE -> {
-                    view.remove(messages)
-
-                }
-                MessageEventAction.UPDATE -> {
-                    view.update(messages)
-
-                }
-                MessageEventAction.CLEAR -> {
-                    view.clear()
-                }
-                else -> {
-                    view.showValidationMessage(1)
-                }
-            }
-        }
-
-    }
 }

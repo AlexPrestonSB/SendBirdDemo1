@@ -81,8 +81,10 @@ class GroupChannelPresenterImpl @Inject constructor(private val preferenceHelper
     }
 
     private fun getChannelList(results: MutableList<BaseMessage>) {
-        var channels: MutableList<GroupChannel>
+        val channels: MutableList<GroupChannel>
         channels = ArrayList()
+
+        val channelUrl: HashMap<String,GroupChannel> = HashMap()
 
         for (result in results) {
             GroupChannel.getChannel(result.channelUrl) { groupChannel, exception ->
@@ -90,7 +92,10 @@ class GroupChannelPresenterImpl @Inject constructor(private val preferenceHelper
                 if (exception != null) {
                     Log.e("TAG", exception.toString())
                 }
-                channels.add(groupChannel)
+                if (!channelUrl.containsKey(groupChannel.url)) {
+                    channelUrl.put(groupChannel.url, groupChannel)
+                    channels.add(groupChannel)
+                }
             }
         }
 

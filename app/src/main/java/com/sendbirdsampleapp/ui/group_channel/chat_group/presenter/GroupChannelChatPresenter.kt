@@ -25,4 +25,9 @@ interface GroupChannelChatPresenter {
     fun setTypingStatus(typing: Boolean)
 
     fun messageSearch(string: String)
+
+    fun loadMessages()
+
+    fun clear()
+
 }
