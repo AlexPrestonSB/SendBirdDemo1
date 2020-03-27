@@ -153,7 +153,7 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
             if (sendBirdException != null) {
                 Log.e("TAG", sendBirdException.toString())
             }
-            view.loadMessages(messages)
+            view.loadMessages(messages, false)
         }
 
     }
@@ -177,13 +177,23 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
 
     private fun getSearchedMessage(results: MutableList<BaseMessage>) {
 
-        channel!!.getNextMessagesById(results[0].messageId, true, 30, true, BaseChannel.MessageTypeFilter.ALL, "") { messages, sendBirdException ->
+        if (results.size > 0) {
 
-            if (sendBirdException != null) {
-                Log.e("TAG", sendBirdException.toString())
+            channel!!.getNextMessagesById(
+                results[0].messageId,
+                true,
+                30,
+                true,
+                BaseChannel.MessageTypeFilter.ALL,
+                ""
+            ) { messages, sendBirdException ->
+
+                if (sendBirdException != null) {
+                    Log.e("TAG", sendBirdException.toString())
+                }
+
+                view.loadMessages(messages, true)
             }
-
-            view.loadMessages(messages)
         }
     }
 

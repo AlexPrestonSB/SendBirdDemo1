@@ -28,7 +28,8 @@ import org.json.JSONException
 import org.json.JSONObject
 import javax.inject.Inject
 
-class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, GroupChannelChatAdapter.OnItemClickListener {
+class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView,
+    GroupChannelChatAdapter.OnItemClickListener {
 
     private val EXTRA_CHANNEL_URL = "EXTRA_CHANNEL_URL"
     private val INTENT_REQUEST_CHOOSE_MEDIA = 301
@@ -66,7 +67,6 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, Grou
     }
 
 
-
     override fun typingIndicator(message: String) {
         recyclerView.scrollToPosition(0)
         if (message != "") {
@@ -94,11 +94,13 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, Grou
     }
 
     override fun displayPushNotification(message: UserMessage, channelUrl: String?) {
-        val notificationManager = this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager =
+            this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         val CHANNEL_ID = "CHANNEL_ID"
         if (Build.VERSION.SDK_INT >= 26) {
-            val channel = NotificationChannel(CHANNEL_ID, "CHANNEL_NAME", NotificationManager.IMPORTANCE_HIGH)
+            val channel =
+                NotificationChannel(CHANNEL_ID, "CHANNEL_NAME", NotificationManager.IMPORTANCE_HIGH)
             notificationManager.createNotificationChannel(channel)
         }
 
@@ -106,13 +108,19 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, Grou
         intent.putExtra(EXTRA_CHANNEL_URL, channelUrl)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
-        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent =
+            PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val builder = NotificationCompat
             .Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.img_notification)
             .setColor(Color.parseColor("#7469C4"))
-            .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.img_notification_large))
+            .setLargeIcon(
+                BitmapFactory.decodeResource(
+                    this.resources,
+                    R.drawable.img_notification_large
+                )
+            )
             .setContentTitle(this.resources.getString(R.string.app_name))
             .setAutoCancel(true)
             .setPriority(Notification.PRIORITY_MAX)
@@ -125,7 +133,10 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, Grou
     }
 
     override fun selectMedia(intent: Intent) {
-        startActivityForResult(Intent.createChooser(intent, "Select Media"), INTENT_REQUEST_CHOOSE_MEDIA)
+        startActivityForResult(
+            Intent.createChooser(intent, "Select Media"),
+            INTENT_REQUEST_CHOOSE_MEDIA
+        )
         SendBird.setAutoBackgroundDetection(false)
     }
 
@@ -185,9 +196,13 @@ class GroupChannelChatActivity : AppCompatActivity(), GroupChannelChatView, Grou
         edit_gchat_message.text.clear()
     }
 
-    override fun loadMessages(messages: MutableList<BaseMessage>) {
+    override fun loadMessages(messages: MutableList<BaseMessage>, search: Boolean) {
         adapter.loadMessages(messages)
-        recyclerView.scrollToPosition(0)
+        if (!search) {
+            recyclerView.scrollToPosition(0)
+        } else {
+            recyclerView.scrollToPosition(messages.size)
+        }
 
     }
 

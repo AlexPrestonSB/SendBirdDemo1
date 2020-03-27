@@ -24,7 +24,7 @@ interface GroupChannelChatView {
 
     fun addFirst(message: BaseMessage)
 
-    fun loadMessages(messages: MutableList<BaseMessage>)
+    fun loadMessages(messages: MutableList<BaseMessage>, search: Boolean)
 
     fun clear()
 
