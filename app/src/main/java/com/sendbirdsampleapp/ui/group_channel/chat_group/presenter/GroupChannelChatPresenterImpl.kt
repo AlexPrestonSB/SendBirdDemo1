@@ -7,19 +7,21 @@ import android.content.Intent
 import android.location.LocationManager
 import android.net.Uri
 import android.util.Log
+import android.view.View
 import com.leocardz.link.preview.library.LinkPreviewCallback
 import com.leocardz.link.preview.library.SourceContent
 import com.sendbird.android.*
-import com.sendbird.syncmanager.MessageCollection
-import com.sendbird.syncmanager.MessageEventAction
-import com.sendbird.syncmanager.MessageFilter
-import com.sendbird.syncmanager.SendBirdSyncManager
+import com.sendbird.syncmanager.*
 import com.sendbird.syncmanager.handler.MessageCollectionHandler
 import com.sendbirdsampleapp.data.preferences.AppPreferenceHelper
 import com.sendbirdsampleapp.ui.group_channel.chat_group.view.GroupChannelChatView
-import com.sendbirdsampleapp.util.*
+import com.sendbirdsampleapp.util.AppConstants
+import com.sendbirdsampleapp.util.ConnectionUtil
+import com.sendbirdsampleapp.util.FileUtil
+import com.sendbirdsampleapp.util.UrlUtil
 import java.io.File
 import javax.inject.Inject
+
 
 class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHelper: AppPreferenceHelper) :
     GroupChannelChatPresenter {
@@ -97,7 +99,11 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
                     }
                 }
 
-                override fun onProgress(bytesSent: Int, totalBytesSent: Int, totalBytesToSend: Int) {
+                override fun onProgress(
+                    bytesSent: Int,
+                    totalBytesSent: Int,
+                    totalBytesToSend: Int
+                ) {
                     //TODO when you have it
                 }
             }
@@ -131,20 +137,25 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
 
         }
 
-        SendBird.addChannelHandler(AppConstants.CHANNEL_HANDLER_ID, object : SendBird.ChannelHandler() {
-            override fun onMessageReceived(baseChannel: BaseChannel?, baseMessage: BaseMessage?) {
-                if (!baseChannel?.url.equals(channelUrl)) {
-                    view.displayPushNotification(baseMessage as UserMessage, baseChannel?.url)
+        SendBird.addChannelHandler(
+            AppConstants.CHANNEL_HANDLER_ID,
+            object : SendBird.ChannelHandler() {
+                override fun onMessageReceived(
+                    baseChannel: BaseChannel?,
+                    baseMessage: BaseMessage?
+                ) {
+                    if (!baseChannel?.url.equals(channelUrl)) {
+                        view.displayPushNotification(baseMessage as UserMessage, baseChannel?.url)
+                    }
                 }
-            }
 
-            override fun onTypingStatusUpdated(channel: GroupChannel?) {
-                if (channel?.url.equals(channelUrl)) {
-                    val typingUsers = channel?.typingMembers
-                    view.typingIndicator(preparedMessage(typingUsers as MutableList<Member>))
+                override fun onTypingStatusUpdated(channel: GroupChannel?) {
+                    if (channel?.url.equals(channelUrl)) {
+                        val typingUsers = channel?.typingMembers
+                        view.typingIndicator(preparedMessage(typingUsers as MutableList<Member>))
+                    }
                 }
-            }
-        })
+            })
     }
 
 
@@ -227,7 +238,12 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
             if (!isNull) {
                 val urlInfo = UrlUtil.parseContent(sourceContent!!)
                 if (channel != null) {
-                    channel!!.sendUserMessage(message, urlInfo.toJsonString(), "url_preview", null) { userMessage, e ->
+                    channel!!.sendUserMessage(
+                        message,
+                        urlInfo.toJsonString(),
+                        "url_preview",
+                        null
+                    ) { userMessage, e ->
                         if (e != null) {
                             view.showValidationMessage(1)
                         } else {
@@ -282,13 +298,14 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
                     channel = groupChannel
 
                     if (messageCollection == null) {
-                        messageCollection = MessageCollection(groupChannel, messageFilter, Long.MAX_VALUE)
+                        messageCollection =
+                            MessageCollection(groupChannel, messageFilter, Long.MAX_VALUE)
                         messageCollection?.setCollectionHandler(messageCollectionHandler)
 
-                        messageCollection?.fetch(MessageCollection.Direction.PREVIOUS) {
-                            if (it != null) {
-                                return@fetch
-                            }
+                        messageCollection?.fetchSucceededMessages(
+                            MessageCollection.Direction.PREVIOUS
+                        ) { hasMore, exception ->
+
                             (context as Activity).runOnUiThread() {
                                 view.markAllRead()
                             }
@@ -300,34 +317,116 @@ class GroupChannelChatPresenterImpl @Inject constructor(private val preferenceHe
         }
     }
 
+    private val messageCollectionHandler: MessageCollectionHandler =
+        object : MessageCollectionHandler() {
+            override fun onMessageEvent(
+                collection: MessageCollection,
+                messages: List<BaseMessage>,
+                action: MessageEventAction
+            ) {
+            }
 
-    private val messageCollectionHandler = MessageCollectionHandler { collection, messages, action ->
-        Log.d("SyncManager", "onMessageEvent: size = " + messages.size + ", action = " + action)
+            override fun onSucceededMessageEvent(
+                collection: MessageCollection,
+                messages: List<BaseMessage>,
+                action: MessageEventAction
+            ) {
+                Log.d(
+                    "SyncManager",
+                    "onSucceededMessageEvent: size = " + messages.size + ", action = " + action
+                )
+//                if ((context as Activity) == null) {
+//                    return
+//                }
+                (context as Activity).runOnUiThread() {
+                    when (action) {
+                        MessageEventAction.INSERT -> {
+                            val title =
+                                channel!!.members[0].nickname + ", " + channel!!.members[1].nickname + "..."
+                            view.displayChatTitle(title)
+                            view.insert(messages as MutableList<BaseMessage>)
+                            view.markAllRead()
+                        }
+                        MessageEventAction.REMOVE -> {
+                            view.remove(messages as MutableList<BaseMessage>)
 
-        (context as Activity).runOnUiThread() {
-            when (action) {
-                MessageEventAction.INSERT -> {
-                    val title = channel!!.members[0].nickname + ", " +  channel!!.members[1].nickname + "..."
-                    view.displayChatTitle(title)
-                    view.insert(messages)
-                    view.markAllRead()
-                }
-                MessageEventAction.REMOVE -> {
-                    view.remove(messages)
+                        }
+                        MessageEventAction.UPDATE -> {
+                            view.update(messages as MutableList<BaseMessage>)
 
+                        }
+                        MessageEventAction.CLEAR -> {
+                            view.clear()
+                        }
+                        else -> {
+                            view.showValidationMessage(1)
+                        }
+                    }
                 }
-                MessageEventAction.UPDATE -> {
-                    view.update(messages)
+            }
 
-                }
-                MessageEventAction.CLEAR -> {
-                    view.clear()
-                }
-                else -> {
-                    view.showValidationMessage(1)
-                }
+            override fun onPendingMessageEvent(
+                collection: MessageCollection,
+                messages: List<BaseMessage>,
+                action: MessageEventAction
+            ) {
+                Log.d(
+                    "SyncManager",
+                    "onPendingMessageEvent: size = " + messages.size + ", action = " + action
+                )
+                // TODO implement pending message event
+            }
+
+            override fun onFailedMessageEvent(
+                collection: MessageCollection,
+                messages: List<BaseMessage>,
+                action: MessageEventAction,
+                reason: FailedMessageEventActionReason
+            ) {
+                Log.d(
+                    "SyncManager",
+                    "onFailedMessageEvent: size = " + messages.size + ", action = " + action
+                )
+                    // TODO implement failed message event
+            }
+
+            override fun onNewMessage(
+                collection: MessageCollection,
+                message: BaseMessage
+            ) {
+                Log.d("SyncManager", "onNewMessage: message = $message")
+                //show when the scroll position is bottom ONLY.
             }
         }
 
-    }
+// OLD CODE
+//    private val messageCollectionHandler = MessageCollectionHandler { collection, messages, action ->
+//        Log.d("SyncManager", "onMessageEvent: size = " + messages.size + ", action = " + action)
+//
+//        (context as Activity).runOnUiThread() {
+//            when (action) {
+//                MessageEventAction.INSERT -> {
+//                    val title = channel!!.members[0].nickname + ", " +  channel!!.members[1].nickname + "..."
+//                    view.displayChatTitle(title)
+//                    view.insert(messages)
+//                    view.markAllRead()
+//                }
+//                MessageEventAction.REMOVE -> {
+//                    view.remove(messages)
+//
+//                }
+//                MessageEventAction.UPDATE -> {
+//                    view.update(messages)
+//
+//                }
+//                MessageEventAction.CLEAR -> {
+//                    view.clear()
+//                }
+//                else -> {
+//                    view.showValidationMessage(1)
+//                }
+//            }
+//        }
+//
+//    }
 }

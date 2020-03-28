@@ -4,18 +4,19 @@ package com.sendbirdsampleapp.ui.group_channel.list_group.presenter
 import android.app.Activity
 import android.content.Context
 import android.util.Log
-import com.sendbird.android.*
+import com.sendbird.android.GroupChannel
+import com.sendbird.android.GroupChannelListQuery
+import com.sendbird.android.SendBird
 import com.sendbird.syncmanager.ChannelCollection
 import com.sendbird.syncmanager.ChannelEventAction
 import com.sendbird.syncmanager.SendBirdSyncManager
 import com.sendbird.syncmanager.handler.ChannelCollectionHandler
-import com.sendbird.syncmanager.handler.CompletionHandler
-import com.sendbirdsampleapp.BaseApp
 import com.sendbirdsampleapp.data.preferences.AppPreferenceHelper
 import com.sendbirdsampleapp.ui.group_channel.list_group.view.GroupChannelView
 import com.sendbirdsampleapp.util.AppConstants
 import com.sendbirdsampleapp.util.ConnectionUtil
 import javax.inject.Inject
+
 
 class GroupChannelPresenterImpl @Inject constructor(private val preferenceHelper: AppPreferenceHelper) :
     GroupChannelPresenter {
