@@ -9,11 +9,11 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         applicationId "com.sendbirdsampleapp"
         minSdkVersion 21
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -43,9 +43,12 @@ dependencies {
     //Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
+
     //SendBird
     implementation 'com.sendbird.sdk:sendbird-android-sdk:3.0.118'
     implementation 'com.sendbird.sdk:sendbird-syncmanager:1.1.2'
+    implementation 'com.sendbird.sdk:sendbird-calls:1.0.1'
+
 
 
     //Android support libraries
