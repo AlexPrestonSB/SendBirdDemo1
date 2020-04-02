@@ -1,6 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <com.sendbird.calls.SendBirdVideoView
+        android:id="@+id/video_view_fullscreen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/view_connecting_view"
+        android:background="@drawable/calls_connecting_video_view_fullscreen_fg"/>
+
+    <RelativeLayout
+        android:id="@+id/layout_video_small"
+        android:layout_width="96dp"
+        android:layout_height="160dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin">
+
+        <com.sendbird.calls.SendBirdVideoView
+            android:id="@+id/video_view_small"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/calls_frame" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/video_layout_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin_x2"
+        android:layout_marginTop="@dimen/activity_vertical_margin_x3"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin_x2">
+
+        <ImageView
+            android:id="@+id/image_video_profile"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/icon_avatar" />
+
+        <TextView
+            android:id="@+id/text_video_user_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/image_video_profile"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:textColor="#e1ffffff"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/text_video_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_video_user_id"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:textColor="#e1ffffff"
+            android:textSize="24sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_video_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="@dimen/activity_horizontal_margin_x3"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin_x3"
+        android:layout_marginBottom="@dimen/activity_vertical_margin_x3">
+
+
+        <ImageView
+            android:id="@+id/image_video_decline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_call_end" />
+
+        <ImageView
+            android:id="@+id/image_video_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/btn_call_end" />
+
+        <ImageView
+            android:id="@+id/image_video_accept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/btn_call_video_accept" />
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

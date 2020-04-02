@@ -1,8 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <RelativeLayout
+        android:id="@+id/voice_layout_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin_x2"
+        android:layout_marginTop="@dimen/activity_vertical_margin_x3"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin_x2">
+
+        <ImageView
+            android:id="@+id/image_voice_profile"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/icon_avatar" />
+
+        <TextView
+            android:id="@+id/text_voice_user_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/image_voice_profile"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:textColor="#e1ffffff"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/text_voice_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_voice_user_id"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:textColor="#e1ffffff"
+            android:textSize="24sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_voice_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="@dimen/activity_horizontal_margin_x3"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin_x3"
+        android:layout_marginBottom="@dimen/activity_vertical_margin_x3">
+
+
+        <ImageView
+            android:id="@+id/image_voice_decline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_call_end" />
+
+        <ImageView
+            android:id="@+id/image_voice_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/btn_call_end" />
+
+        <ImageView
+            android:id="@+id/image_voice_accept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/btn_call_voice_accept" />
+
+
+    </RelativeLayout>
 
 
 </RelativeLayout>
