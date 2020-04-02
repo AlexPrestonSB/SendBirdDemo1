@@ -90,6 +90,28 @@
 <!--        app:layout_constraintTop_toBottomOf="@id/text_channel_open" />-->
 
     <TextView
+        android:id="@+id/text_calls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:drawableStart="@drawable/group_icon_40_dp"
+        android:drawablePadding="@dimen/activity_horizontal_margin"
+        android:gravity="center_vertical"
+        android:text="@string/calls"
+        android:textColor="@color/text_standard"
+        android:textSize="@dimen/text_standard"
+        app:layout_constraintTop_toBottomOf="@+id/line_channel" />
+
+    <View
+        android:id="@+id/line_calls"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_height"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@color/light_gray"
+        app:layout_constraintTop_toBottomOf="@+id/text_calls" />
+
+    <TextView
         android:id="@+id/text_channel_version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
