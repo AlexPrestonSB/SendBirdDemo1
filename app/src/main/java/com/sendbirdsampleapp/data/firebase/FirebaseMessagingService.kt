@@ -24,7 +24,7 @@ class FirebaseMessagingService : FirebaseMessagingService() {
     private val TAG = "FIREBASE_MESSAGING"
     private val EXTRA_CHANNEL_URL = "EXTRA_CHANNEL_URL"
 
-    override fun onMessageReceived(remoteMessage: RemoteMessage?) {
+    override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
 
         val message = remoteMessage?.data?.get("message")
@@ -34,7 +34,7 @@ class FirebaseMessagingService : FirebaseMessagingService() {
         message?.let { sendNotification(it, channelUrl) }
     }
 
-    override fun onNewToken(token: String?) {
+    override fun onNewToken(token: String) {
         super.onNewToken(token)
 
         registerPushTokenForCurrentUser(token) { pushTokenRegistrationStatus, sendBirdException ->
