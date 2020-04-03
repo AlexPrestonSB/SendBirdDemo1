@@ -1,5 +1,6 @@
 package com.sendbirdsampleapp.ui.login.presenter
 
+import android.content.Context
 import com.sendbirdsampleapp.ui.login.view.LoginView
 
 interface LoginPresenter {
@@ -8,5 +9,7 @@ interface LoginPresenter {
     fun onLoginClicked(userId: String, nickname: String)
 
     fun checkConnected()
+
+    fun onResume(context: Context)
 
 }

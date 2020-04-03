@@ -54,6 +54,11 @@ class LoginActivity : AppCompatActivity(), LoginView {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        presenter.onResume(this)
+    }
+
     override fun showProgress() {
         progress_bar_login.show()
     }

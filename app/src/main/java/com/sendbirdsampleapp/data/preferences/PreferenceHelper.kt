@@ -18,4 +18,8 @@ interface PreferenceHelper {
     fun getToken(): String
 
     fun setToken(token: String?)
+
+    fun setCallToken(token: String?)
+
+    fun getCallToken() : String
 }

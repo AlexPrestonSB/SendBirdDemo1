@@ -29,17 +29,21 @@
         </activity>
         <activity android:name=".ui.channel.ChannelActivity"></activity>
         <activity android:name=".ui.group_channel.list_group.GroupChannelActivity"></activity>
-        <activity android:name=".ui.open_channel.OpenChannelActivity"></activity>
+        <activity android:name=".ui.calls.CallActivity"></activity>
+        <activity android:name=".ui.calls.VideoCallActivity"></activity>
+        <activity android:name=".ui.calls.VoiceCallActivity"></activity>
         <activity android:name=".ui.group_channel.create_group.GroupChannelCreateActivity"></activity>
         <activity android:name=".ui.group_channel.chat_group.GroupChannelChatActivity"></activity>
         <activity android:name=".util.MediaPlayerActivity"></activity>
         <activity android:name=".util.PhotoViewerActivity"></activity>
-        <service android:name=".data.firebase.FirebaseMessagingService"
+        <!-- [Calls] FCM -->
+        <service
+            android:name=".data.firebase.FirebaseMessagingService"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
-            </service>
+        </service>
 
     </application>
 

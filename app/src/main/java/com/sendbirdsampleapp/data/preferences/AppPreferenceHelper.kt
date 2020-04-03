@@ -16,6 +16,7 @@ class AppPreferenceHelper @Inject constructor(context: Context) :
         private val PREFERENCE_KEY_NOTIFICATIONS_SHOW_PREVIEWS = "notificationShowPreviews"
         private val PREFERENCE_KEY_NOTIFICATIONS_DO_NOT_DISTURB = "notificationsNoNotDisturb"
         private val PREFERENCE_KEY_GCM_TOKEN = "gcmToken"
+        private val PREFERENCE_CALL_TOKEN = "callToken"
     }
 
     inline fun SharedPreferences.edit(operation: (SharedPreferences.Editor) -> Unit) {
@@ -41,6 +42,11 @@ class AppPreferenceHelper @Inject constructor(context: Context) :
     override fun getToken(): String =  mPrefs.getString(PREFERENCE_KEY_GCM_TOKEN, "token")!!
 
     override fun setToken(token: String?) { mPrefs.edit { it.putString(PREFERENCE_KEY_GCM_TOKEN, token) }}
+
+    override fun setCallToken(token: String?) { mPrefs.edit { it.putString(PREFERENCE_CALL_TOKEN, token)} }
+
+    override fun getCallToken() = mPrefs.getString(PREFERENCE_CALL_TOKEN, "callToken")
+
 }
 
 

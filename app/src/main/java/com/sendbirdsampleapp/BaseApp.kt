@@ -2,11 +2,17 @@ package com.sendbirdsampleapp
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import com.sendbird.android.SendBird
-import com.sendbird.syncmanager.SendBirdSyncManager
+import com.sendbird.calls.DirectCall
+import com.sendbird.calls.SendBirdCall
+import com.sendbird.calls.handler.SendBirdCallListener
 import com.sendbirdsampleapp.di.component.AppComponent
 import com.sendbirdsampleapp.di.component.DaggerAppComponent
+import com.sendbirdsampleapp.ui.calls.CallActivity
+import com.sendbirdsampleapp.util.ActivityUtils
 import com.sendbirdsampleapp.util.AppConstants
+import java.util.*
 
 class BaseApp : Application() {
 
@@ -16,7 +22,7 @@ class BaseApp : Application() {
         super.onCreate()
 
         SendBird.init(AppConstants.APP_ID, applicationContext)
-        //SendBirdSyncManager.setLoggerLevel(98765)
+        initSendBirdCall()
 
         injector = DaggerAppComponent.builder()
             .application(this)
@@ -24,10 +30,26 @@ class BaseApp : Application() {
 
     }
 
-    fun isSyncSetUp() = isSyncManagerSetup
+    fun initSendBirdCall() {
 
-    fun setSyncManagerSetUp(setup: Boolean) {
-        isSyncManagerSetup = setup
+        if (SendBirdCall.init(applicationContext, AppConstants.APP_ID)) {
+            SendBirdCall.removeAllListeners()
+            SendBirdCall.addListener(
+                UUID.randomUUID().toString(),
+                object : SendBirdCallListener() {
+                    override fun onRinging(call: DirectCall) {
+                        Log.d(
+                            "TAG",
+                            "onRinging() => callId: " + call.callId
+                        )
+                        if (CallActivity.isRunning) {
+                            call.end()
+                            return
+                        }
+                        ActivityUtils.startCallActivityAsCallee(context, call)
+                    }
+                })
+        }
     }
 
     lateinit var injector: AppComponent

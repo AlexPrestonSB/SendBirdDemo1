@@ -10,7 +10,6 @@
         android:text="Make A Call"
         android:textSize="24sp"
         android:textColor="#e1000000"
-        android:fontFamily="@font/roboto_medium"
         android:layout_centerHorizontal="true"
         android:layout_above="@+id/text_description_dial"/>
 
