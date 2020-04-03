@@ -16,7 +16,7 @@ class BaseApp : Application() {
         super.onCreate()
 
         SendBird.init(AppConstants.APP_ID, applicationContext)
-        SendBirdSyncManager.setLoggerLevel(98765)
+        //SendBirdSyncManager.setLoggerLevel(98765)
 
         injector = DaggerAppComponent.builder()
             .application(this)
