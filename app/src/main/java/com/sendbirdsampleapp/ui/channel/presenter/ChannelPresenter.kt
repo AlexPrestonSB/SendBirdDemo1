@@ -8,5 +8,7 @@ interface ChannelPresenter {
 
     fun navigateToGroupChannels()
 
+    fun navigateToCalls()
+
     fun logoutPressed()
 }

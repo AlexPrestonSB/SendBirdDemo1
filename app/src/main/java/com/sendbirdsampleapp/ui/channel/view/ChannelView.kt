@@ -8,4 +8,6 @@ interface ChannelView {
 
     fun logoutPressed()
 
+    fun navigateToCalls()
+
 }

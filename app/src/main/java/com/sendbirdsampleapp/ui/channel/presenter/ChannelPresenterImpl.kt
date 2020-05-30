@@ -26,4 +26,8 @@ class ChannelPresenterImpl@Inject constructor(private val preferenceHelper: AppP
             preferenceHelper.setConnected(false)
         }
     }
+
+    override fun navigateToCalls() {
+        channelView.navigateToCalls()
+    }
 }

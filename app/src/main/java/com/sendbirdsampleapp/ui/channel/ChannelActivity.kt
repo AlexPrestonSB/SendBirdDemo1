@@ -7,6 +7,7 @@ import com.sendbird.android.SendBird
 import com.sendbirdsampleapp.BaseApp
 import com.sendbirdsampleapp.BuildConfig
 import com.sendbirdsampleapp.R
+import com.sendbirdsampleapp.ui.calls.CallActivity
 import com.sendbirdsampleapp.ui.channel.presenter.ChannelPresenterImpl
 import com.sendbirdsampleapp.ui.channel.view.ChannelView
 import com.sendbirdsampleapp.ui.group_channel.list_group.GroupChannelActivity
@@ -31,7 +32,8 @@ class ChannelActivity : AppCompatActivity(), ChannelView {
 
 
         //text_channel_group.setOnClickListener { groupChannelPressed() }
-        
+        button_calls.setOnClickListener{callsPressed()}
+
 
         val version = String.format(
             resources.getString(R.string.sample_version),
@@ -51,6 +53,10 @@ class ChannelActivity : AppCompatActivity(), ChannelView {
         presenter.navigateToGroupChannels()
     }
 
+    private fun callsPressed() {
+        presenter.navigateToCalls()
+    }
+
 
     override fun logoutPressed() {
         val intent = Intent(this, LoginActivity::class.java)
@@ -61,6 +67,9 @@ class ChannelActivity : AppCompatActivity(), ChannelView {
         startActivity(Intent(this, GroupChannelActivity::class.java))
     }
 
+    override fun navigateToCalls() {
+        startActivity(Intent(this, CallActivity::class.java))
+    }
 
     override fun showValidationMessage(errorCode: Int) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
