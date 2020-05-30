@@ -1,10 +1,7 @@
 package com.sendbirdsampleapp.ui.login.presenter
 
-import android.app.Activity
 import android.content.Context
 import android.util.Log
-import android.widget.Toast
-import com.google.firebase.iid.FirebaseInstanceId
 import com.sendbird.android.SendBird
 import com.sendbird.calls.AuthenticateParams
 import com.sendbird.calls.SendBirdCall
@@ -13,13 +10,18 @@ import com.sendbirdsampleapp.data.preferences.AppPreferenceHelper
 import com.sendbirdsampleapp.ui.login.view.LoginView
 import com.sendbirdsampleapp.util.AppConstants
 import com.sendbirdsampleapp.util.PushUtil
+//import org.omg.PortableServer.IdAssignmentPolicyValue.USER_ID
+//import java.rmi.dgc.VMID.isUnique
 import javax.inject.Inject
 
-class LoginPresenterImpl @Inject constructor(private val preferenceHelper: AppPreferenceHelper) : LoginPresenter {
+
+class LoginPresenterImpl @Inject constructor(private val preferenceHelper: AppPreferenceHelper) :
+    LoginPresenter {
 
     private lateinit var loginView: LoginView
     private lateinit var context: Context
     private lateinit var userId: String
+    private lateinit var nickname: String
 
 
     override fun setView(loginView: LoginView) {
@@ -53,23 +55,9 @@ class LoginPresenterImpl @Inject constructor(private val preferenceHelper: AppPr
 
     private fun connectToSendBird(userId: String, nickname: String) {
         this.userId = userId
-            SendBird.connect(userId) { user, e ->
-                if (e != null) {
-                    loginView.showValidationMessage(AppConstants.FAILED_LOGIN)
-                    Log.e(AppConstants.FAILED_LOGIN.toString(), e.localizedMessage)
-                } else {
+        this.nickname = nickname
 
-                    FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener {
-                        if (!it.isSuccessful) {
-                            loginView.showValidationMessage(AppConstants.FAILED_FIREBASE_CONNECTION)
-                            return@addOnCompleteListener
-                        }
-                        updateCurrentUserInfo(userId, nickname, it.result?.token)
-                        connectToCalls()
-
-                    }
-                }
-            }
+        connectToCalls()
     }
 
     private fun connectToCalls() {
@@ -78,9 +66,15 @@ class LoginPresenterImpl @Inject constructor(private val preferenceHelper: AppPr
 
     private val pushTokenHandler = object : PushUtil.GetPushTokenHandler {
         override fun onResult(token: String?, e: SendBirdException?) {
-            SendBirdCall.authenticate(AuthenticateParams(userId).setPushToken(token, false).setAccessToken("")) { user, exception ->
-                if (exception == null){
-                    loginView.navigateToChannels()
+            SendBirdCall.authenticate(AuthenticateParams(userId).setAccessToken("")) { user, exception ->
+                if (exception == null) {
+                    SendBirdCall.registerPushToken(token, false) {
+                        Log.d("T", token)
+                        if (it == null) {
+                            updateCurrentUserInfo(userId, nickname, token)
+                            loginView.navigateToChannels()
+                        }
+                    }
                 } else {
                     loginView.showValidationMessage(AppConstants.FAILED_LOGIN)
                 }

@@ -46,7 +46,7 @@ class BaseApp : Application() {
                             call.end()
                             return
                         }
-                        ActivityUtils.startCallActivityAsCallee(context, call)
+
                     }
                 })
         }

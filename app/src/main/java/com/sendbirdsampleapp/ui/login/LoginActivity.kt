@@ -36,7 +36,6 @@ class LoginActivity : AppCompatActivity(), LoginView {
 
 
         presenter.setView(this)
-        presenter.checkConnected()
 
         val version = String.format(
             resources.getString(R.string.sample_version),
@@ -57,6 +56,8 @@ class LoginActivity : AppCompatActivity(), LoginView {
     override fun onResume() {
         super.onResume()
         presenter.onResume(this)
+        presenter.checkConnected()
+
     }
 
     override fun showProgress() {
