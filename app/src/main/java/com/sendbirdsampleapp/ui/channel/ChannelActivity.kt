@@ -8,6 +8,7 @@ import com.sendbirdsampleapp.BaseApp
 import com.sendbirdsampleapp.BuildConfig
 import com.sendbirdsampleapp.R
 import com.sendbirdsampleapp.ui.calls.CallActivity
+import com.sendbirdsampleapp.ui.calls.DialActivity
 import com.sendbirdsampleapp.ui.channel.presenter.ChannelPresenterImpl
 import com.sendbirdsampleapp.ui.channel.view.ChannelView
 import com.sendbirdsampleapp.ui.group_channel.list_group.GroupChannelActivity
@@ -68,7 +69,7 @@ class ChannelActivity : AppCompatActivity(), ChannelView {
     }
 
     override fun navigateToCalls() {
-        startActivity(Intent(this, CallActivity::class.java))
+        startActivity(Intent(this, DialActivity::class.java))
     }
 
     override fun showValidationMessage(errorCode: Int) {

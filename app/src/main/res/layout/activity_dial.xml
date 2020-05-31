@@ -39,7 +39,7 @@
         app:boxBackgroundColor="#f0f0f0">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/text_input_edit_text_user_id"
+            android:id="@+id/text_dial_userid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16sp"
