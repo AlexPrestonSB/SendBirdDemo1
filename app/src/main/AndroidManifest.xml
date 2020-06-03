@@ -29,7 +29,6 @@
         </activity>
         <activity android:name=".ui.channel.ChannelActivity"></activity>
         <activity android:name=".ui.group_channel.list_group.GroupChannelActivity"></activity>
-        <activity android:name=".ui.calls.CallActivity"></activity>
         <activity android:name=".ui.calls.VideoCallActivity"></activity>
         <activity android:name=".ui.calls.VoiceCallActivity"></activity>
         <activity android:name=".ui.calls.DialActivity"></activity>

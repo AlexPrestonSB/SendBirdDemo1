@@ -7,7 +7,6 @@ import com.sendbird.android.SendBird
 import com.sendbirdsampleapp.BaseApp
 import com.sendbirdsampleapp.BuildConfig
 import com.sendbirdsampleapp.R
-import com.sendbirdsampleapp.ui.calls.CallActivity
 import com.sendbirdsampleapp.ui.calls.DialActivity
 import com.sendbirdsampleapp.ui.channel.presenter.ChannelPresenterImpl
 import com.sendbirdsampleapp.ui.channel.view.ChannelView
