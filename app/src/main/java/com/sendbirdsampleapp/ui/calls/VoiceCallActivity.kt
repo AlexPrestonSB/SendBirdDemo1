@@ -47,7 +47,6 @@ class VoiceCallActivity : AppCompatActivity() {
 
         image_voice_accept.setOnClickListener { acceptListener() }
         image_voice_decline.setOnClickListener { declineListener() }
-        image_voice_end.setOnClickListener { declineListener() }
     }
 
     fun handleIncomingCall() {
@@ -60,7 +59,7 @@ class VoiceCallActivity : AppCompatActivity() {
         dParams.setVideoCall(isVideo)
         dParams.setCallOptions(CallOptions())
 
-        val call = SendBirdCall.dial(dParams, object : DialHandler {
+        call = SendBirdCall.dial(dParams, object : DialHandler {
             override fun onResult(callInfo: DirectCall?, e: SendBirdException?) {
                 if (e == null) {
                     Log.d("TAG", callInfo?.callId)
